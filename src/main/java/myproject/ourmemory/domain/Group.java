@@ -1,5 +1,6 @@
 package myproject.ourmemory.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ import static java.time.LocalDateTime.now;
 @Table(name = "group")
 public class Group {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
     private Long id;
 
@@ -29,15 +30,15 @@ public class Group {
 
     private String key;
 
-    private LocalDateTime regDate;
+    private LocalDateTime createdDate;
+
+    public Group() {
+    }
 
     //==생성 메서드==//
-    public static Group createGroup(String name) {
-        Group group = new Group();
-        group.setName(name);
-        group.setRegDate(now());
-
-        return group;
+    @Builder
+    public Group(String name) {
+        this.name = name;
     }
 
     //==변경 메서드==//

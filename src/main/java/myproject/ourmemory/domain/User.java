@@ -1,5 +1,6 @@
 package myproject.ourmemory.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Table(name = "user")
 public class User {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -26,13 +27,14 @@ public class User {
 
     private String nickName;
 
-    //==생성 메서드==//
-    public static User createUser(String name, String nickName) {
-        User user = new User();
-        user.setName(name);
-        user.setNickName(nickName);
+    public User() {
+    }
 
-        return user;
+    //==생성 메서드==//
+    @Builder
+    public User(String name, String nickName) {
+        this.name = name;
+        this.nickName = nickName;
     }
 
     //==변경 메서드==//

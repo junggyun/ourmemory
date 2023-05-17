@@ -2,6 +2,7 @@ package myproject.ourmemory.service;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.dto.user.CreateUserRequestDto;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,13 @@ public class UserService {
      * 회원 등록
      */
     @Transactional
-    public Long join(User user) {
+    public Long join(CreateUserRequestDto request) {
+
+        User user = User.builder()
+                .name(request.getName())
+                .nickName(request.getNickName())
+                .build();
+
         userRepository.save(user);
 
         return user.getId();

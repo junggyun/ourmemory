@@ -1,17 +1,20 @@
 package myproject.ourmemory.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.*;
+
 @Entity
 @Getter @Setter
 @Table(name = "post")
 public class Post {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -25,20 +28,22 @@ public class Post {
 
     private String title;
 
+    @Lob
     private String content;
 
-    private LocalDateTime regDate;
+    private LocalDateTime createdDate;
+
+    public Post() {
+    }
 
     //==생성 메서드==//
-    public static Post createPost(User user, Group group, String title, String content) {
-        Post post = new Post();
-        post.setUser(user);
-        post.setGroup(group);
-        post.setTitle(title);
-        post.setContent(content);
-        post.setRegDate(LocalDateTime.now());
-
-        return post;
+    @Builder
+    public Post(User user, Group group, String title, String content) {
+        this.user = user;
+        this.group = group;
+        this.title = title;
+        this.content = content;
+        this.createdDate = now();
     }
 
     //==변경 메서드==//

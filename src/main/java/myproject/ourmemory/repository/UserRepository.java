@@ -17,8 +17,16 @@ public class UserRepository {
         em.persist(user);
     }
 
+    public void saveAll(List<User> users) {
+
+    }
+
     public void delete(User user) {
         em.remove(user);
+    }
+
+    public void deleteAll() {
+        em.clear();
     }
 
     public User findOne(Long id) {

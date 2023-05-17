@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "user_group")
 public class UserGroup {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_group_id")
     private Long id;
 

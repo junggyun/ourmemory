@@ -29,7 +29,12 @@ public class PostService {
         User user = userRepository.findOne(userId);
         Group group = groupRepository.findOne(groupId);
 
-        Post post = Post.createPost(user, group, title, content);
+        Post post = Post.builder()
+                .user(user)
+                .group(group)
+                .title(title)
+                .content(content)
+                .build();
 
         postRepository.save(post);
 
