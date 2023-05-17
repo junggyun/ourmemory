@@ -2,6 +2,7 @@ package myproject.ourmemory.repository;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,7 +19,9 @@ public class UserRepository {
     }
 
     public void saveAll(List<User> users) {
-
+        for (User user : users) {
+            em.persist(user);
+        }
     }
 
     public void delete(User user) {
@@ -35,6 +38,13 @@ public class UserRepository {
 
     public List<User> findAll() {
         return em.createQuery("select u from User u", User.class)
+                .getResultList();
+    }
+
+    public List<User> findPaging(int offset, int limit) {
+        return em.createQuery("select u from User u", User.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 }

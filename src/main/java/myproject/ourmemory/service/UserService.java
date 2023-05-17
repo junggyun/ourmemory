@@ -54,4 +54,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    //전체 회원 페이징 조회
+    public List<User> findPagingUsers(int offset, int limit) {
+        return userRepository.findPaging(offset, limit);
+    }
+
 }

@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -87,5 +89,27 @@ class UserServiceTest {
          assertEquals(2L, findUsers.size());
 
       }
+
+    @Test
+    @DisplayName("전체 회원 1페이지 조회")
+    public void 전체_회원_1페이지_조회() throws Exception {
+        //given
+        List<User> users = IntStream.range(0, 30)
+                .mapToObj(i -> {
+                    return User.builder()
+                            .name("회원" + i)
+                            .nickName("닉네임" + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        userRepository.saveAll(users);
+
+        //when
+        List<User> findUsers = userService.findPagingUsers(0, 10);
+
+        //then
+        assertEquals(10L, findUsers.size());
+
+    }
 
 }

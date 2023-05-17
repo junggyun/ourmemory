@@ -13,7 +13,7 @@ import static java.time.LocalDateTime.now;
 
 @Entity
 @Getter @Setter
-@Table(name = "group")
+@Table(name = "groups")
 public class Group {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
