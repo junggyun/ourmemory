@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,6 +94,27 @@ class GroupControllerTest {
                 .andDo(print());
         //then
         assertEquals("모바일과", group.getName());
+
+    }
+
+    @Test
+    @DisplayName("그룹 삭제")
+    public void 그룹_삭제() throws Exception {
+        //given
+        Group group = Group.builder()
+                .name("컴공과")
+                .build();
+        groupRepository.save(group);
+
+        //when
+        mockMvc.perform(delete("/groups/{groupId}", group.getId())
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+        //then
+        assertEquals(0L, groupRepository.count());
 
     }
 

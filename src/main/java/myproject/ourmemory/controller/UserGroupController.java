@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupId;
 import myproject.ourmemory.dto.userGroup.*;
+import myproject.ourmemory.repository.GroupRepository;
+import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserGroupService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ public class UserGroupController {
 
     private final UserGroupService userGroupService;
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
 
     @PostMapping("/userGroups")
     public CreateUserGroupResponse create(@RequestBody CreateUserGroupRequest request) {
@@ -28,7 +31,7 @@ public class UserGroupController {
     /**
      * 특정 유저 그룹 리스트 조회
      */
-    @GetMapping("/userGroups")
+    @GetMapping("/userGroups/byUser")
     public GetByUserResponse findAllByUser(@ModelAttribute GetUserGroupRequest request) {
 
         userRepository.findById(request.getUserId())
@@ -46,4 +49,27 @@ public class UserGroupController {
 
         return result;
     }
+
+    /**
+     * 특정 그룹 유저 리스트 조회
+     */
+    @GetMapping("/userGroups/byGroup")
+    public GetByGroupResponse findAllByGroup(@ModelAttribute GetUserGroupRequest request) {
+
+        groupRepository.findById(request.getGroupId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        List<UserGroup> userGroups = userGroupService.listByGroup(request);
+        List<UserList> collect = userGroups.stream()
+                .map(u -> new UserList(u))
+                .collect(Collectors.toList());
+
+        GetByGroupResponse result = GetByGroupResponse.builder()
+                .groupId(request.getGroupId())
+                .users(collect)
+                .build();
+
+        return result;
+    }
+
 }

@@ -3,6 +3,7 @@ package myproject.ourmemory.service;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.*;
 import myproject.ourmemory.dto.userGroup.CreateUserGroupRequest;
+import myproject.ourmemory.dto.userGroup.GetByGroupRequest;
 import myproject.ourmemory.dto.userGroup.GetUserGroupRequest;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserGroupRepository;

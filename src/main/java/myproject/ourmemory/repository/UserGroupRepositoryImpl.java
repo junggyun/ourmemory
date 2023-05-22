@@ -6,6 +6,7 @@ import myproject.ourmemory.domain.QGroup;
 import myproject.ourmemory.domain.QUser;
 import myproject.ourmemory.domain.QUserGroup;
 import myproject.ourmemory.domain.UserGroup;
+import myproject.ourmemory.dto.userGroup.GetByGroupRequest;
 import myproject.ourmemory.dto.userGroup.GetUserGroupRequest;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
     public List<UserGroup> findByUser(GetUserGroupRequest request) {
         return jpaQueryFactory
                 .selectFrom(qUserGroup)
-                .where(qUser.id.eq(request.getUserId()))
+                .where(qUserGroup.user.id.eq(request.getUserId()))
                 .offset(request.getOffset())
                 .limit(request.getSize())
                 .fetch();
@@ -34,7 +35,7 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
     public List<UserGroup> findByGroup(GetUserGroupRequest request) {
         return jpaQueryFactory
                 .selectFrom(qUserGroup)
-                .where(qGroup.id.eq(request.getGroupId()))
+                .where(qUserGroup.group.id.eq(request.getGroupId()))
                 .offset(request.getOffset())
                 .limit(request.getSize())
                 .fetch();
