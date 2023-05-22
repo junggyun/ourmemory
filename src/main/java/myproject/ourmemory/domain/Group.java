@@ -3,6 +3,8 @@ package myproject.ourmemory.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import myproject.ourmemory.dto.group.UpdateGroupRequest;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ public class Group {
     @Column(name = "group_id")
     private Long id;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<UserGroup> userGroups = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
@@ -30,7 +32,6 @@ public class Group {
 
     private String key;
 
-    private LocalDateTime createdDate;
 
     public Group() {
     }
@@ -39,17 +40,19 @@ public class Group {
     @Builder
     public Group(String name) {
         this.name = name;
+        setKey();
     }
+
 
     //==변경 메서드==//
-    public void updateName(String name) {
-        this.name = name;
+    public void updateName(UpdateGroupRequest request) {
+        name = request.getName();
     }
 
-    //==연관관계 메서드==//
-    public void setUserGroup(UserGroup userGroup) {
-        userGroups.add(userGroup);
-        userGroup.setGroup(this);
+    //==비즈니스 메서드==//
+    public void setKey() {
+        key = RandomStringUtils.randomNumeric(8);
     }
+
 
 }

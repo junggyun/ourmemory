@@ -12,7 +12,7 @@ import static java.time.LocalDateTime.*;
 @Entity
 @Getter @Setter
 @Table(name = "post")
-public class Post {
+public class Post extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -31,7 +31,6 @@ public class Post {
     @Lob
     private String content;
 
-    private LocalDateTime createdDate;
 
     public Post() {
     }
@@ -39,11 +38,10 @@ public class Post {
     //==생성 메서드==//
     @Builder
     public Post(User user, Group group, String title, String content) {
-        this.user = user;
-        this.group = group;
+        setUser(user);
+        setGroup(group);
         this.title = title;
         this.content = content;
-        this.createdDate = now();
     }
 
     //==변경 메서드==//

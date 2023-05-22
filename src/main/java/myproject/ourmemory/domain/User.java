@@ -3,6 +3,7 @@ package myproject.ourmemory.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import myproject.ourmemory.dto.user.UpdateUserRequest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,13 +12,13 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserGroup> userGroups = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -38,14 +39,17 @@ public class User {
     }
 
     //==변경 메서드==//
-    public void updateNickName(String nickName) {
-        this.nickName = nickName;
+    public void updateUser(UpdateUserRequest request) {
+        nickName = request.getNickName();
     }
 
-    //==연관관계 메서드==//
-    public void setUserGroup(UserGroup userGroup) {
-        userGroups.add(userGroup);
-        userGroup.setUser(this);
+    //==비즈니스 메서드==//
+    public void joinGroup(Group group) {
+        UserGroup userGroup = UserGroup.builder()
+                .user(this)
+                .group(group)
+                .build();
     }
+
 
 }

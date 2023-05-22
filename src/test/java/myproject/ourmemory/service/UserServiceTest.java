@@ -1,7 +1,9 @@
 package myproject.ourmemory.service;
 
 import myproject.ourmemory.domain.User;
-import myproject.ourmemory.dto.user.CreateUserRequestDto;
+import myproject.ourmemory.dto.user.CreateUserRequest;
+import myproject.ourmemory.dto.user.UpdateUserRequest;
+import myproject.ourmemory.dto.user.GetUserRequest;
 import myproject.ourmemory.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +34,7 @@ class UserServiceTest {
     @DisplayName("회원 등록")
     public void 회원_등록() throws Exception {
         //given
-        CreateUserRequestDto request = CreateUserRequestDto.builder()
+        CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .nickName("테란킹")
                 .build();
@@ -40,7 +42,7 @@ class UserServiceTest {
         Long userId = userService.join(request);
 
         //then
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         assertEquals(1, userRepository.findAll().size());
         assertEquals("박정균", user.getName());
@@ -91,10 +93,10 @@ class UserServiceTest {
       }
 
     @Test
-    @DisplayName("전체 회원 1페이지 조회")
-    public void 전체_회원_1페이지_조회() throws Exception {
+    @DisplayName("전체 회원 페이징 조회")
+    public void 전체_회원_페이징_조회() throws Exception {
         //given
-        List<User> users = IntStream.range(0, 30)
+        List<User> users = IntStream.range(1, 51)
                 .mapToObj(i -> {
                     return User.builder()
                             .name("회원" + i)
@@ -104,11 +106,59 @@ class UserServiceTest {
                 .collect(Collectors.toList());
         userRepository.saveAll(users);
 
+        GetUserRequest request = GetUserRequest.builder()
+                .build();
+
         //when
-        List<User> findUsers = userService.findPagingUsers(0, 10);
+        List<User> findUsers = userService.findUsers(request);
 
         //then
         assertEquals(10L, findUsers.size());
+        assertEquals("회원1", findUsers.get(0).getName());
+        assertEquals("닉네임1", findUsers.get(0).getNickName());
+        assertEquals("회원10", findUsers.get(9).getName());
+        assertEquals("닉네임10", findUsers.get(9).getNickName());
+
+    }
+
+    @Test
+    @DisplayName("회원 닉네임 변경")
+    public void 회원_닉네임_변경() throws Exception {
+        //given
+        User user = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user);
+
+        UpdateUserRequest request = UpdateUserRequest.builder()
+                .nickName("저그킹")
+                .build();
+
+        //when
+        userService.updateNickName(user.getId(), request);
+
+        //then
+
+        assertEquals("저그킹", user.getNickName() );
+
+    }
+
+    @Test
+    @DisplayName("회원 삭제")
+    public void 회원_삭제() throws Exception {
+        //given
+        User user = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user);
+
+        //when
+        userService.deleteUser(user.getId());
+
+        //then
+        assertEquals(0, userRepository.count());
 
     }
 

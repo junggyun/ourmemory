@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.Post;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.repository.*;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.PostRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -26,8 +26,10 @@ public class PostService {
      * 게시글 등록
      */
     public Long createPost(Long userId, Long groupId, String title, String content) {
-        User user = userRepository.findOne(userId);
-        Group group = groupRepository.findOne(groupId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
 
         Post post = Post.builder()
                 .user(user)
@@ -59,7 +61,8 @@ public class PostService {
      */
     //특정 게시글 조회
     public Post findOnePost(Long postId) {
-        return postRepository.findOne(postId);
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
     }
 
     //전체 게시글 조회

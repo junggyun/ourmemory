@@ -11,8 +11,8 @@ public class UserDto {
     private String nickName;
 
     public UserDto(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.nickName = user.getNickName();
+        id = user.getId();
+        name = user.getName();
+        nickName = user.getNickName();
     }
 }
