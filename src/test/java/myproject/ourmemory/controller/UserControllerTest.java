@@ -69,6 +69,34 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("회원 등록 - 닉네임 중복")
+    public void 회원_등록_닉네임_중복_예외처리() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("정한별")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+        //expected
+        mockMvc.perform(post("/users")
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+
+    }
+
+    @Test
     @DisplayName("특정 회원 조회")
     public void 특정_회원_조회() throws Exception {
         //given
@@ -78,16 +106,29 @@ class UserControllerTest {
                 .build();
 
         Long userId = userService.join(request);
-        User user = userService.findOneUser(userId);
         //expected
-        mockMvc.perform(get("/users/{userId}", user.getId())
+        mockMvc.perform(get("/users/{userId}", userId)
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(user.getId()))
+                .andExpect(jsonPath("$.id").value(userId))
                 .andExpect(jsonPath("$.name").value("박정균"))
                 .andExpect(jsonPath("$.nickName").value("테란킹"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원 조회")
+    public void 존재하지_않는_회원_조회() throws Exception {
+        //given
+
+        //expected
+        mockMvc.perform(get("/users/{userId}", 3L)
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
@@ -99,7 +140,7 @@ class UserControllerTest {
                 .mapToObj(i -> {
                     return User.builder()
                             .name("회원" + i)
-                            .nickName("닉네임" + i)
+                            .nickName("별명" + i)
                             .build();
                 })
                 .collect(Collectors.toList());

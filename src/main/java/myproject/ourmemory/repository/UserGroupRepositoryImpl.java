@@ -6,8 +6,7 @@ import myproject.ourmemory.domain.QGroup;
 import myproject.ourmemory.domain.QUser;
 import myproject.ourmemory.domain.QUserGroup;
 import myproject.ourmemory.domain.UserGroup;
-import myproject.ourmemory.dto.userGroup.GetByGroupRequest;
-import myproject.ourmemory.dto.userGroup.GetUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

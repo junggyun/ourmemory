@@ -1,8 +1,7 @@
 package myproject.ourmemory.repository;
 
 import myproject.ourmemory.domain.UserGroup;
-import myproject.ourmemory.dto.userGroup.GetByGroupRequest;
-import myproject.ourmemory.dto.userGroup.GetUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 
 import java.util.List;
 

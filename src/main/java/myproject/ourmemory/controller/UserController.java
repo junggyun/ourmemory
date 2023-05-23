@@ -18,8 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users")
-    public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request, BindingResult result) {
-
+    public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
         Long userId = userService.join(request);
 
         return new CreateUserResponse(userId);
@@ -51,7 +50,7 @@ public class UserController {
 
     @DeleteMapping("/users/{userId}")
     public DeleteUserResponse deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+        userService.delete(userId);
 
         return new DeleteUserResponse(userId);
     }

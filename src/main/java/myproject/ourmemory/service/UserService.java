@@ -5,6 +5,8 @@ import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.CreateUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
+import myproject.ourmemory.exception.UserNickNameDuplicated;
+import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +25,11 @@ public class UserService {
      */
     @Transactional
     public Long join(CreateUserRequest request) {
-
         User user = User.builder()
                 .name(request.getName())
                 .nickName(request.getNickName())
                 .build();
-
+        nickNameValidate(user);
         userRepository.save(user);
 
         return user.getId();
@@ -40,7 +41,7 @@ public class UserService {
     @Transactional
     public void updateNickName(Long userId, UpdateUserRequest request) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(UserNotFound::new);
 
         findUser.updateUser(request);
     }
@@ -49,9 +50,9 @@ public class UserService {
      * 회원 삭제
      */
     @Transactional
-    public void deleteUser(Long userId) {
+    public void delete(Long userId) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(UserNotFound::new);
 
         userRepository.delete(findUser);
     }
@@ -62,7 +63,7 @@ public class UserService {
     //특정 회원 조회
     public User findOneUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new UserNotFound());
     }
 
     //전체 회원 조회
@@ -73,6 +74,18 @@ public class UserService {
     //전체 회원 페이징 조회
     public List<User> findUsers(GetUserRequest request) {
         return userRepository.findUsers(request);
+    }
+
+    /**
+     * 예외처리
+     */
+    private void nickNameValidate(User user) {
+        List<User> findUsers = userRepository.findAll();
+
+        for (User findUser : findUsers) {
+            if (user.getNickName().equals(findUser.getNickName()))
+                throw new UserNickNameDuplicated("nickName", "이미 사용 중인 닉네임입니다.");
+        }
     }
 
 }

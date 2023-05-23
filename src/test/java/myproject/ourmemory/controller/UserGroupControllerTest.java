@@ -1,13 +1,14 @@
 package myproject.ourmemory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import myproject.ourmemory.domain.Group;
-import myproject.ourmemory.domain.User;
-import myproject.ourmemory.dto.userGroup.CreateUserGroupRequest;
+import myproject.ourmemory.domain.*;
+import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserGroupService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -42,30 +43,24 @@ class UserGroupControllerTest {
     }
 
     @Test
-    @DisplayName("유저그룹 등록")
-    public void 유저그룹_등록() throws Exception {
+    @DisplayName("유저그룹 등록(그룹 생성)")
+    public void 유저그룹_등록_그룹생성() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .nickName("테란킹")
                 .build();
-
-        Group group = Group.builder()
-                .name("컴공과")
-                .build();
-
         userRepository.save(user);
-        groupRepository.save(group);
 
         CreateUserGroupRequest request = CreateUserGroupRequest.builder()
                 .userId(user.getId())
-                .groupId(group.getId())
+                .groupName("컴소과")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        mockMvc.perform(post("/userGroups")
+        mockMvc.perform(post("/userGroups/create")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -74,8 +69,55 @@ class UserGroupControllerTest {
                 .andDo(print());
 
         //then
+        UserGroup userGroup = userGroupRepository.findAll().get(0);
 
-     }
+        assertEquals(UserGroupRole.HOST, userGroup.getRole());
+    }
+
+    @Test
+    @DisplayName("유저그룹 등록(그룹 입장)")
+    public void 유저그룹_등록_그룹입장() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
+                .build();
+        userRepository.save(user2);
+
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴소과")
+                .build();
+        UserGroupId userGroupId = userGroupService.create(request1);
+
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(userGroupId.getGroupId())
+                .build();
+
+
+        String json = objectMapper.writeValueAsString(request2);
+
+        //when
+        mockMvc.perform(post("/userGroups/join")
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        //then
+        UserGroup userGroup = userGroupRepository.findAll().get(1);
+
+        assertEquals(UserGroupRole.MEMBER, userGroup.getRole());
+    }
 
     @Test
     @DisplayName("특정 유저 그룹 조회")
@@ -93,23 +135,17 @@ class UserGroupControllerTest {
                 .build();
         userRepository.save(user2);
 
-        Group group = Group.builder()
-                .name("컴공과")
-                .build();
-
-        groupRepository.save(group);
-
         CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
                 .userId(user1.getId())
-                .groupId(group.getId())
+                .groupName("컴공과")
                 .build();
-        userGroupService.create(request1);
+        UserGroupId userGroupId = userGroupService.create(request1);
 
-        CreateUserGroupRequest request2 = CreateUserGroupRequest.builder()
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(group.getId())
+                .groupId(userGroupId.getGroupId())
                 .build();
-        userGroupService.create(request2);
+        userGroupService.join(request2);
 
 
         //when
@@ -136,36 +172,26 @@ class UserGroupControllerTest {
                 .build();
         userRepository.save(user);
 
-        Group group1 = Group.builder()
-                .name("컴공과")
-                .build();
-        groupRepository.save(group1);
-
-        Group group2 = Group.builder()
-                .name("모바일과")
-                .build();
-        groupRepository.save(group2);
-
         CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
                 .userId(user.getId())
-                .groupId(group1.getId())
+                .groupName("컴공과")
                 .build();
-        userGroupService.create(request1);
+        UserGroupId userGroupId = userGroupService.create(request1);
 
         CreateUserGroupRequest request2 = CreateUserGroupRequest.builder()
                 .userId(user.getId())
-                .groupId(group2.getId())
+                .groupName("모바일과")
                 .build();
         userGroupService.create(request2);
 
 
         //when
-        mockMvc.perform(get("/userGroups/byGroup?groupId={groupId}&size=5&page=1", group1.getId())
+        mockMvc.perform(get("/userGroups/byGroup?groupId={groupId}&size=5&page=1", userGroupId.getGroupId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.groupId").value(group1.getId()))
+                .andExpect(jsonPath("$.groupId").value(userGroupId.getGroupId()))
                 .andExpect(jsonPath("$.users.length()").value(1))
                 .andDo(print());
 

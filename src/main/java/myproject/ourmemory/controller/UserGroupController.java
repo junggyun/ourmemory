@@ -3,12 +3,13 @@ package myproject.ourmemory.controller;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupId;
-import myproject.ourmemory.dto.userGroup.*;
+import myproject.ourmemory.dto.usergroup.*;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserGroupService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +21,26 @@ public class UserGroupController {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
-    @PostMapping("/userGroups")
-    public CreateUserGroupResponse create(@RequestBody CreateUserGroupRequest request) {
+    /**
+     * 유저그룹 등록(그룹 생성)
+     */
+    @PostMapping("/userGroups/create")
+    public CreateUserGroupResponse create(@Valid @RequestBody CreateUserGroupRequest request) {
 
         UserGroupId userGroupId = userGroupService.create(request);
 
         return new CreateUserGroupResponse(userGroupId);
+    }
+
+    /**
+     * 유저그룹 등록(그룹 입장)
+     */
+    @PostMapping("/userGroups/join")
+    public JoingUserGroupResponse join(@Valid @RequestBody JoinUserGroupRequest request) {
+
+        UserGroupId userGroupId = userGroupService.join(request);
+
+        return new JoingUserGroupResponse(userGroupId);
     }
 
     /**

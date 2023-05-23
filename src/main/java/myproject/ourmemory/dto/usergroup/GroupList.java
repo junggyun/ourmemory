@@ -1,11 +1,9 @@
-package myproject.ourmemory.dto.userGroup;
+package myproject.ourmemory.dto.usergroup;
 
 import lombok.Getter;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupRole;
 import myproject.ourmemory.dto.group.GroupDto;
-
-import java.util.List;
 
 @Getter
 public class GroupList {

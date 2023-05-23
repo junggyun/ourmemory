@@ -1,7 +1,11 @@
 package myproject.ourmemory.controller;
 
 import myproject.ourmemory.exception.ErrorResponse;
+import myproject.ourmemory.exception.OurMemoryException;
+import myproject.ourmemory.exception.UserNickNameDuplicated;
+import myproject.ourmemory.exception.UserNotFound;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +28,23 @@ public class ExceptionController {
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+
+        return response;
+    }
+
+    @ExceptionHandler(OurMemoryException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> ourMemoryException(OurMemoryException e) {
+        int statusCode = e.getStatusCode();
+
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
 
         return response;
     }

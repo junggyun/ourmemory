@@ -2,9 +2,11 @@ package myproject.ourmemory.service;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.*;
-import myproject.ourmemory.dto.userGroup.CreateUserGroupRequest;
-import myproject.ourmemory.dto.userGroup.GetByGroupRequest;
-import myproject.ourmemory.dto.userGroup.GetUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
+import myproject.ourmemory.exception.GroupNotFound;
+import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
@@ -23,21 +25,46 @@ public class UserGroupService {
     private final GroupRepository groupRepository;
 
     /**
-     * 유저그룹 생성
+     * 유저그룹 등록(그룹 생성)
      */
     @Transactional
     public UserGroupId create(CreateUserGroupRequest request) {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(UserNotFound::new);
 
-        Group group = groupRepository.findById(request.getGroupId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+        Group group = Group.builder()
+                .name(request.getGroupName())
+                .build();
+        groupRepository.save(group);
 
         UserGroup userGroup = UserGroup.builder()
                 .user(user)
                 .group(group)
                 .role(UserGroupRole.HOST)
+                .build();
+
+        userGroupRepository.save(userGroup);
+
+        return userGroup.getId();
+    }
+
+    /**
+     * 유저그룹 등록(그룹 입장)
+     */
+    @Transactional
+    public UserGroupId join(JoinUserGroupRequest request) {
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(UserNotFound::new);
+
+        Group group = groupRepository.findById(request.getGroupId())
+                .orElseThrow(GroupNotFound::new);
+
+        UserGroup userGroup = UserGroup.builder()
+                .user(user)
+                .group(group)
+                .role(UserGroupRole.MEMBER)
                 .build();
 
         userGroupRepository.save(userGroup);

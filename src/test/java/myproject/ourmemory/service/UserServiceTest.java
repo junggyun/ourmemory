@@ -4,6 +4,7 @@ import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.CreateUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
+import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -68,6 +70,23 @@ class UserServiceTest {
         assertEquals("테란킹", findUser.getNickName());
      }
 
+    @Test
+    @DisplayName("특정 회원 조회 예외")
+    public void 특정_회원_조회_예외() throws Exception {
+        //given
+        User user = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+
+        userRepository.save(user);
+
+        //expected
+        assertThrows(UserNotFound.class, () -> {
+            userService.findOneUser(user.getId() + 1L);
+        });
+    }
+
      @Test
      @DisplayName("전체 회원 조회")
      public void 전체_회원_조회() throws Exception {
@@ -100,7 +119,7 @@ class UserServiceTest {
                 .mapToObj(i -> {
                     return User.builder()
                             .name("회원" + i)
-                            .nickName("닉네임" + i)
+                            .nickName("별명" + i)
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -115,9 +134,9 @@ class UserServiceTest {
         //then
         assertEquals(10L, findUsers.size());
         assertEquals("회원1", findUsers.get(0).getName());
-        assertEquals("닉네임1", findUsers.get(0).getNickName());
+        assertEquals("별명1", findUsers.get(0).getNickName());
         assertEquals("회원10", findUsers.get(9).getName());
-        assertEquals("닉네임10", findUsers.get(9).getNickName());
+        assertEquals("별명10", findUsers.get(9).getNickName());
 
     }
 
@@ -155,7 +174,7 @@ class UserServiceTest {
         userRepository.save(user);
 
         //when
-        userService.deleteUser(user.getId());
+        userService.delete(user.getId());
 
         //then
         assertEquals(0, userRepository.count());

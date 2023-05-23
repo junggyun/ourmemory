@@ -7,6 +7,7 @@ import myproject.ourmemory.domain.UserGroupRole;
 import myproject.ourmemory.dto.group.AddUserRequest;
 import myproject.ourmemory.dto.group.CreateGroupRequest;
 import myproject.ourmemory.dto.group.UpdateGroupRequest;
+import myproject.ourmemory.exception.GroupNotFound;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class GroupService {
     @Transactional
     public void updateName(Long groupId, UpdateGroupRequest request) {
         Group findGroup = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+                .orElseThrow(GroupNotFound::new);
 
         findGroup.updateName(request);
     }
@@ -65,7 +66,7 @@ public class GroupService {
     @Transactional
     public void deleteGroup(Long groupId) {
         Group findGroup = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+                .orElseThrow(GroupNotFound::new);
 
         groupRepository.delete(findGroup);
     }
@@ -76,7 +77,7 @@ public class GroupService {
     //특정 그룹 조회
     public Group findOneGroup(Long groupId) {
         return groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+                .orElseThrow(GroupNotFound::new);
     }
 
     //전체 그룹 조회

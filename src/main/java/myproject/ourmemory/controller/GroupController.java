@@ -3,7 +3,7 @@ package myproject.ourmemory.controller;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.dto.group.*;
-import myproject.ourmemory.dto.userGroup.DeleteUserGroupResponse;
+import myproject.ourmemory.dto.usergroup.DeleteUserGroupResponse;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.service.GroupService;
 import org.springframework.web.bind.annotation.*;

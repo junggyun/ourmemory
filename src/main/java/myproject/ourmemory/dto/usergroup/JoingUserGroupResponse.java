@@ -1,14 +1,14 @@
-package myproject.ourmemory.dto.userGroup;
+package myproject.ourmemory.dto.usergroup;
 
 import lombok.Getter;
 import myproject.ourmemory.domain.UserGroupId;
 
 @Getter
-public class CreateUserGroupResponse {
+public class JoingUserGroupResponse {
 
     private UserGroupId id;
 
-    public CreateUserGroupResponse(UserGroupId id) {
+    public JoingUserGroupResponse(UserGroupId id) {
         this.id = id;
     }
 }

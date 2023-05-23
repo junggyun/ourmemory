@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class CreateGroupRequest {
 
-    @NotBlank(message = "이름을 입력해주세요.")
+    @NotBlank(message = "그룹명을 입력해주세요.")
     private String name;
 
     public CreateGroupRequest() {

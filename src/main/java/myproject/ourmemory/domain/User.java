@@ -1,11 +1,13 @@
 package myproject.ourmemory.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +26,11 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
+    @NotNull
     private String name;
 
+    @NotNull
+    @Column(unique = true)
     private String nickName;
 
     public User() {
@@ -42,14 +47,5 @@ public class User extends BaseTimeEntity {
     public void updateUser(UpdateUserRequest request) {
         nickName = request.getNickName();
     }
-
-    //==비즈니스 메서드==//
-    public void joinGroup(Group group) {
-        UserGroup userGroup = UserGroup.builder()
-                .user(this)
-                .group(group)
-                .build();
-    }
-
 
 }

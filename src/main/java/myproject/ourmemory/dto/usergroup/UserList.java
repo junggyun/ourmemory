@@ -1,7 +1,6 @@
-package myproject.ourmemory.dto.userGroup;
+package myproject.ourmemory.dto.usergroup;
 
 import lombok.Getter;
-import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.dto.user.UserDto;
 

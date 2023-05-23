@@ -1,4 +1,4 @@
-package myproject.ourmemory.dto.userGroup;
+package myproject.ourmemory.dto.usergroup;
 
 import lombok.Getter;
 import myproject.ourmemory.domain.UserGroup;
