@@ -6,6 +6,7 @@ import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupRole;
 import myproject.ourmemory.dto.group.AddUserRequest;
 import myproject.ourmemory.dto.group.CreateGroupRequest;
+import myproject.ourmemory.dto.group.GetGroupRequest;
 import myproject.ourmemory.dto.group.UpdateGroupRequest;
 import myproject.ourmemory.exception.GroupNotFound;
 import myproject.ourmemory.repository.GroupRepository;
@@ -80,9 +81,9 @@ public class GroupService {
                 .orElseThrow(GroupNotFound::new);
     }
 
-    //전체 그룹 조회
-    public List<Group> findAllGroups() {
-        return groupRepository.findAllWithUser();
+    //전체 그룹 페이징 조회
+    public List<Group> findGroups(GetGroupRequest request) {
+        return groupRepository.findGroups(request);
     }
 
     /**

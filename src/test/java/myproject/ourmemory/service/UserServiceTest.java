@@ -119,7 +119,7 @@ class UserServiceTest {
                 .mapToObj(i -> {
                     return User.builder()
                             .name("회원" + i)
-                            .nickName("별명" + i)
+                            .nickName("닉네임" + i)
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -134,9 +134,9 @@ class UserServiceTest {
         //then
         assertEquals(10L, findUsers.size());
         assertEquals("회원1", findUsers.get(0).getName());
-        assertEquals("별명1", findUsers.get(0).getNickName());
+        assertEquals("닉네임1", findUsers.get(0).getNickName());
         assertEquals("회원10", findUsers.get(9).getName());
-        assertEquals("별명10", findUsers.get(9).getNickName());
+        assertEquals("닉네임10", findUsers.get(9).getNickName());
 
     }
 

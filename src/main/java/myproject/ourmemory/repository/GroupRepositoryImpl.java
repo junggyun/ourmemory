@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.QGroup;
+import myproject.ourmemory.dto.group.GetGroupRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,8 +18,10 @@ public class GroupRepositoryImpl implements CustomGroupRepository {
     private final EntityManager em;
 
     @Override
-    public List<Group> findAllWithUser() {
+    public List<Group> findGroups(GetGroupRequest request) {
         return jpaQueryFactory.selectFrom(QGroup.group)
+                .offset(request.getOffset())
+                .limit(request.getSize())
                 .fetch();
     }
 }

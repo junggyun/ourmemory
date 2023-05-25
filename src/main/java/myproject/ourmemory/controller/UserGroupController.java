@@ -2,7 +2,6 @@ package myproject.ourmemory.controller;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.UserGroup;
-import myproject.ourmemory.domain.UserGroupId;
 import myproject.ourmemory.dto.usergroup.*;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserRepository;
@@ -22,29 +21,7 @@ public class UserGroupController {
     private final GroupRepository groupRepository;
 
     /**
-     * 유저그룹 등록(그룹 생성)
-     */
-    @PostMapping("/userGroups/create")
-    public CreateUserGroupResponse create(@Valid @RequestBody CreateUserGroupRequest request) {
-
-        UserGroupId userGroupId = userGroupService.create(request);
-
-        return new CreateUserGroupResponse(userGroupId);
-    }
-
-    /**
-     * 유저그룹 등록(그룹 입장)
-     */
-    @PostMapping("/userGroups/join")
-    public JoingUserGroupResponse join(@Valid @RequestBody JoinUserGroupRequest request) {
-
-        UserGroupId userGroupId = userGroupService.join(request);
-
-        return new JoingUserGroupResponse(userGroupId);
-    }
-
-    /**
-     * 특정 유저 그룹 리스트 조회
+     * 특정 회원 그룹 리스트 조회
      */
     @GetMapping("/userGroups/byUser")
     public GetByUserResponse findAllByUser(@ModelAttribute GetUserGroupRequest request) {
@@ -66,7 +43,7 @@ public class UserGroupController {
     }
 
     /**
-     * 특정 그룹 유저 리스트 조회
+     * 특정 회원 유저 리스트 조회
      */
     @GetMapping("/userGroups/byGroup")
     public GetByGroupResponse findAllByGroup(@ModelAttribute GetUserGroupRequest request) {
@@ -87,4 +64,25 @@ public class UserGroupController {
         return result;
     }
 
+    /**
+     * 유저그룹 등록(그룹 생성)
+     */
+    @PostMapping("/userGroups/create")
+    public CreateUserGroupResponse create(@Valid @RequestBody CreateUserGroupRequest request) {
+
+        Long userGroupId = userGroupService.create(request);
+
+        return new CreateUserGroupResponse(userGroupId);
+    }
+
+    /**
+     * 유저그룹 등록(그룹 입장)
+     */
+    @PostMapping("/userGroups/join")
+    public JoingUserGroupResponse join(@Valid @RequestBody JoinUserGroupRequest request) {
+
+        Long userGroupId = userGroupService.join(request);
+
+        return new JoingUserGroupResponse(userGroupId);
+    }
 }

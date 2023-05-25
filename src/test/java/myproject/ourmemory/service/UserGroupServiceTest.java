@@ -4,7 +4,6 @@ import myproject.ourmemory.InitDB;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
-import myproject.ourmemory.domain.UserGroupId;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
@@ -113,11 +112,12 @@ class UserGroupServiceTest {
                 .userId(user1.getId())
                 .groupName("컴공과")
                 .build();
-        UserGroupId userGroupId = userGroupService.create(request1);
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroupId.getGroupId())
+                .groupId(userGroup.getGroup().getId())
                 .build();
         userGroupService.join(request2);
 
@@ -149,7 +149,8 @@ class UserGroupServiceTest {
                 .userId(user.getId())
                 .groupName("컴공과")
                 .build();
-        UserGroupId userGroupId = userGroupService.create(request1);
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
 
         CreateUserGroupRequest request2 = CreateUserGroupRequest.builder()
                 .userId(user.getId())
@@ -158,7 +159,7 @@ class UserGroupServiceTest {
         userGroupService.create(request2);
 
         GetUserGroupRequest request3 = GetUserGroupRequest.builder()
-                .groupId(userGroupId.getGroupId())
+                .groupId(userGroup.getGroup().getId())
                 .build();
         //when
         List<UserGroup> userGroups = userGroupService.listByGroup(request3);

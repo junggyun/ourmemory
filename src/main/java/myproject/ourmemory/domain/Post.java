@@ -3,6 +3,7 @@ package myproject.ourmemory.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import myproject.ourmemory.dto.post.UpdatePostRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -45,6 +46,10 @@ public class Post extends BaseTimeEntity{
     }
 
     //==변경 메서드==//
+    public void updatePost(UpdatePostRequest request) {
+        title = request.getTitle();
+        content = request.getContent();
+    }
 
     //==연관관계 메서드==//
     public void setUser(User user) {

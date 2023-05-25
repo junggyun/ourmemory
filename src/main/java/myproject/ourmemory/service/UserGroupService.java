@@ -28,7 +28,7 @@ public class UserGroupService {
      * 유저그룹 등록(그룹 생성)
      */
     @Transactional
-    public UserGroupId create(CreateUserGroupRequest request) {
+    public Long create(CreateUserGroupRequest request) {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
@@ -53,7 +53,7 @@ public class UserGroupService {
      * 유저그룹 등록(그룹 입장)
      */
     @Transactional
-    public UserGroupId join(JoinUserGroupRequest request) {
+    public Long join(JoinUserGroupRequest request) {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
@@ -71,6 +71,10 @@ public class UserGroupService {
 
         return userGroup.getId();
     }
+
+    /**
+     * 유저그룹 삭제
+     */
 
     /**
      * 유저 기준 조회

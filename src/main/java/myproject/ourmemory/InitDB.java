@@ -19,7 +19,7 @@ public class InitDB {
 
     private final initService initService;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         initService.DBinit1();
     }

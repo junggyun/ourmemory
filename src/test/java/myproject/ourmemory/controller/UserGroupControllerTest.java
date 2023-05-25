@@ -94,11 +94,12 @@ class UserGroupControllerTest {
                 .userId(user1.getId())
                 .groupName("컴소과")
                 .build();
-        UserGroupId userGroupId = userGroupService.create(request1);
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroupId.getGroupId())
+                .groupId(userGroup.getGroup().getId())
                 .build();
 
 
@@ -114,9 +115,9 @@ class UserGroupControllerTest {
                 .andDo(print());
 
         //then
-        UserGroup userGroup = userGroupRepository.findAll().get(1);
+        UserGroup findUserGroup = userGroupRepository.findAll().get(1);
 
-        assertEquals(UserGroupRole.MEMBER, userGroup.getRole());
+        assertEquals(UserGroupRole.MEMBER, findUserGroup.getRole());
     }
 
     @Test
@@ -139,11 +140,12 @@ class UserGroupControllerTest {
                 .userId(user1.getId())
                 .groupName("컴공과")
                 .build();
-        UserGroupId userGroupId = userGroupService.create(request1);
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroupId.getGroupId())
+                .groupId(userGroup.getGroup().getId())
                 .build();
         userGroupService.join(request2);
 
@@ -176,7 +178,8 @@ class UserGroupControllerTest {
                 .userId(user.getId())
                 .groupName("컴공과")
                 .build();
-        UserGroupId userGroupId = userGroupService.create(request1);
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
 
         CreateUserGroupRequest request2 = CreateUserGroupRequest.builder()
                 .userId(user.getId())
@@ -186,12 +189,12 @@ class UserGroupControllerTest {
 
 
         //when
-        mockMvc.perform(get("/userGroups/byGroup?groupId={groupId}&size=5&page=1", userGroupId.getGroupId())
+        mockMvc.perform(get("/userGroups/byGroup?groupId={groupId}&size=5&page=1", userGroup.getGroup().getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.groupId").value(userGroupId.getGroupId()))
+                .andExpect(jsonPath("$.groupId").value(userGroup.getGroup().getId()))
                 .andExpect(jsonPath("$.users.length()").value(1))
                 .andDo(print());
 

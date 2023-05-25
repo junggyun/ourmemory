@@ -17,8 +17,8 @@ public class PostDto {
     private GroupDto group;
     private String title;
     private String content;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+    private String createdDate;
+    private String modifiedDate;
 
     public PostDto() {
     }

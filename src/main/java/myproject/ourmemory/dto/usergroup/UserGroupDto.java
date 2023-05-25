@@ -12,8 +12,8 @@ public class UserGroupDto {
     private UserGroupRole role;
 
     public UserGroupDto(UserGroup userGroup) {
-        userId = userGroup.getId().getUserId();
-        groupId = userGroup.getId().getGroupId();
+        userId = userGroup.getUser().getId();
+        groupId = userGroup.getGroup().getId();
         role = userGroup.getRole();
     }
 }

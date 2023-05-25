@@ -2,10 +2,14 @@ package myproject.ourmemory.service;
 
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.dto.group.AddUserRequest;
 import myproject.ourmemory.dto.group.CreateGroupRequest;
+import myproject.ourmemory.dto.group.GetGroupRequest;
 import myproject.ourmemory.dto.group.UpdateGroupRequest;
+import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.repository.GroupRepository;
+import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,6 +29,8 @@ class GroupServiceTest {
     @Autowired private UserRepository userRepository;
     @Autowired private GroupRepository groupRepository;
     @Autowired private GroupService groupService;
+    @Autowired private UserGroupService userGroupService;
+    @Autowired private UserGroupRepository userGroupRepository;
 
     @BeforeEach
     void clean() {
@@ -83,41 +91,56 @@ class GroupServiceTest {
     }
 
     @Test
-    @DisplayName("그룹 조회")
+    @DisplayName("그룹 단건 조회")
     public void 그룹_조회() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .nickName("테란킹")
                 .build();
-
-        Group group1 = Group.builder()
-                .name("컴공과")
-                .build();
-
-        Group group2 = Group.builder()
-                .name("모바일과")
-                .build();
-
         userRepository.save(user);
-        groupRepository.save(group1);
-        groupRepository.save(group2);
-
-        AddUserRequest request1 = AddUserRequest.builder()
-                .user(user)
-                .group(group1)
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user.getId())
+                .groupName("컴공과")
                 .build();
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId).get();
+        Group group = userGroup.getGroup();
 
-        AddUserRequest request2 = AddUserRequest.builder()
-                .user(user)
-                .group(group2)
-                .build();
 
         //when
-        groupService.addUser(request1);
-        groupService.addUser(request2);
-        groupRepository.findAllWithUser();
+        groupService.findOneGroup(group.getId());
+
         //then
+        assertEquals("컴공과", group.getName());
+    }
+        @Test
+        @DisplayName("그룹 페이징 조회")
+        public void 그룹_페이징_조회() throws Exception {
+            //given
+            User user = User.builder()
+                    .name("박정균")
+                    .nickName("테란킹")
+                    .build();
+            userRepository.save(user);
+
+            for (int i = 1; i <= 51; i++) {
+                CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                        .userId(user.getId())
+                        .groupName("컴공과" + i)
+                        .build();
+                userGroupService.create(request1);
+            }
+
+            GetGroupRequest request = GetGroupRequest.builder()
+                    .page(1)
+                    .build();
+
+            //when
+            List<Group> groups = groupService.findGroups(request);
+
+            //then
+            assertEquals(10, groups.size());
     }
 
 }

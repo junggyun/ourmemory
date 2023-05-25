@@ -5,6 +5,9 @@ import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.Post;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.post.CreatePostRequest;
+import myproject.ourmemory.dto.post.GetPostRequest;
+import myproject.ourmemory.dto.post.UpdatePostRequest;
+import myproject.ourmemory.dto.post.UpdatePostResponse;
 import myproject.ourmemory.exception.GroupNotFound;
 import myproject.ourmemory.exception.PostNotFound;
 import myproject.ourmemory.exception.UserNotFound;
@@ -52,13 +55,22 @@ public class PostService {
     /**
      * 게시글 수정
      */
+    @Transactional
+    public void updatePost(Long postId, UpdatePostRequest request) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+        post.updatePost(request);
 
+    }
 
     /**
      * 게시글 삭제
      */
     @Transactional
-    public void deletePost(Post post) {
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
         postRepository.delete(post);
     }
 
@@ -74,6 +86,11 @@ public class PostService {
     //전체 게시글 조회
     public List<Post> findAllPosts() {
         return postRepository.findAll();
+    }
+
+    //전체 게시글 페이징 조회
+    public List<Post> findPosts(GetPostRequest request) {
+        return postRepository.findPosts(request);
     }
 
 

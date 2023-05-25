@@ -25,7 +25,7 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<UserGroup> userGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group")
     private List<Post> posts = new ArrayList<>();
 
     private String name;

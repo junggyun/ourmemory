@@ -17,13 +17,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
-    public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
-        Long userId = userService.join(request);
-
-        return new CreateUserResponse(userId);
-    }
-
+    /**
+     * 회원 단건 조회
+     */
     @GetMapping("/users/{userId}")
     public UserDto user(@PathVariable Long userId) {
         User findUser = userService.findOneUser(userId);
@@ -31,6 +27,9 @@ public class UserController {
         return new UserDto(findUser);
     }
 
+    /**
+     * 회원 페이징 조회
+     */
     @GetMapping("/users")
     public List<UserDto> users(@ModelAttribute GetUserRequest request) {
         List<User> findUsers = userService.findUsers(request);
@@ -41,6 +40,19 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 회원 등록
+     */
+    @PostMapping("/users")
+    public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
+        Long userId = userService.join(request);
+
+        return new CreateUserResponse(userId);
+    }
+
+    /**
+     * 회원 수정
+     */
     @PostMapping("/users/{userId}")
     public UpdateUserResponse updateUser(@PathVariable Long userId, @RequestBody @Valid UpdateUserRequest request) {
         userService.updateNickName(userId, request);
@@ -48,6 +60,9 @@ public class UserController {
         return new UpdateUserResponse(userId);
     }
 
+    /**
+     * 회원 삭제
+     */
     @DeleteMapping("/users/{userId}")
     public DeleteUserResponse deleteUser(@PathVariable Long userId) {
         userService.delete(userId);
