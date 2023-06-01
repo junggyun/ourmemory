@@ -3,7 +3,7 @@ package myproject.ourmemory.domain;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter @Setter
@@ -14,7 +14,7 @@ import javax.persistence.*;
                 columnNames = {"user_id", "group_id"}
         )
         })
-public class UserGroup {
+public class UserGroup extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +39,12 @@ public class UserGroup {
         setUser(user);
         setGroup(group);
         this.role = role;
+    }
+
+    //==변경 메서드==//
+    public void updateRole(UserGroup memberUser) {
+        role = UserGroupRole.MEMBER;
+        memberUser.role = UserGroupRole.HOST;
     }
 
     //==연관관계 메서드==//

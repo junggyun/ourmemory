@@ -4,9 +4,12 @@ import myproject.ourmemory.InitDB;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
+import myproject.ourmemory.domain.UserGroupRole;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.UpdateUserGroupRequest;
+import myproject.ourmemory.exception.UserGroupNotFound;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
@@ -65,30 +68,128 @@ class UserGroupServiceTest {
     @DisplayName("유저그룹 등록(그룹 입장)")
     public void 유저_그룹_등록_그룹입장() throws Exception {
         //given
-        User user = User.builder()
+        User user1 = User.builder()
                 .name("박정균")
                 .nickName("테란킹")
                 .build();
+        userRepository.save(user1);
 
-        Group group = Group.builder()
-                .name("컴공과")
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
                 .build();
+        userRepository.save(user2);
 
-        userRepository.save(user);
-        groupRepository.save(group);
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴공과")
+                .build();
+        Long userGroupId1 = userGroupService.create(request1);
+        UserGroup userGroup1 = userGroupRepository.findById(userGroupId1)
+                .orElseThrow(UserGroupNotFound::new);
 
-        JoinUserGroupRequest request = JoinUserGroupRequest.builder()
-                .userId(user.getId())
-                .groupId(group.getId())
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(userGroup1.getGroup().getId())
                 .build();
 
         //when
-        userGroupService.join(request);
+        Long userGroupId2 = userGroupService.join(request2);
 
         //then
-        UserGroup userGroup = userGroupRepository.findAll().get(0);
+        UserGroup userGroup2 = userGroupRepository.findById(userGroupId2)
+                .orElseThrow(UserGroupNotFound::new);
 
-        assertEquals("MEMBER", userGroup.getRole().toString());
+        assertEquals(UserGroupRole.MEMBER, userGroup2.getRole());
+    }
+
+    @Test
+    @DisplayName("유저그룹 수정(ROLE)")
+    public void 유저_그룹_수정() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
+                .build();
+        userRepository.save(user2);
+
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴공과")
+                .build();
+        Long hostUserGroupId = userGroupService.create(request1);
+        UserGroup hostUserGroup = userGroupRepository.findById(hostUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+        Long groupId = hostUserGroup.getGroup().getId();
+
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(groupId)
+                .build();
+        Long memberUserGroupId = userGroupService.join(request2);
+        UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+        UpdateUserGroupRequest request3 = UpdateUserGroupRequest.builder()
+                .hostUserId(user1.getId())
+                .memberUserId(user2.getId())
+                .build();
+
+        //when
+        userGroupService.updateRole(groupId, request3);
+
+        //then
+
+        assertEquals(UserGroupRole.MEMBER, hostUserGroup.getRole());
+        assertEquals(UserGroupRole.HOST, memberUserGroup.getRole());
+    }
+
+    @Test
+    @DisplayName("유저그룹 삭제")
+    public void 유저_그룹_삭제() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
+                .build();
+        userRepository.save(user2);
+
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴공과")
+                .build();
+        Long hostUserGroupId = userGroupService.create(request1);
+        UserGroup hostUserGroup = userGroupRepository.findById(hostUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+        Long groupId = hostUserGroup.getGroup().getId();
+
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(groupId)
+                .build();
+        Long memberUserGroupId = userGroupService.join(request2);
+        UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+
+        //when
+        userGroupService.delete(memberUserGroupId);
+
+        //then
+
+        assertEquals(1, userGroupRepository.count());
     }
 
     @Test

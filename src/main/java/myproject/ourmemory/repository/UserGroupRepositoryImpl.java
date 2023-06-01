@@ -17,8 +17,17 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     QUserGroup qUserGroup = QUserGroup.userGroup;
-    QUser qUser = QUser.user;
-    QGroup qGroup = QGroup.group;
+
+    @Override
+    public UserGroup findOneUserGroup(GetUserGroupRequest request) {
+        return jpaQueryFactory
+                .selectFrom(qUserGroup)
+                .join(qUserGroup.user).fetchJoin()
+                .join(qUserGroup.group).fetchJoin()
+                .where(qUserGroup.user.id.eq(request.getUserId()), qUserGroup.group.id.eq(request.getGroupId()))
+                .fetch()
+                .get(0);
+    }
 
     @Override
     public List<UserGroup> findByUser(GetUserGroupRequest request) {

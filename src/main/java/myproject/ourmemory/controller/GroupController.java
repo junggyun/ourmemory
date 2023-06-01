@@ -8,7 +8,7 @@ import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.service.GroupService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +20,7 @@ public class GroupController {
     private final GroupRepository groupRepository;
 
     /**
-     * 게시글 단건 조회
+     * 그룹 단건 조회
      */
     @GetMapping("/groups/{groupId}")
     public GroupDto group(@PathVariable Long groupId) {
@@ -30,7 +30,7 @@ public class GroupController {
     }
 
     /**
-     * 게시글 페이징 조회
+     * 그룹 페이징 조회
      */
     @GetMapping("/groups")
     public List<GroupDto> groups(@ModelAttribute GetGroupRequest request) {
@@ -42,18 +42,18 @@ public class GroupController {
         return result;
     }
 
-    /**
-     * 게시글 등록
-     */
-    @PostMapping("/groups")
-    public CreateGroupResponse createGroup(@RequestBody @Valid CreateGroupRequest request) {
-        Long groupId = groupService.createGroup(request);
+//    /**
+//     * 그룹 등록
+//     */
+//    @PostMapping("/groups")
+//    public CreateGroupResponse createGroup(@RequestBody @Valid CreateGroupRequest request) {
+//        Long groupId = groupService.createGroup(request);
+//
+//        return new CreateGroupResponse(groupId);
+//    }
 
-        return new CreateGroupResponse(groupId);
-    }
-
     /**
-     * 게시글 수정
+     * 그룹 수정
      */
     @PostMapping("/groups/{groupId}")
     public UpdateGroupResponse updateGroup(@PathVariable Long groupId, @RequestBody @Valid UpdateGroupRequest request) {
@@ -63,7 +63,7 @@ public class GroupController {
     }
 
     /**
-     * 게시글 삭제
+     * 그룹 삭제
      */
     @DeleteMapping("/groups/{groupId}")
     public DeleteUserGroupResponse delete(@PathVariable Long groupId) {

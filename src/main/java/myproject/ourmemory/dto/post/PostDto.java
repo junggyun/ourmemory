@@ -14,7 +14,6 @@ public class PostDto {
 
     private Long postId;
     private UserDto user;
-    private GroupDto group;
     private String title;
     private String content;
     private String createdDate;
@@ -26,7 +25,6 @@ public class PostDto {
     public PostDto(Post post) {
         postId = post.getId();
         user = new UserDto(post.getUser());
-        group = new GroupDto(post.getGroup());
         title = post.getTitle();
         content = post.getContent();
         createdDate = post.getCreatedDate();

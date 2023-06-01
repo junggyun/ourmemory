@@ -90,7 +90,7 @@ class UserControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andDo(print());
 
 

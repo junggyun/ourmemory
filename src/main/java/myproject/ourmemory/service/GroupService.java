@@ -25,30 +25,20 @@ public class GroupService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
-    /**
-     * 그룹 등록
-     */
-    @Transactional
-    public Long createGroup(CreateGroupRequest request) {
-
-        Group group = Group.builder()
-                .name(request.getName())
-                .build();
-
-        groupRepository.save(group);
-
-        return group.getId();
-    }
-
-    @Transactional
-    public void addUser(AddUserRequest request) {
-
-        UserGroup userGroup = UserGroup.builder()
-                .user(request.getUser())
-                .group(request.getGroup())
-                .role(UserGroupRole.MEMBER)
-                .build();
-    }
+//    /**
+//     * 그룹 등록
+//     */
+//    @Transactional
+//    public Long createGroup(CreateGroupRequest request) {
+//
+//        Group group = Group.builder()
+//                .name(request.getName())
+//                .build();
+//
+//        groupRepository.save(group);
+//
+//        return group.getId();
+//    }
 
     /**
      * 그룹 수정

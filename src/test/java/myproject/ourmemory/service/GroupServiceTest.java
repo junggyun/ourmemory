@@ -37,22 +37,22 @@ class GroupServiceTest {
         groupRepository.deleteAll();
     }
 
-    @Test
-    @DisplayName("그룹 등록")
-    public void 그룹_등록() throws Exception {
-        //given
-        CreateGroupRequest request = CreateGroupRequest.builder()
-                .name("컴공과")
-                .build();
-        //when
-        groupService.createGroup(request);
-
-        //then
-        Group group = groupRepository.findAll().get(0);
-
-        assertEquals(1L, groupRepository.count());
-        assertEquals("컴공과", group.getName());
-     }
+//    @Test
+//    @DisplayName("그룹 등록")
+//    public void 그룹_등록() throws Exception {
+//        //given
+//        CreateGroupRequest request = CreateGroupRequest.builder()
+//                .name("컴공과")
+//                .build();
+//        //when
+//        groupService.createGroup(request);
+//
+//        //then
+//        Group group = groupRepository.findAll().get(0);
+//
+//        assertEquals(1L, groupRepository.count());
+//        assertEquals("컴공과", group.getName());
+//     }
 
     @Test
     @DisplayName("그룹 수정")
@@ -130,6 +130,7 @@ class GroupServiceTest {
                         .groupName("컴공과" + i)
                         .build();
                 userGroupService.create(request1);
+
             }
 
             GetGroupRequest request = GetGroupRequest.builder()

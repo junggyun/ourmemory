@@ -2,6 +2,7 @@ package myproject.ourmemory.dto.usergroup;
 
 import lombok.Builder;
 import lombok.Getter;
+import myproject.ourmemory.domain.User;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ public class GetByUserResponse {
     private List<GroupList> groups;
 
     @Builder
-    public GetByUserResponse(Long userId, List<GroupList> groups) {
-        this.userId = userId;
+    public GetByUserResponse(User user, List<GroupList> groups) {
+        userId = user.getId();
         this.groups = groups;
     }
 }

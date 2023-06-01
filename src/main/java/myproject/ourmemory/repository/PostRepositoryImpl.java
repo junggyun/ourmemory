@@ -9,7 +9,7 @@ import myproject.ourmemory.domain.QUser;
 import myproject.ourmemory.dto.post.GetPostRequest;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @Repository
@@ -17,9 +17,8 @@ import java.util.List;
 public class PostRepositoryImpl implements CustomPostRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-    QPost qPost = QPost.post;
-    QGroup qGroup = QGroup.group;
-    QUser qUser = QUser.user;
+    private final QPost qPost = QPost.post;
+
     @Override
     public List<Post> findPosts(GetPostRequest request) {
         return jpaQueryFactory

@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,18 +20,18 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserGroup> userGroups = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Post> posts = new ArrayList<>();
-
     @NotNull
     private String name;
 
     @NotNull
     @Column(unique = true)
     private String nickName;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserGroup> userGroups = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
     public User() {
     }

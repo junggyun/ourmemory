@@ -3,8 +3,8 @@ package myproject.ourmemory.dto.post;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Lob;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.Lob;
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 public class UpdatePostRequest {

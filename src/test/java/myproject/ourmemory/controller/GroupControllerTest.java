@@ -49,31 +49,31 @@ class GroupControllerTest {
         groupRepository.deleteAll();
     }
 
-    @Test
-    @DisplayName("그룹 등록")
-    public void 그룹_등록() throws Exception {
-        //given
-        CreateGroupRequest request = CreateGroupRequest.builder()
-                .name("컴공과")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //when
-        mockMvc.perform(post("/groups")
-                        .characterEncoding("UTF-8")
-                        .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-        //then
-        Group group = groupRepository.findAll().get(0);
-
-        assertEquals(1L, groupRepository.count());
-        assertEquals("컴공과", group.getName());
-
-    }
+//    @Test
+//    @DisplayName("그룹 등록")
+//    public void 그룹_등록() throws Exception {
+//        //given
+//        CreateGroupRequest request = CreateGroupRequest.builder()
+//                .name("컴공과")
+//                .build();
+//
+//        String json = objectMapper.writeValueAsString(request);
+//
+//        //when
+//        mockMvc.perform(post("/groups")
+//                        .characterEncoding("UTF-8")
+//                        .contentType(APPLICATION_JSON)
+//                        .content(json)
+//                )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//        //then
+//        Group group = groupRepository.findAll().get(0);
+//
+//        assertEquals(1L, groupRepository.count());
+//        assertEquals("컴공과", group.getName());
+//
+//    }
 
     @Test
     @DisplayName("그룹 수정")

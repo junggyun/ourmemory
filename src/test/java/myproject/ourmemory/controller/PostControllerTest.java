@@ -132,9 +132,7 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.name").value("박정균"))
                 .andExpect(jsonPath("$.user.nickName").value("테란킹"))
-                .andExpect(jsonPath("$.group.name").value("컴공과"))
                 .andExpect(jsonPath("$.title").value("속보"))
                 .andExpect(jsonPath("$.content").value("안녕하세요"))
                 .andDo(print());

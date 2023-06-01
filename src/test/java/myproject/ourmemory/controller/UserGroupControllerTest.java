@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import myproject.ourmemory.domain.*;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.UpdateUserGroupRequest;
+import myproject.ourmemory.exception.UserGroupNotFound;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
@@ -38,6 +40,7 @@ class UserGroupControllerTest {
 
     @BeforeEach
     void clean() {
+        userRepository.deleteAll();
         userGroupRepository.deleteAll();
 
     }
@@ -118,6 +121,107 @@ class UserGroupControllerTest {
         UserGroup findUserGroup = userGroupRepository.findAll().get(1);
 
         assertEquals(UserGroupRole.MEMBER, findUserGroup.getRole());
+    }
+
+    @Test
+    @DisplayName("유저그룹 수정(ROLE)")
+    public void 유저그룹_수정() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
+                .build();
+        userRepository.save(user2);
+
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴공과")
+                .build();
+        Long hostUserGroupId = userGroupService.create(request1);
+
+        UserGroup hostUserGroup = userGroupRepository.findById(hostUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+        Long groupId = hostUserGroup.getGroup().getId();
+
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(groupId)
+                .build();
+        Long memberUserGroupId = userGroupService.join(request2);
+
+        UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+        UpdateUserGroupRequest request3 = UpdateUserGroupRequest.builder()
+                .hostUserId(user1.getId())
+                .memberUserId(user2.getId())
+                .build();
+
+        String json = objectMapper.writeValueAsString(request3);
+
+        //expected
+        mockMvc.perform(post("/userGroups/{groupId}", groupId)
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberToHost.role").value("HOST"))
+                .andExpect(jsonPath("$.hostToMember.role").value("MEMBER"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("유저그룹 삭제")
+    public void 유저그룹_삭제() throws Exception {
+        //given
+        User user1 = User.builder()
+                .name("박정균")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = User.builder()
+                .name("정한별")
+                .nickName("저그한별")
+                .build();
+        userRepository.save(user2);
+
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user1.getId())
+                .groupName("컴공과")
+                .build();
+        Long hostUserGroupId = userGroupService.create(request1);
+
+        UserGroup hostUserGroup = userGroupRepository.findById(hostUserGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+        Long groupId = hostUserGroup.getGroup().getId();
+
+        JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                .userId(user2.getId())
+                .groupId(groupId)
+                .build();
+        Long memberUserGroupId = userGroupService.join(request2);
+
+        //when
+        mockMvc.perform(delete("/userGroups/{userGroupId}", memberUserGroupId)
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        //then
+        assertEquals(1, userGroupRepository.count());
     }
 
     @Test

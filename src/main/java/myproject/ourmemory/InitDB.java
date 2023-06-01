@@ -2,7 +2,10 @@ package myproject.ourmemory;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
+import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
+import myproject.ourmemory.exception.UserGroupNotFound;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.PostRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
@@ -11,7 +14,10 @@ import myproject.ourmemory.service.UserGroupService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -37,30 +43,34 @@ public class InitDB {
 
         public void DBinit1() {
 
-            User user1 = User.builder()
-                    .name("테스터1")
-                    .nickName("닉네임1")
-                    .build();
-            userRepository.save(user1);
+            List<User> users = IntStream.range(1, 51)
+                    .mapToObj(i -> {
+                        return User.builder()
+                                .name("회원" + i)
+                                .nickName("닉네임" + i)
+                                .build();
+                    })
+                    .collect(Collectors.toList());
+            userRepository.saveAll(users);
 
-            User user2 = User.builder()
-                    .name("테스터2")
-                    .nickName("닉네임2")
-                    .build();
-            userRepository.save(user2);
+            for (int i = 1; i <= 10; i++) {
+                CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                        .userId(users.get(0).getId())
+                        .groupName("컴공과" + i)
+                        .build();
+                Long userGroupId = userGroupService.create(request1);
+                UserGroup userGroup = userGroupRepository.findById(userGroupId)
+                        .orElseThrow(UserGroupNotFound::new);
 
-            CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
-                    .userId(user1.getId())
-                    .groupName("그룹1")
-                    .build();
+                for (int j = 1; j <= 49; j++) {
+                    JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
+                            .userId(users.get(j).getId())
+                            .groupId(userGroup.getGroup().getId())
+                            .build();
+                    userGroupService.join(request2);
+                }
+            }
 
-            CreateUserGroupRequest request2 = CreateUserGroupRequest.builder()
-                    .userId(user2.getId())
-                    .groupName("그룹2")
-                    .build();
-
-            userGroupService.create(request1);
-            userGroupService.create(request2);
         }
     }
 }
