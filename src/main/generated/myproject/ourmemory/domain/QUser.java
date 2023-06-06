@@ -25,6 +25,8 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final StringPath createdDate = _super.createdDate;
 
+    public final StringPath email = createString("email");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
@@ -34,7 +36,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath nickName = createString("nickName");
 
+    public final StringPath password = createString("password");
+
     public final ListPath<Post, QPost> posts = this.<Post, QPost>createList("posts", Post.class, QPost.class, PathInits.DIRECT2);
+
+    public final EnumPath<UserRole> role = createEnum("role", UserRole.class);
 
     public final ListPath<UserGroup, QUserGroup> userGroups = this.<UserGroup, QUserGroup>createList("userGroups", UserGroup.class, QUserGroup.class, PathInits.DIRECT2);
 

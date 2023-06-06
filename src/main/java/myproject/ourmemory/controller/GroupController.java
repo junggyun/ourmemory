@@ -36,7 +36,7 @@ public class GroupController {
     public List<GroupDto> groups(@ModelAttribute GetGroupRequest request) {
         List<Group> groups = groupService.findGroups(request);
         List<GroupDto> result = groups.stream()
-                .map(g -> new GroupDto(g))
+                .map(GroupDto::new)
                 .collect(Collectors.toList());
 
         return result;

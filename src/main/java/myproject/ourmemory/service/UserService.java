@@ -7,7 +7,14 @@ import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
 import myproject.ourmemory.exception.UserNickNameDuplicated;
 import myproject.ourmemory.exception.UserNotFound;
+import myproject.ourmemory.jwt.JwtToken;
+import myproject.ourmemory.jwt.JwtTokenProvider;
 import myproject.ourmemory.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +27,31 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder encoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    /**
+     * 로그인
+     */
+    public JwtToken login(String email, String password) {
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        JwtToken token = jwtTokenProvider.generateToken(authentication);
+
+        return token;
+    }
+
     /**
      * 회원 등록
      */
     @Transactional
     public Long join(CreateUserRequest request) {
         User user = User.builder()
+                .email(request.getEmail())
+                .password(encoder.encode(request.getPassword()))
                 .name(request.getName())
                 .nickName(request.getNickName())
                 .build();
@@ -63,7 +89,7 @@ public class UserService {
     //특정 회원 조회
     public User findOneUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFound());
+                .orElseThrow(UserNotFound::new);
     }
 
     //전체 회원 조회

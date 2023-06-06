@@ -3,12 +3,15 @@ package myproject.ourmemory.controller;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.*;
+import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -16,6 +19,20 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+
+    /**
+     * 로그인
+     */
+    @GetMapping("/users/login")
+    public String login() {
+        return "로그인 페이지입니다.";
+    }
+    @PostMapping("/users/login")
+    public ResponseEntity<JwtToken> login(@RequestBody Map<String, String> loginForm) {
+        JwtToken token = userService.login(loginForm.get("email"), loginForm.get("password"));
+
+        return ResponseEntity.ok(token);
+    }
 
     /**
      * 회원 단건 조회

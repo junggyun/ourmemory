@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final PostService postService;
 

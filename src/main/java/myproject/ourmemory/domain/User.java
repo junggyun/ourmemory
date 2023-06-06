@@ -20,12 +20,19 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    private String email;
+
+    private String password;
+
     @NotNull
     private String name;
 
     @NotNull
     @Column(unique = true)
     private String nickName;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @OneToMany(mappedBy = "user")
     private List<UserGroup> userGroups = new ArrayList<>();
@@ -38,9 +45,12 @@ public class User extends BaseTimeEntity {
 
     //==생성 메서드==//
     @Builder
-    public User(String name, String nickName) {
+    public User(String email, String password, String name, String nickName) {
+        this.email = email;
+        this.password = password;
         this.name = name;
         this.nickName = nickName;
+        role = UserRole.USER;
     }
 
     //==변경 메서드==//

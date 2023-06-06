@@ -22,7 +22,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class GroupService {
 
-    private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
 //    /**

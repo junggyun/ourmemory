@@ -21,3 +21,6 @@ server:
   servlet:
     encoding:
       force-response: true
+jwt:
+  secret:
+    b25seXBsc3NvbnRlcnJhbmtpbmdiYWNrZW5kbmV3YmllbXluYW1laXNwYXJranVuZ2d5dW5wbGVhc2VlbmNvZGVvdmVyMjU2Yml0cw==
