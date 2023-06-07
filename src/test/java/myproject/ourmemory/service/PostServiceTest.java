@@ -48,6 +48,8 @@ class PostServiceTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -73,13 +75,15 @@ class PostServiceTest {
         //then
         assertEquals(1L, postRepository.count());
      }
-     
+
      @Test
      @DisplayName("게시글 단건 조회")
      public void 게시글_단건_조회() throws Exception {
          //given
          User user = User.builder()
                  .name("박정균")
+                 .email("onlyplsson@gmail.com")
+                 .password("1234")
                  .nickName("테란킹")
                  .build();
          userRepository.save(user);
@@ -119,6 +123,8 @@ class PostServiceTest {
                 .mapToObj(i -> {
                     return User.builder()
                             .name("회원" + i)
+                            .email(i + "@gmail.com")
+                            .password("1234")
                             .nickName("닉네임" + i)
                             .build();
                 })
@@ -164,6 +170,8 @@ class PostServiceTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -207,6 +215,8 @@ class PostServiceTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);

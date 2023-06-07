@@ -5,16 +5,15 @@ import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.CreateUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
-import myproject.ourmemory.exception.UserNickNameDuplicated;
+import myproject.ourmemory.exception.CreateUserDuplicate;
 import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
 import myproject.ourmemory.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -39,7 +38,10 @@ public class UserService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        JwtToken token = jwtTokenProvider.generateToken(authentication);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFound::new);
+
+        JwtToken token = jwtTokenProvider.generateToken(user.getId(), authentication);
 
         return token;
     }
@@ -55,6 +57,7 @@ public class UserService {
                 .name(request.getName())
                 .nickName(request.getNickName())
                 .build();
+        emailValidate(user);
         nickNameValidate(user);
         userRepository.save(user);
 
@@ -110,7 +113,16 @@ public class UserService {
 
         for (User findUser : findUsers) {
             if (user.getNickName().equals(findUser.getNickName()))
-                throw new UserNickNameDuplicated("nickName", "이미 사용 중인 닉네임입니다.");
+                throw new CreateUserDuplicate("nickName", "이미 사용 중인 닉네임입니다.");
+        }
+    }
+
+    private void emailValidate(User user) {
+        List<User> findUsers = userRepository.findAll();
+
+        for (User findUser : findUsers) {
+            if (user.getEmail().equals(findUser.getEmail()))
+                throw new CreateUserDuplicate("email", "이미 가입된 이메일입니다.");
         }
     }
 

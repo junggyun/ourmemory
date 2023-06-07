@@ -35,13 +35,13 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretByteKey);
     }
 
-    public JwtToken generateToken(Authentication authentication) {
+    public JwtToken generateToken(Long userId, Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         //Access Token
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(userId.toString())
                 .claim("auth", authorities)
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidTime))
                 .signWith(key)

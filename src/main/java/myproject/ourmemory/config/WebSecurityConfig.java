@@ -5,6 +5,7 @@ import myproject.ourmemory.jwt.JwtAuthenticationFilter;
 import myproject.ourmemory.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.*;
+import static org.springframework.http.HttpMethod.*;
 
 
 @EnableWebSecurity
@@ -32,11 +34,12 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return new WebSecurityCustomizer() {
-            @Override public void customize(WebSecurity web) {
+            @Override
+            public void customize(WebSecurity web) {
                 web.ignoring()
                         .requestMatchers("/favicon.ico")
-                        .requestMatchers("/error")
-                        .requestMatchers(toH2Console());
+                        .requestMatchers("/error");
+//                        .requestMatchers(toH2Console());
             }
         };
     }
@@ -45,7 +48,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests()
-                .requestMatchers("/users/login", "/users").permitAll()
+                .requestMatchers(POST, "/api/users").permitAll()
+                .requestMatchers("/api/users/login").permitAll()
+                .requestMatchers(GET, "/api/users").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
@@ -60,7 +65,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -2,8 +2,6 @@ package myproject.ourmemory.controller;
 
 import myproject.ourmemory.exception.ErrorResponse;
 import myproject.ourmemory.exception.OurMemoryException;
-import myproject.ourmemory.exception.UserNickNameDuplicated;
-import myproject.ourmemory.exception.UserNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

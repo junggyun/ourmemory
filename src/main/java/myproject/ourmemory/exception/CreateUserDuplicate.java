@@ -3,16 +3,16 @@ package myproject.ourmemory.exception;
 import lombok.Getter;
 
 @Getter
-public class UserNickNameDuplicated extends OurMemoryException {
+public class CreateUserDuplicate extends OurMemoryException {
 
     private static final String MESSAGE = "잘못된 요청입니다.";
 
 
-    public UserNickNameDuplicated() {
+    public CreateUserDuplicate() {
         super(MESSAGE);
     }
 
-    public UserNickNameDuplicated(String fieldName, String message) {
+    public CreateUserDuplicate(String fieldName, String message) {
         super(MESSAGE);
         addValidation(fieldName, message);
     }

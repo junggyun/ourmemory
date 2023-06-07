@@ -46,6 +46,8 @@ class UserGroupServiceTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -70,12 +72,16 @@ class UserGroupServiceTest {
         //given
         User user1 = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
 
         User user2 = User.builder()
                 .name("정한별")
+                .email("wjdgksquf@gmail.com")
+                .password("1234")
                 .nickName("저그한별")
                 .build();
         userRepository.save(user2);
@@ -109,13 +115,17 @@ class UserGroupServiceTest {
         //given
         User user1 = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
 
         User user2 = User.builder()
                 .name("정한별")
-                .nickName("저그한별")
+                .email("wjdgksquf@gmail.com")
+                .password("1234")
+                .nickName("항뵬")
                 .build();
         userRepository.save(user2);
 
@@ -156,13 +166,17 @@ class UserGroupServiceTest {
         //given
         User user1 = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
 
         User user2 = User.builder()
                 .name("정한별")
-                .nickName("저그한별")
+                .email("wjdgksquf@gmail.com")
+                .password("1234")
+                .nickName("항뵬")
                 .build();
         userRepository.save(user2);
 
@@ -198,13 +212,17 @@ class UserGroupServiceTest {
         //given
         User user1 = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
 
         User user2 = User.builder()
                 .name("정한별")
-                .nickName("저그한별")
+                .email("wjdgksquf@gmail.com")
+                .password("1234")
+                .nickName("항뵬")
                 .build();
         userRepository.save(user2);
 
@@ -242,6 +260,8 @@ class UserGroupServiceTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);

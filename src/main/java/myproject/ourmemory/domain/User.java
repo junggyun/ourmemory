@@ -20,8 +20,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull
+    @Column(unique = true)
     private String email;
 
+    @NotNull
     private String password;
 
     @NotNull
@@ -50,7 +53,11 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.name = name;
         this.nickName = nickName;
-        role = UserRole.USER;
+        if (nickName.equals("관리자")) {
+            role = UserRole.ADMIN;
+        } else {
+            role = UserRole.USER;
+        }
     }
 
     //==변경 메서드==//

@@ -64,6 +64,8 @@ class PostControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -106,6 +108,8 @@ class PostControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -191,6 +195,8 @@ class PostControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -237,6 +243,8 @@ class PostControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);

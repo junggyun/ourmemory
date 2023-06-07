@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,8 @@ class UserControllerTest {
         //given
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
 
@@ -74,12 +78,16 @@ class UserControllerTest {
         //given
         User user1 = User.builder()
                 .name("정한별")
+                .email("wjdgksquf@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
 
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
 
@@ -98,10 +106,13 @@ class UserControllerTest {
 
     @Test
     @DisplayName("특정 회원 조회")
+    @WithUserDetails(setupBefore =  TestExecutionEvent.TEST_EXECUTION, value = "onlyplsson@gmail.com")
     public void 특정_회원_조회() throws Exception {
         //given
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
 
@@ -168,6 +179,8 @@ class UserControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -197,6 +210,8 @@ class UserControllerTest {
         //given
         User user = User.builder()
                 .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);

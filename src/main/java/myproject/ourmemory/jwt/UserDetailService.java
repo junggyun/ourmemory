@@ -21,11 +21,7 @@ public class UserDetailService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(UserNotFound::new);
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole().toString())
-                .build();
+        return new UserPrincipal(user);
 
     }
 }

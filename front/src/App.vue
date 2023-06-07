@@ -1,10 +1,12 @@
+<script setup lang="ts">
 
-<script>
 </script>
-
 <template>
-  <p>안녕하세요</p>
+    <div>
+    </div>
+    <RouterView/>
 </template>
 
 <style>
+
 </style>
