@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import {ref} from "vue"
-import axios from "axios";
 import jwtDecode from "jwt-decode";
 import store from "@/store";
+import {loginUser} from "@/api";
 
 const email = ref("")
 const password = ref("")
@@ -14,23 +14,33 @@ interface MyPayload {
     exp: number
 }
 
-const login = function () {
-    axios.post("/api/users/login", {
-        email: email.value,
-        password: password.value
-    })
-        .then((res) => {
-            alert("로그인 성공")
-            const token = res.data.accessToken
-            const userId = jwtDecode<MyPayload>(token).sub
-            store.commit('setUserId', userId)
-            const getUserId = store.getters.getUserId
-            router.push(`/home/${getUserId}`)
-        })
-        .catch((err) => {
-            alert("아이디 또는 비밀번호가 잘못되었습니다.")
-            console.log(err)
-        })
+const login = async function () {
+    try {
+        const loginRequest ={
+            email: email.value,
+            password: password.value
+        }
+        const res = await loginUser(loginRequest);
+
+        const token = res.data.accessToken
+        const userId = jwtDecode<MyPayload>(token).sub
+        const role = jwtDecode<MyPayload>(token).auth
+
+        store.commit('setUserId', userId)
+        store.commit('setRole', role)
+        store.commit('setToken', token)
+
+        const getUserId = store.getters.getUserId
+        if (role === "ROLE_ADMIN") {
+            await router.push('/admin')
+        } else if (role === "ROLE_USER") {
+            await router.push(`/home/${getUserId}`)
+        }
+    } catch (err) {
+        alert("아이디 또는 비밀번호가 잘못되었습니다.")
+        console.log(err)
+    }
+
 }
 
 const goSignup = function () {
@@ -73,7 +83,7 @@ const goSignup = function () {
     </div>
 </template>
 
-<style>
+<style scoped>
 .main {
     position: absolute; top:0; left:0;
     width: 100%;

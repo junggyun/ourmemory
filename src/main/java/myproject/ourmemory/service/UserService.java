@@ -102,6 +102,7 @@ public class UserService {
 
     //전체 회원 페이징 조회
     public List<User> findUsers(GetUserRequest request) {
+
         return userRepository.findUsers(request);
     }
 

@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import axios from "axios";
 import router from "@/router";
-import { ref } from 'vue'
+import {ref} from 'vue'
+import {registerUser} from "@/api";
 
 const email = ref("")
 const password = ref("")
 const name = ref("")
 const nickName = ref("")
 
-const signup = function () {
-    axios.post("/api/users", {
-        email: email.value,
-        password: password.value,
-        name: name.value,
-        nickName: nickName.value
-    })
-        .then(() => {
-            alert("회원가입 성공")
-            router.push("/")
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-}
+const signup = async function () {
+    try {
+        const registerRequest = {
+            email: email.value,
+            password: password.value,
+            name: name.value,
+            nickName: nickName.value
+        }
+        await registerUser(registerRequest);
 
+        alert("회원가입 성공")
+        await router.push("/")
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 
 
@@ -65,7 +65,7 @@ const signup = function () {
 </template>
 
 
-<style>
+<style scoped>
 .main {
     position: absolute; top:0; left:0;
     width: 100%;

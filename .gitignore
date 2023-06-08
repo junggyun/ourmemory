@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### image video ###
+/front/src/image/
+/front/src/video/

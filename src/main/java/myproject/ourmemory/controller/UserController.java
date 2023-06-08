@@ -24,10 +24,6 @@ public class UserController {
     /**
      * 로그인
      */
-    @GetMapping("/users/login")
-    public String login() {
-        return "로그인 페이지입니다.";
-    }
     @PostMapping("/users/login")
     public ResponseEntity<JwtToken> login(@RequestBody Map<String, String> loginForm) {
         JwtToken token = userService.login(loginForm.get("email"), loginForm.get("password"));
@@ -51,11 +47,10 @@ public class UserController {
     @GetMapping("/users")
     public List<UserDto> users(@ModelAttribute GetUserRequest request) {
         List<User> findUsers = userService.findUsers(request);
-        List<UserDto> result = findUsers.stream()
+
+        return findUsers.stream()
                 .map(UserDto::new)
                 .collect(Collectors.toList());
-
-        return result;
     }
 
     /**
