@@ -1,5 +1,6 @@
 package myproject.ourmemory.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.QUser;
@@ -21,5 +22,12 @@ public class UserRepositoryImpl implements CustomUserRepository {
                 .limit(request.getSize())
                 .offset(request.getOffset())
                 .fetch();
+    }
+
+    @Override
+    public Long countUsers() {
+        return jpaQueryFactory.select(QUser.user.count())
+                .from(QUser.user)
+                .fetchFirst();
     }
 }

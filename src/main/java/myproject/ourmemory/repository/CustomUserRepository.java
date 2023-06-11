@@ -9,4 +9,6 @@ public interface CustomUserRepository {
 
     List<User> findUsers(GetUserRequest request);
 
+    Long countUsers();
+
 }

@@ -1,11 +1,15 @@
 package myproject.ourmemory.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.domain.UserRole;
 import myproject.ourmemory.dto.user.CreateUserRequest;
-import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
+import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.exception.CreateUserDuplicate;
+import myproject.ourmemory.exception.InvalidRequest;
+import myproject.ourmemory.exception.NotUser;
 import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
@@ -22,6 +26,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -82,6 +87,7 @@ public class UserService {
     public void delete(Long userId) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
+        validateRole(findUser);
 
         userRepository.delete(findUser);
     }
@@ -106,6 +112,14 @@ public class UserService {
         return userRepository.findUsers(request);
     }
 
+    //전체 회원 페이지 수 조회
+    public int getPages(GetUserRequest request) {
+        Long totalUsers = userRepository.countUsers();
+        int totalPages = (int) Math.ceil((double) totalUsers / request.getSize());
+
+        return totalPages;
+    }
+
     /**
      * 예외처리
      */
@@ -124,6 +138,12 @@ public class UserService {
         for (User findUser : findUsers) {
             if (user.getEmail().equals(findUser.getEmail()))
                 throw new CreateUserDuplicate("email", "이미 가입된 이메일입니다.");
+        }
+    }
+
+    private void validateRole(User findUser) {
+        if (findUser.getRole().equals(UserRole.ADMIN)) {
+            throw new NotUser("role", "관리자는 삭제할 수 없습니다.");
         }
     }
 

@@ -5,7 +5,12 @@ const store= createStore({
     state: {
         userId : "",
         role : "",
-        token : ""
+        token : "",
+        userData: {
+            email: "",
+            name: "",
+            nickName: "",
+        }
     },
     getters: {
         getUserId: function (state) {

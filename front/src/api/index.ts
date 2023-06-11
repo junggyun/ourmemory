@@ -2,12 +2,9 @@ import axios from "axios";
 import {setInterceptors} from "@/api/common/interceptors";
 import store from "@/store";
 
-const createInstance = function () {
+const createAuthInstance = function () {
     const instance = axios.create({
         baseURL: "http://localhost:3000/",
-        headers: {
-            Authorization: ""
-        }
     })
     return setInterceptors(instance)
 }
@@ -15,26 +12,44 @@ const createInstance = function () {
 const instance = axios.create({
     baseURL: "http://localhost:3000"
 })
-const authInstance = createInstance()
+const authInstance = createAuthInstance()
 
 const loginUser = function (loginRequest : any) {
     return instance.post("/api/users/login", loginRequest, {
-        headers: {
-            Authorization: `Bearer ${store.state.token}`
-        }
+        // headers: {
+        //     Authorization: `Bearer ${store.state.token}`
+        // }
     })
 }
 
-const registerUser = function (registerRequest : any) {
-    return instance.post("/api/users", registerRequest)
+const registerUserAPI = function (registerRequest : any) {
+    return instance.post(
+        "/api/users", registerRequest)
 }
 
-const createUserGroup = function (createUserGroupRequest : any) {
-    return authInstance.post("/api/UserGroups/create", createUserGroupRequest)
+const createGroupAPI = function (createGroupRequest : any) {
+    return authInstance.post(
+        "/api/UserGroups/create", createGroupRequest)
 }
 
-const userList = function (getUserRequest : any) {
-    return authInstance.get(`/api/users?size=${getUserRequest.size}&page=${getUserRequest.page}`, getUserRequest)
+const getGroupAPI = function (getGroupRequest : any) {
+    return authInstance.get(
+        `/api/userGroups/byUser?size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
 }
 
-export { loginUser, registerUser, userList }
+const userListAPI = function (getUserRequest : any) {
+    return authInstance.get(
+        `/api/users?size=${getUserRequest.size}&page=${getUserRequest.page}`, getUserRequest)
+}
+
+const deleteUserAPI = function (userId: any) {
+    return authInstance.delete(
+        `/api/users/${userId}`)
+}
+
+const getUserAPI = function (userId: any) {
+    return authInstance.get(
+        `/api/users/${userId}`)
+}
+
+export { loginUser, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupAPI }

@@ -21,7 +21,6 @@ const login = async function () {
             password: password.value
         }
         const res = await loginUser(loginRequest);
-
         const token = res.data.accessToken
         const userId = jwtDecode<MyPayload>(token).sub
         const role = jwtDecode<MyPayload>(token).auth
@@ -85,28 +84,27 @@ const goSignup = function () {
 
 <style scoped>
 .main {
-    position: absolute; top:0; left:0;
-    width: 100%;
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 video {
+    position: absolute;
     width: 100%;
 }
 
 .form {
-    position: absolute;
-    left: 50%;
-    top: 50%;
     width: 400px;
-    margin: -300px 0px 0px -250px;
     text-align: center;
-    opacity: 1;
-
+    margin-bottom: 50px;
 }
 
 .title {
-    margin: 50px 0px 50px 0px;
+    margin-bottom: 40px;
+    width: 100%;
+    opacity: 0.8;
 }
 
 #emailInput, #passwordInput, #loginButton, #signupButton {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from "@/router";
 import {ref} from 'vue'
-import {registerUser} from "@/api";
+import {registerUserAPI} from "@/api";
 
 const email = ref("")
 const password = ref("")
@@ -16,7 +16,7 @@ const signup = async function () {
             name: name.value,
             nickName: nickName.value
         }
-        await registerUser(registerRequest);
+        await registerUserAPI(registerRequest);
 
         alert("회원가입 성공")
         await router.push("/")
@@ -67,28 +67,28 @@ const signup = async function () {
 
 <style scoped>
 .main {
-    position: absolute; top:0; left:0;
-    width: 100%;
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 video {
+    position: absolute;
     width: 100%;
 }
 
 .form {
-    position: absolute;
-    left: 50%;
-    top: 50%;
     width: 400px;
-    margin: -300px 0px 0px -250px;
     text-align: center;
-    opacity: 1;
+    margin-bottom: 50px;
 
 }
 
 .title {
-    margin: 50px 0 50px 0;
+    margin-bottom: 40px;
+    width: 100%;
+    opacity: 0.8;
 }
 
 #emailInput, #passwordInput, #nameInput, #nickNameInput, #signupButton {

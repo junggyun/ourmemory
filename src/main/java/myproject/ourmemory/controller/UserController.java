@@ -2,9 +2,12 @@ package myproject.ourmemory.controller;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.domain.UserRole;
 import myproject.ourmemory.dto.user.*;
+import myproject.ourmemory.exception.NotUser;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +28,14 @@ public class UserController {
      * 로그인
      */
     @PostMapping("/users/login")
-    public ResponseEntity<JwtToken> login(@RequestBody Map<String, String> loginForm) {
+    public JwtToken login(@RequestBody Map<String, String> loginForm) {
         JwtToken token = userService.login(loginForm.get("email"), loginForm.get("password"));
 
-        return ResponseEntity.ok(token);
+        return JwtToken.builder()
+                .grantType(token.getGrantType())
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
     }
 
     /**
@@ -44,13 +51,21 @@ public class UserController {
     /**
      * 회원 페이징 조회
      */
-    @GetMapping("/users")
-    public List<UserDto> users(@ModelAttribute GetUserRequest request) {
+    @GetMapping("/users") //todo 페이지 수 추가했음
+    public GetUserResponse users(@ModelAttribute GetUserRequest request) {
         List<User> findUsers = userService.findUsers(request);
+        int totalPages = userService.getPages(request);
 
-        return findUsers.stream()
+        List<UserDto> collect = findUsers.stream()
                 .map(UserDto::new)
-                .collect(Collectors.toList());
+                .toList();
+
+        GetUserResponse result = GetUserResponse.builder()
+                .totalPages(totalPages)
+                .users(collect)
+                .build();
+
+        return result;
     }
 
     /**

@@ -48,4 +48,12 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
                 .limit(request.getSize())
                 .fetch();
     }
+
+    @Override
+    public Long countUsers(GetUserGroupRequest request) {
+        return jpaQueryFactory
+                .select(qUserGroup.group.count())
+                .where(qUserGroup.user.id.eq(request.getUserId()))
+                .fetchFirst();
+    }
 }

@@ -1,29 +1,55 @@
 <script setup lang="ts">
-import {userList} from "@/api";
-import {ref, onMounted} from "vue";
+import { deleteUserAPI, userListAPI} from "@/api";
+import {onMounted, ref} from "vue";
 
-const pageNum = ref('')
 
-const getUser = function () {
+const pageNum = ref(1)
+const sizeNum = ref(5)
+const totalPages = ref('')
+const users = ref([])
+
+const getUserRequest = ref({
+    page: pageNum.value,
+    size: sizeNum.value
+})
+
+const nextPage = async function () {
+    pageNum.value += 1
+    await getUser()
+}
+
+const prevPage = async function () {
+    pageNum.value -= 1
+    await getUser()
+}
+
+const getUser = async function () {
     try {
-        const users = ref('')
+        getUserRequest.value.page = pageNum.value
+        const result = await userListAPI(getUserRequest.value);
+        users.value = result.data.users
+        totalPages.value = result.data.totalPages
 
-        const getUserRequest = {
-            page: 1,
-            size: 5
-        }
-        onMounted(async () => {
-            const result = await userList(getUserRequest);
-            users.value = result.data
-        })
-
-        return users
     } catch (err) {
         console.log(err)
     }
-    //todo 회원 목록 페이지네이션
 }
-const users = getUser()
+
+const deleteUser = async function (userId: any) {
+    try {
+        const confirmed = window.confirm("정말로 삭제하시겠습니까?");
+        if (confirmed) {
+            await deleteUserAPI(userId);
+            await getUser()
+        }
+
+    } catch (err) {
+        alert(err.response.data.validation.role)
+    }
+}
+
+onMounted(getUser)
+
 
 
 
@@ -45,19 +71,22 @@ const users = getUser()
         </thead>
         <tbody>
         <tr v-for="user in users" :key="user.id">
-            <th scope="row">{{user.id}}</th>
-            <td>{{user.name}}</td>
-            <td>{{user.nickName}}</td>
-            <td>{{user.email}}</td>
-            <td>{{user.role}}</td>
+            <th scope="row" style="width: 5%">{{user.id}}</th>
+            <td style="width: 10%">{{user.name}}</td>
+            <td style="width: 10%">{{user.nickName}}</td>
+            <td style="width: 30%">{{user.email}}</td>
+            <td style="width: 15%">
+                {{user.role}}
+                <button class="btn-user-delete" @click="deleteUser(user.id)">삭제</button>
+            </td>
         </tr>
         </tbody>
     </table>
 
     <div class="btn-cover">
-        <button :disabled="pageNum === 0" @click="prevPage" class="page-btn">이전</button>
-        <span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span>
-        <button :disabled="pageNum >= pageCount - 1" @click="nextPage" class="page-btn">다음</button>
+        <button :disabled="pageNum === 1" @click="prevPage" class="page-btn">이전</button>
+        <span class="page-count">{{ pageNum  }} / {{ totalPages }} 페이지</span>
+        <button :disabled="pageNum == totalPages" @click="nextPage" class="page-btn">다음</button>
     </div>
 
 </template>
@@ -101,5 +130,8 @@ table tr th {
 }
 .btn-cover .page-count {
     padding: 0 1rem;
+}
+.btn-user-delete {
+    float: right;
 }
 </style>

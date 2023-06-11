@@ -36,6 +36,7 @@ public class UserGroupController {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
+        int totalPages = userGroupService.getPages(request);
 
         List<UserGroup> userGroups = userGroupService.listByUser(request);
         List<GroupList> collect = userGroups.stream()
@@ -43,6 +44,7 @@ public class UserGroupController {
                 .collect(Collectors.toList());
 
         GetByUserResponse result = GetByUserResponse.builder()
+                .totalPages(totalPages)
                 .user(user)
                 .groups(collect)
                 .build();
