@@ -3,7 +3,7 @@ import {onMounted, ref} from "vue";
 import {getUserAPI} from "@/api";
 import store from "@/store";
 import GroupListView from "@/components/user/GroupListView.vue";
-import CreateGroupModal from "@/components/user/CreateGroupModal.vue";
+import CreateGroupView from "@/components/user/CreateGroupView.vue";
 
 const dynamicComponent = ref("")
 
@@ -72,7 +72,7 @@ onMounted(getUser)
                 <GroupListView></GroupListView>
             </div>
             <div v-if="dynamicComponent === 'CreateGroupModal'">
-                <CreateGroupModal></CreateGroupModal>
+                <CreateGroupView></CreateGroupView>
             </div>
 
         </div>

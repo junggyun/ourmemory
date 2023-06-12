@@ -26,6 +26,7 @@ const prevPage = async function () {
 const getUser = async function () {
     try {
         getUserRequest.value.page = pageNum.value
+
         const result = await userListAPI(getUserRequest.value);
         users.value = result.data.users
         totalPages.value = result.data.totalPages

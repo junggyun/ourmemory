@@ -5,7 +5,6 @@ import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupRole;
-import myproject.ourmemory.dto.user.GetUserRequest;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
@@ -133,7 +132,7 @@ public class UserGroupService {
      * 유저 기준 그룹 페이지 수 조회
      */
     public int getPages(GetUserGroupRequest request) {
-        Long totalGroups = userGroupRepository.countUsers(request);
+        Long totalGroups = userGroupRepository.countGroups(request);
         int totalPages = (int) Math.ceil((double) totalGroups / request.getSize());
 
         return totalPages;

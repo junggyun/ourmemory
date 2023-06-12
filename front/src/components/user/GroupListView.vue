@@ -28,10 +28,11 @@ const prevPage = async function () {
 const getGroup = async function () {
     try {
         getGroupRequest.value.page = pageNum.value;
-        const result = await getGroupAPI(getGroupRequest.value);
-        groups.value = result.data.gruops
-        totalPages.value = result.data.totalPages
 
+        const result = await getGroupAPI(getGroupRequest.value);
+        groups.value = result.data.groups
+        totalPages.value = result.data.totalPages
+        console.log(totalPages.value)
     } catch (error) {
         console.log(error)
     }
@@ -39,16 +40,23 @@ const getGroup = async function () {
 };
 
 onMounted(getGroup)
-
+//todo 그룹만들기, 그룹 목록 다듬기
 
 
 </script>
 
 <template>
     <div class="title">
-        <h1>회원 목록</h1>
+        <h1>그룹 목록</h1>
     </div>
+    <div class="group-list" v-for="group in groups" :key="group.group.id">
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+                {{ group.group.name }}
+            </a>
+        </div>
 
+    </div>
 
     <div class="btn-cover">
         <button :disabled="pageNum === 1" @click="prevPage" class="page-btn">이전</button>

@@ -50,9 +50,10 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
     }
 
     @Override
-    public Long countUsers(GetUserGroupRequest request) {
+    public Long countGroups(GetUserGroupRequest request) {
         return jpaQueryFactory
-                .select(qUserGroup.group.count())
+                .select(qUserGroup.count())
+                .from(qUserGroup)
                 .where(qUserGroup.user.id.eq(request.getUserId()))
                 .fetchFirst();
     }

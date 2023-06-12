@@ -3,7 +3,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 const store= createStore({
     state: {
-        userId : "",
+        userId : 0,
         role : "",
         token : "",
         userData: {
@@ -22,7 +22,7 @@ const store= createStore({
     },
     mutations: {
         setUserId(state, userId) {
-            state.userId = userId
+            state.userId = parseInt(userId)
         },
         setRole(state, role) {
             state.role = role
@@ -31,7 +31,7 @@ const store= createStore({
             state.token =token
         },
         clearStore(state) {
-            state.userId = ""
+            state.userId = 0
             state.role = ""
             state.token = ""
         },

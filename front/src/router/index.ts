@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
     if (store.state.role === 'ROLE_ADMIN' && to.meta.role === store.state.role) {
       next()
     } else if (store.state.role === 'ROLE_USER' && to.meta.role === store.state.role) {
-      if (to.params?.userId === store.state.userId) {
+      if (to.params?.userId === store.state.userId.toString()) {
         next()
       } else {
         next(`/home/${store.state.userId}`)

@@ -18,7 +18,8 @@ public class UserRepositoryImpl implements CustomUserRepository {
 
     @Override
     public List<User> findUsers(GetUserRequest request) {
-        return jpaQueryFactory.selectFrom(QUser.user)
+        return jpaQueryFactory
+                .selectFrom(QUser.user)
                 .limit(request.getSize())
                 .offset(request.getOffset())
                 .fetch();
@@ -26,7 +27,8 @@ public class UserRepositoryImpl implements CustomUserRepository {
 
     @Override
     public Long countUsers() {
-        return jpaQueryFactory.select(QUser.user.count())
+        return jpaQueryFactory
+                .select(QUser.user.count())
                 .from(QUser.user)
                 .fetchFirst();
     }

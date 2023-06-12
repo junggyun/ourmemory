@@ -29,12 +29,12 @@ const registerUserAPI = function (registerRequest : any) {
 
 const createGroupAPI = function (createGroupRequest : any) {
     return authInstance.post(
-        "/api/UserGroups/create", createGroupRequest)
+        "/api/userGroups/create", createGroupRequest)
 }
 
 const getGroupAPI = function (getGroupRequest : any) {
     return authInstance.get(
-        `/api/userGroups/byUser?size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
+        `/api/userGroups/byUser?userId=${getGroupRequest.userId}&size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
 }
 
 const userListAPI = function (getUserRequest : any) {
