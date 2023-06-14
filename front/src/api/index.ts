@@ -42,9 +42,14 @@ const joinGroupAPI = function (joinGroupRequest : any) {
 //         `/api/userGroups/byUser?userId=${getGroupRequest.userId}&size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
 // }
 
-const getGroupAPI = function (userId : any) {
+const getGroupByUserAPI = function (userId : any) {
     return authInstance.get(
         `/api/userGroups/byUser/${userId}`, userId)
+}
+
+const getUserByGroupAPI = function (groupId : any) {
+    return authInstance.get(
+        `/api/userGroups/byGroup/${groupId}`, groupId)
 }
 
 const userListAPI = function (getUserRequest : any) {
@@ -62,4 +67,4 @@ const getUserAPI = function (userId: any) {
         `/api/users/${userId}`)
 }
 
-export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupAPI, joinGroupAPI }
+export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI }

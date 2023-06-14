@@ -14,5 +14,7 @@ public interface CustomUserGroupRepository {
 
     List<UserGroup> findByGroup(GetUserGroupRequest request);
 
+    List<UserGroup> findAllByGroup(Long groupId);
+
     Long countGroups(GetUserGroupRequest request);
 }

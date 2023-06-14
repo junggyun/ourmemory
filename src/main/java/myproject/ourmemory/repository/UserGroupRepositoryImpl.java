@@ -39,7 +39,8 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
                 .fetch();
     }
 
-    @Override public List<UserGroup> findAllByUser(Long userId) {
+    @Override
+    public List<UserGroup> findAllByUser(Long userId) {
         return jpaQueryFactory
                 .selectFrom(qUserGroup)
                 .where(qUserGroup.user.id.eq(userId))
@@ -53,6 +54,14 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
                 .where(qUserGroup.group.id.eq(request.getGroupId()))
                 .offset(request.getOffset())
                 .limit(request.getSize())
+                .fetch();
+    }
+
+    @Override
+    public List<UserGroup> findAllByGroup(Long groupId) {
+        return jpaQueryFactory
+                .selectFrom(qUserGroup)
+                .where(qUserGroup.group.id.eq(groupId))
                 .fetch();
     }
 

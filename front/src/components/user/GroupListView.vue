@@ -1,32 +1,41 @@
 <script setup lang="ts">
-import {getGroupAPI} from "@/api";
-import {onMounted, ref} from "vue";
+import {getGroupByUserAPI} from "@/api";
+import {onMounted, ref, defineEmits} from "vue";
 import store from "@/store";
 import CreateGroupView from "@/components/user/CreateGroupView.vue";
 import JoinGroupView from "@/components/user/JoinGroupView.vue";
+import router from "@/router";
 
 const groups = ref([])
+const emit = defineEmits(['groupEnter']);
 
 const dynamicComponent = ref("")
 
 
-const ViewCreateGroupModal = function () {
+const viewCreateGroupModal = function () {
     dynamicComponent.value = "CreateGroupModal"
 }
 
-const ViewJoinGroupModal = function () {
+const viewJoinGroupModal = function () {
     dynamicComponent.value = "JoinGroupModal"
+}
+
+const viewGroupEnter = async function (groupId: any, groupName: any, action:any) {
+    emit('groupEnter', action)
+    store.commit('setGroupId', groupId)
+    store.commit('setGroupName', groupName)
+    store.commit('setDynamicComponent', action)
+    await router.push(`/home/${store.state.userData.nickName}/${groupId}`)
 }
 
 
 const getGroup = async function () {
     try {
-        const result = await getGroupAPI(store.state.userId);
+        const result = await getGroupByUserAPI(store.state.userId);
         groups.value = result.data.groups
     } catch (error) {
         console.log(error)
     }
-
 };
 
 onMounted(getGroup)
@@ -36,12 +45,12 @@ onMounted(getGroup)
 
 <template>
     <div class="group-add">
-        <button class="btn btn-outline-danger me-1" @click="ViewCreateGroupModal">
+        <button class="btn btn-outline-danger me-1" @click="viewCreateGroupModal">
             <i class="bi bi-folder-plus"></i>
             그룹 생성
         </button>
 
-        <button class="btn btn-outline-success" @click="ViewJoinGroupModal">
+        <button class="btn btn-outline-success" @click="viewJoinGroupModal">
             <i class="bi bi-folder-plus"></i>
             그룹 참가
         </button>
@@ -52,7 +61,7 @@ onMounted(getGroup)
             <img src="@/image/groupImage.jpg" class="flex-shrink-0 me-3" alt="">
             <div class="d-flex justify-content-center me-5" style="width: 100%">
                 <h3>{{ group.group.name }}</h3>
-                <a href="#" class="stretched-link"></a>
+                <a href="#" class="stretched-link" @click="viewGroupEnter(group.group.id, group.group.name, 'groupEnter')"></a>
             </div>
         </div>
         <div class="group-empty" v-if="groups.length == 0">

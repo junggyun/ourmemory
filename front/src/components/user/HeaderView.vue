@@ -6,13 +6,18 @@ const logout = async function () {
     await router.push('/')
 }
 
+const home = async function () {
+    store.commit('clearGroup')
+    await router.push(`/home/${store.state.userData.nickName}`)
+}
+
 </script>
 
 <template>
 
     <div class="header-wrap">
         <div class="title">
-            <h1>OURMEMORY</h1>
+            <h1 @click="home">OURMEMORY</h1>
         </div>
         <div class="user-info">
             <a href="#">{{ store.state.userData.name}}</a>님
@@ -23,7 +28,10 @@ const logout = async function () {
 </template>
 
 <style scoped>
-
+h1 {
+    pointer-events: auto;
+    cursor : pointer;
+}
 .header-wrap {
     position: relative;
     display: flex;

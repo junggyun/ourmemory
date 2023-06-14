@@ -5,7 +5,7 @@ import {ref} from "vue";
 
 const dynamicComponent = ref("")
 
-const ViewUserList = function () {
+const viewUserList = function () {
     dynamicComponent.value = "UserListView"
 }
 
@@ -26,7 +26,7 @@ const ViewUserList = function () {
             <div class="nav-main">
                 <nav class="navbar bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#" @click="ViewUserList">회원 목록</a>
+                        <a class="navbar-brand" href="#" @click="viewUserList">회원 목록</a>
                     </div>
                 </nav>
                 <nav class="navbar bg-light">

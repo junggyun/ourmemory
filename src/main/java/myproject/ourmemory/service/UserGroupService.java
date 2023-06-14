@@ -136,6 +136,10 @@ public class UserGroupService {
         return userGroupRepository.findByGroup(request);
     }
 
+    public List<UserGroup> listByGroup(Long groupId) {
+        return userGroupRepository.findAllByGroup(groupId);
+    }
+
     /**
      * 유저 기준 그룹 페이지 수 조회
      */

@@ -74,13 +74,13 @@ public class UserGroupController {
     /**
      * 특정 그룹 회원 리스트 조회
      */
-    @GetMapping("/userGroups/byGroup")
-    public GetByGroupResponse findAllByGroup(@ModelAttribute GetUserGroupRequest request) {
+    @GetMapping("/userGroups/byGroup/{groupId}")
+    public GetByGroupResponse findAllByGroup(@PathVariable Long groupId) {
 
-        Group group = groupRepository.findById(request.getGroupId())
+        Group group = groupRepository.findById(groupId)
                 .orElseThrow(GroupNotFound::new);
 
-        List<UserGroup> userGroups = userGroupService.listByGroup(request);
+        List<UserGroup> userGroups = userGroupService.listByGroup(groupId);
         List<UserList> collect = userGroups.stream()
                 .map(u -> new UserList(u))
                 .collect(Collectors.toList());
@@ -92,6 +92,25 @@ public class UserGroupController {
 
         return result;
     }
+
+//    @GetMapping("/userGroups/byGroup")
+//    public GetByGroupResponse findAllByGroup(@ModelAttribute GetUserGroupRequest request) {
+//
+//        Group group = groupRepository.findById(request.getGroupId())
+//                .orElseThrow(GroupNotFound::new);
+//
+//        List<UserGroup> userGroups = userGroupService.listByGroup(request);
+//        List<UserList> collect = userGroups.stream()
+//                .map(u -> new UserList(u))
+//                .collect(Collectors.toList());
+//
+//        GetByGroupResponse result = GetByGroupResponse.builder()
+//                .group(group)
+//                .users(collect)
+//                .build();
+//
+//        return result;
+//    }
 
 
 

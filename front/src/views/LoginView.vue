@@ -31,8 +31,8 @@ const login = async function () {
 
         const user = await getUserAPI(store.state.userId)
         store.commit('setEmail', user.data.email)
-        store.commit('setName', user.data.name)
-        store.commit('setNickName', user.data.nickName)
+        store.commit('setUserName', user.data.name)
+        store.commit('setUserNickName', user.data.nickName)
 
         const nickName = store.state.userData.nickName
         if (role === "ROLE_ADMIN") {

@@ -14,6 +14,7 @@
     "bootstrap-icons": "^1.10.5",
     "core-js": "^3.8.3",
     "jwt-decode": "^3.1.2",
+    "vue": "^3.2.36",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.2.2",
     "vuex": "^4.0.2",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",

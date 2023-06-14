@@ -1,5 +1,6 @@
 import { createStore} from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import {ref} from "vue";
 
 const store= createStore({
     state: {
@@ -10,7 +11,12 @@ const store= createStore({
             email: "",
             name: "",
             nickName: "",
-        }
+        },
+        groupData: {
+            id: 0,
+            name: "",
+        },
+        dynamicComponent: ""
     },
     getters: {
         getUserId: function (state) {
@@ -33,23 +39,43 @@ const store= createStore({
         setEmail(state, email) {
             state.userData.email = email
         },
-        setNickName(state, nickName) {
+        setUserNickName(state, nickName) {
             state.userData.nickName = nickName
         },
-        setName(state, name) {
+        setUserName(state, name) {
             state.userData.name = name
+        },
+        setGroupId(state, id) {
+            state.groupData.id = id
+        },
+        setGroupName(state, name) {
+            state.groupData.name = name
+        },
+        setDynamicComponent(state, dynamicComponent) {
+            state.dynamicComponent = dynamicComponent
+        },
+        clearGroup(state) {
+            state.groupData.id = 0
+            state.groupData.name = ""
+            state.dynamicComponent = ""
         },
         clearStore(state) {
             state.userId = 0
             state.role = ""
             state.token = ""
+            state.userData.name = ""
+            state.userData.nickName = ""
+            state.userData.email = ""
+            state.groupData.id = 0
+            state.groupData.name = ""
+            state.dynamicComponent = ""
         },
 
     },
     actions: {
     },
     plugins: [ createPersistedState({
-        paths: ['userId', 'role', 'token', 'userData']
+        paths: ['userId', 'role', 'token', 'userData', 'groupData', 'dynamicComponent']
     }) ]
 })
 export default store
