@@ -1,5 +1,6 @@
 package myproject.ourmemory.repository;
 
+import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.UserGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 

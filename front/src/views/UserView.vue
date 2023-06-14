@@ -82,6 +82,7 @@ onMounted(getUser)
 
 .body {
     flex: 1;
+    width: 100vw;
     height: auto;
     display: flex;
     justify-content: center;

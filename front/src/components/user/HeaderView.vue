@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+import router from "@/router";
+import store from "@/store";
+
+const logout = async function () {
+    await router.push('/')
+}
 
 </script>
 
@@ -6,7 +12,11 @@
 
     <div class="header-wrap">
         <div class="title">
-            <h2>OURMEMORY</h2>
+            <h1>OURMEMORY</h1>
+        </div>
+        <div class="user-info">
+            <a href="#">{{ store.state.userData.name}}</a>님
+            <button type="button" class="btn btn-outline-danger- " @click="logout" style="text-decoration: underline; color: darkgray">로그아웃</button>
         </div>
     </div>
 
@@ -15,10 +25,21 @@
 <style scoped>
 
 .header-wrap {
+    position: relative;
     display: flex;
     align-items: center;
     width: 70vw;
     height: 100%;
+
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.user-info span {
 
 }
 </style>

@@ -57,13 +57,16 @@ public class UserGroupService {
     @Transactional
     public Long join(JoinUserGroupRequest request) {
 
+        String key = request.getKey();
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
 
-        Group group = groupRepository.findById(request.getGroupId())
+        Group group = groupRepository.findByKey(key)
                 .orElseThrow(GroupNotFound::new);
 
-        joinValidate(request, user);
+        joinValidate(group, user);
+        keyValidate(group, key);
 
         UserGroup userGroup = UserGroup.builder()
                 .user(user)
@@ -75,6 +78,7 @@ public class UserGroupService {
 
         return userGroup.getId();
     }
+
 
 
 
@@ -157,12 +161,18 @@ public class UserGroupService {
         }
     }
 
-    private void joinValidate(JoinUserGroupRequest request, User user) {
+    private void joinValidate(Group group, User user) {
         List<UserGroup> userGroups = user.getUserGroups();
         for (UserGroup u : userGroups) {
-            if (request.getGroupId() == u.getGroup().getId()) {
+            if (group.getId() == u.getGroup().getId()) {
                 throw new UserGroupDuplicated("groupId", "이미 속한 그룹입니다.");
             }
+        }
+    }
+
+    private void keyValidate(Group group, String key) {
+        if (!key.equals(group.getKey())) {
+            throw new InvalidKey("key", "key값이 일치하지 않습니다.");
         }
     }
 }

@@ -19,6 +19,7 @@ const createGroup = async function () {
             console.log(createGroupRequest.value)
 
             await createGroupAPI(createGroupRequest.value);
+            window.location.reload()
         }
     } catch (error) {
         console.log(createGroupRequest.value.groupName)
