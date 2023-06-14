@@ -39,6 +39,13 @@ public class UserGroupRepositoryImpl implements CustomUserGroupRepository {
                 .fetch();
     }
 
+    @Override public List<UserGroup> findAllByUser(Long userId) {
+        return jpaQueryFactory
+                .selectFrom(qUserGroup)
+                .where(qUserGroup.user.id.eq(userId))
+                .fetch();
+    }
+
     @Override
     public List<UserGroup> findByGroup(GetUserGroupRequest request) {
         return jpaQueryFactory

@@ -31,20 +31,39 @@ public class UserGroupController {
     /**
      * 특정 회원 그룹 리스트 조회
      */
-    @GetMapping("/userGroups/byUser")
-    public GetByUserResponse findAllByUser(@ModelAttribute GetUserGroupRequest request) {
+//    @GetMapping("/userGroups/byUser")
+//    public GetByUserResponse findAllByUser(@ModelAttribute GetUserGroupRequest request) {
+//
+//        User user = userRepository.findById(request.getUserId())
+//                .orElseThrow(UserNotFound::new);
+//        int totalPages = userGroupService.getPages(request);
+//
+//        List<UserGroup> userGroups = userGroupService.listByUser(request);
+//        List<GroupList> collect = userGroups.stream()
+//                .map(u -> new GroupList(u))
+//                .collect(Collectors.toList());
+//
+//        GetByUserResponse result = GetByUserResponse.builder()
+//                .totalPages(totalPages)
+//                .user(user)
+//                .groups(collect)
+//                .build();
+//
+//        return result;
+//    }
 
-        User user = userRepository.findById(request.getUserId())
+    @GetMapping("/userGroups/byUser/{userId}")
+    public GetByUserResponse findAllByUser(@PathVariable Long userId) {
+
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
-        int totalPages = userGroupService.getPages(request);
 
-        List<UserGroup> userGroups = userGroupService.listByUser(request);
+        List<UserGroup> userGroups = userGroupService.listByUser(userId);
         List<GroupList> collect = userGroups.stream()
                 .map(u -> new GroupList(u))
                 .collect(Collectors.toList());
 
         GetByUserResponse result = GetByUserResponse.builder()
-                .totalPages(totalPages)
                 .user(user)
                 .groups(collect)
                 .build();
@@ -73,6 +92,8 @@ public class UserGroupController {
 
         return result;
     }
+
+
 
     /**
      * 유저그룹 등록(그룹 생성)

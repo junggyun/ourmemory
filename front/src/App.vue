@@ -2,11 +2,15 @@
 
 </script>
 <template>
-    <div>
+    <div class="app">
+        <RouterView/>
     </div>
-    <RouterView/>
+
 </template>
 
 <style>
-
+.app {
+    width: 100vw;
+    height: auto;
+}
 </style>

@@ -3,7 +3,7 @@ import router from "@/router";
 import {ref} from "vue"
 import jwtDecode from "jwt-decode";
 import store from "@/store";
-import {loginUser} from "@/api";
+import {getUserAPI, loginAPI} from "@/api";
 
 const email = ref("")
 const password = ref("")
@@ -20,7 +20,7 @@ const login = async function () {
             email: email.value,
             password: password.value
         }
-        const res = await loginUser(loginRequest);
+        const res = await loginAPI(loginRequest);
         const token = res.data.accessToken
         const userId = jwtDecode<MyPayload>(token).sub
         const role = jwtDecode<MyPayload>(token).auth
@@ -29,11 +29,16 @@ const login = async function () {
         store.commit('setRole', role)
         store.commit('setToken', token)
 
-        const getUserId = store.getters.getUserId
+        const user = await getUserAPI(store.state.userId)
+        store.commit('setEmail', user.data.email)
+        store.commit('setName', user.data.name)
+        store.commit('setNickName', user.data.nickName)
+
+        const nickName = store.state.userData.nickName
         if (role === "ROLE_ADMIN") {
             await router.push('/admin')
         } else if (role === "ROLE_USER") {
-            await router.push(`/home/${getUserId}`)
+            await router.push(`/home/${nickName}`)
         }
     } catch (err) {
         alert("아이디 또는 비밀번호가 잘못되었습니다.")
@@ -88,10 +93,11 @@ const goSignup = function () {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 100vw;
 }
 
 video {
-    position: absolute;
+    position: fixed;
     width: 100%;
 }
 

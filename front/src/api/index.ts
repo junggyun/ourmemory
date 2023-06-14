@@ -14,7 +14,7 @@ const instance = axios.create({
 })
 const authInstance = createAuthInstance()
 
-const loginUser = function (loginRequest : any) {
+const loginAPI = function (loginRequest : any) {
     return instance.post("/api/users/login", loginRequest, {
         // headers: {
         //     Authorization: `Bearer ${store.state.token}`
@@ -32,9 +32,14 @@ const createGroupAPI = function (createGroupRequest : any) {
         "/api/userGroups/create", createGroupRequest)
 }
 
-const getGroupAPI = function (getGroupRequest : any) {
+// const getGroupAPI = function (getGroupRequest : any) {
+//     return authInstance.get(
+//         `/api/userGroups/byUser?userId=${getGroupRequest.userId}&size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
+// }
+
+const getGroupAPI = function (userId : any) {
     return authInstance.get(
-        `/api/userGroups/byUser?userId=${getGroupRequest.userId}&size=${getGroupRequest.size}&page=${getGroupRequest.page}`, getGroupRequest)
+        `/api/userGroups/byUser/${userId}`, userId)
 }
 
 const userListAPI = function (getUserRequest : any) {
@@ -52,4 +57,4 @@ const getUserAPI = function (userId: any) {
         `/api/users/${userId}`)
 }
 
-export { loginUser, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupAPI }
+export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupAPI }

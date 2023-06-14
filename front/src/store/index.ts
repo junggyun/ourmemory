@@ -30,6 +30,15 @@ const store= createStore({
         setToken(state, token) {
             state.token =token
         },
+        setEmail(state, email) {
+            state.userData.email = email
+        },
+        setNickName(state, nickName) {
+            state.userData.nickName = nickName
+        },
+        setName(state, name) {
+            state.userData.name = name
+        },
         clearStore(state) {
             state.userId = 0
             state.role = ""
@@ -40,7 +49,7 @@ const store= createStore({
     actions: {
     },
     plugins: [ createPersistedState({
-        paths: ['userId', 'role', 'token']
+        paths: ['userId', 'role', 'token', 'userData']
     }) ]
 })
 export default store

@@ -10,6 +10,8 @@ public interface CustomUserGroupRepository {
     UserGroup findOneUserGroup(GetUserGroupRequest request);
     List<UserGroup> findByUser(GetUserGroupRequest request);
 
+    List<UserGroup> findAllByUser(Long userId);
+
     List<UserGroup> findByGroup(GetUserGroupRequest request);
 
     Long countGroups(GetUserGroupRequest request);

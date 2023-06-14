@@ -121,6 +121,10 @@ public class UserGroupService {
         return userGroupRepository.findByUser(request);
     }
 
+    public List<UserGroup> listByUser(Long userId) {
+        return userGroupRepository.findAllByUser(userId);
+    }
+
     /**
      * 그룹 기준 조회
      */

@@ -14,8 +14,6 @@ const routes: Array<RouteRecordRaw> = [
       localStorage.removeItem('vuex')
       next()
     },
-
-
   },
   {
     path: '/signup',
@@ -26,9 +24,9 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/home/:userId',
-    name: 'Home',
-    component: () => import('@/views/HomeView.vue'),
+    path: '/home/:nickName',
+    name: 'User',
+    component: () => import('@/views/UserView.vue'),
     meta: {
       role: 'ROLE_USER'
     }
@@ -56,10 +54,10 @@ router.beforeEach((to, from, next) => {
     if (store.state.role === 'ROLE_ADMIN' && to.meta.role === store.state.role) {
       next()
     } else if (store.state.role === 'ROLE_USER' && to.meta.role === store.state.role) {
-      if (to.params?.userId === store.state.userId.toString()) {
+      if (to.params?.nickName === store.state.userData.nickName) {
         next()
       } else {
-        next(`/home/${store.state.userId}`)
+        next(`/home/${store.state.userData.nickName}`)
       }
 
     } else {
