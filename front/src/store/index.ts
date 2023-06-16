@@ -15,6 +15,7 @@ const store= createStore({
         groupData: {
             id: 0,
             name: "",
+            key: "",
         },
         dynamicComponent: ""
     },
@@ -51,12 +52,16 @@ const store= createStore({
         setGroupName(state, name) {
             state.groupData.name = name
         },
+        setGroupKey(state, key) {
+            state.groupData.key = key
+        },
         setDynamicComponent(state, dynamicComponent) {
             state.dynamicComponent = dynamicComponent
         },
         clearGroup(state) {
             state.groupData.id = 0
             state.groupData.name = ""
+            state.groupData.key = ""
             state.dynamicComponent = ""
         },
         clearStore(state) {
@@ -68,6 +73,7 @@ const store= createStore({
             state.userData.email = ""
             state.groupData.id = 0
             state.groupData.name = ""
+            state.groupData.key = ""
             state.dynamicComponent = ""
         },
 

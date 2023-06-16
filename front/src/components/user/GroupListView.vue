@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {getGroupByUserAPI} from "@/api";
-import {onMounted, ref, defineEmits} from "vue";
+import {defineEmits, onMounted, ref} from "vue";
 import store from "@/store";
 import CreateGroupView from "@/components/user/CreateGroupView.vue";
 import JoinGroupView from "@/components/user/JoinGroupView.vue";
@@ -20,12 +20,14 @@ const viewJoinGroupModal = function () {
     dynamicComponent.value = "JoinGroupModal"
 }
 
-const viewGroupEnter = async function (groupId: any, groupName: any, action:any) {
+const viewGroupEnter = async function (group:any, action:any) {
     emit('groupEnter', action)
-    store.commit('setGroupId', groupId)
-    store.commit('setGroupName', groupName)
+    store.commit('setGroupId', group.id)
+    store.commit('setGroupName', group.name)
+    store.commit('setGroupKey', group.key)
     store.commit('setDynamicComponent', action)
-    await router.push(`/home/${store.state.userData.nickName}/${groupId}`)
+    await router.push(`/home/${store.state.userData.nickName}/${group.id}`)
+
 }
 
 
@@ -61,7 +63,7 @@ onMounted(getGroup)
             <img src="@/image/groupImage.jpg" class="flex-shrink-0 me-3" alt="">
             <div class="d-flex justify-content-center me-5" style="width: 100%">
                 <h3>{{ group.group.name }}</h3>
-                <a href="#" class="stretched-link" @click="viewGroupEnter(group.group.id, group.group.name, 'groupEnter')"></a>
+                <a href="#" class="stretched-link" @click="viewGroupEnter(group.group, 'groupEnter')"></a>
             </div>
         </div>
         <div class="group-empty" v-if="groups.length == 0">

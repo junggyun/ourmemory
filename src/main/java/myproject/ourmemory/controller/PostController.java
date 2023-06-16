@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Post;
 import myproject.ourmemory.dto.post.*;
 import myproject.ourmemory.repository.GroupRepository;
-import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class PostController {
      * 게시글 단건 조회
      */
     @GetMapping("/posts/{postId}")
-    public PostDto user(@PathVariable Long postId) {
+    public PostDto post(@PathVariable Long postId) {
         Post post = postService.findOnePost(postId);
 
         return new PostDto(post);
@@ -34,11 +33,32 @@ public class PostController {
      * 게시글 페이징 조회
      */
     @GetMapping("/posts")
-    public List<PostDto> users(@ModelAttribute GetPostRequest request) {
+    public List<PostDto> posts(@ModelAttribute GetPostRequest request) {
         List<Post> posts = postService.findPosts(request);
         List<PostDto> result = posts.stream()
                 .map(p -> new PostDto(p))
                 .collect(Collectors.toList());
+
+        return result;
+    }
+
+    /**
+     * 그룹별 게시글 페이징 조회
+     */
+    @GetMapping("/posts/byGroup")
+    public GetPostByGroupResponse postsByGroup(@ModelAttribute GetPostRequest request) {
+        List<Post> posts = postService.findPostsByGroup(request);
+        int totalPages = postService.getPages(request);
+
+        List<PostDto> collect = posts.stream()
+                .map(p -> new PostDto(p))
+                .collect(Collectors.toList());
+
+        GetPostByGroupResponse result = GetPostByGroupResponse.builder()
+                .totalPages(totalPages)
+                .posts(collect)
+                .build();
+
 
         return result;
     }

@@ -12,6 +12,9 @@ public class GetPostRequest {
 
     private static final int MAX_SIZE = 2000;
 
+    private Long userId;
+    private Long groupId;
+
     @Builder.Default
     private Integer size = 10;
 

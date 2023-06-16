@@ -5,7 +5,7 @@ import {onMounted, ref} from "vue";
 
 const pageNum = ref(1)
 const sizeNum = ref(5)
-const totalPages = ref('')
+const totalPages = ref(0)
 const users = ref([])
 
 const getUserRequest = ref({

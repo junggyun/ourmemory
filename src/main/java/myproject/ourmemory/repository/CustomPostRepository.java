@@ -9,4 +9,8 @@ import java.util.List;
 public interface CustomPostRepository {
 
     List<Post> findPosts(GetPostRequest request);
+
+    List<Post> findPostsByGroup(GetPostRequest request);
+
+    Long countPostsByGroup(GetPostRequest request);
 }

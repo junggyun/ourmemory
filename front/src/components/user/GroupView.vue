@@ -1,58 +1,100 @@
 <script lang="ts" setup>
-
-
-import {getUserByGroupAPI} from "@/api";
 import store from "@/store";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
+import GroupKeyModal from "@/components/user/GroupKeyModal.vue";
+import CreatePostForm from "@/components/user/CreatePostForm.vue";
+import PostListView from "@/components/user/PostListView.vue";
+import UserListView from "@/components/user/UserListView.vue";
+import PostView from "@/components/user/PostView.vue";
 
-const users = ref([])
+const dynamicComponent = ref("")
+const isGroupKeyModal = ref(false)
+const findPost = ref({
+    title: "",
+    content: "",
+    createdDate: "",
+    userNickName: "",
+})
 
-const getUsers = async function () {
-    try {
-        const result = await getUserByGroupAPI(store.state.groupData.id);
-        users.value = result.data.users
-    } catch (error) {
-        console.log(error)
-    }
+const viewGroupKey = function () {
+    isGroupKeyModal.value = true
 }
 
-onMounted(getUsers)
+const closeGroupKey = function () {
+    isGroupKeyModal.value = false
+}
+
+const viewCreatePostForm = function () {
+    dynamicComponent.value = "CreatePostForm"
+}
+
+const viewPost = function (postData: any) {
+    findPost.value.title = postData.title
+    findPost.value.content = postData.content
+    findPost.value.createdDate = postData.createdDate
+    findPost.value.userNickName = postData.user.nickName
+    dynamicComponent.value = "ViewPost"
+}
+
+const groupHome = function () {
+    dynamicComponent.value = ""
+}
+
 </script>
 
 <template>
-    <div class="post-add">
-        <button class="btn btn-outline-success">
+    <h4 @click="groupHome">{{ store.state.groupData.name }}</h4>
+    <div class="post-add" v-if="dynamicComponent === ''">
+        <button class="btn btn-outline-success" @click="viewGroupKey">
             <i class="bi bi-folder-plus"></i>
             멤버 초대
         </button>
-        <button class="btn btn-outline-danger" >
+        <button class="btn btn-outline-danger" @click="viewCreatePostForm" >
             <i class="bi bi-folder-plus"></i>
             글 작성
         </button>
     </div>
-    <div class="user-post-wrap" >
-        <div class="group-user-list">
-            <div class="group-list-wrap" style="">
-                <div class="d-flex position-relative border mt-2 me-3 align-items-center " v-for="user in users" :key="user.user.id" style="height: 50px">
-                    <img src="@/image/userImage.jpg" class="flex-shrink-0  " alt="">
-                    <div class="d-flex justify-content-center" style="width: 100%">
-                        <span>{{ user.user.nickName }}</span>
-                        <a href="#" class="stretched-link" ></a>
-                    </div>
-                </div>
+    <div class="user-post-wrap">
+        <div class="group-user-list" v-if="dynamicComponent === ''">
+            <UserListView></UserListView>
+        </div>
+        <div class="group-code" v-if="isGroupKeyModal">
+            <GroupKeyModal @closeGroupKey="closeGroupKey"></GroupKeyModal>
+        </div>
+        <div class="post-content-wrap mt-2">
+            <div class="post-list" v-if="dynamicComponent === ''">
+                <PostListView @viewPost="viewPost"></PostListView>
+            </div>
+            <div class="post-create" v-if="dynamicComponent === 'CreatePostForm'">
+                <CreatePostForm @groupHome="groupHome"></CreatePostForm>
+            </div>
+            <div class="post-view" v-if="dynamicComponent === 'ViewPost'">
+                <PostView :postData="findPost"></PostView>
             </div>
         </div>
-        <div class="post-list mt-2">
-            123
-        </div>
     </div>
+
 
 </template>
 
 <style scoped>
+h4 {
+    pointer-events: auto;
+    cursor : pointer;
+    margin-bottom: 20px;
+    color: darkgray;
+}
+h4:hover {
+    text-decoration: underline;
+}
 .post-add {
     display: flex;
     justify-content: space-between;
+    border: 1px solid darkgray;
+    border-radius: 8px;
+}
+.post-add button {
+    margin: 0.5em;
 }
 .user-post-wrap {
     display: flex;
@@ -60,12 +102,15 @@ onMounted(getUsers)
 .group-user-list {
     flex: 2;
 }
-img {
-    width: 30px;
-}
-
-.post-list {
+.post-content-wrap {
     flex: 8;
-    border: 1px solid darkgray;
+}
+.group-code {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
 }
 </style>

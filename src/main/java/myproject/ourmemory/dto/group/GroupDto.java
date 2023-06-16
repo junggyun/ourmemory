@@ -13,12 +13,14 @@ public class GroupDto {
 
     private Long id;
     private String name;
+    private String key;
     private String createdDate;
 
 
     public GroupDto(Group group) {
         id = group.getId();
         name = group.getName();
+        key = group.getKey();
         createdDate = group.getCreatedDate();
     }
 

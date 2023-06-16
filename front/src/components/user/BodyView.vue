@@ -38,7 +38,7 @@ watch(dynamicComponentComputed, (newVal) => {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 70vw;
+    width: 60vw;
     height: 100%;
 }
 

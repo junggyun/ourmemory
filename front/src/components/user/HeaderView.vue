@@ -20,7 +20,7 @@ const home = async function () {
             <h1 @click="home">OURMEMORY</h1>
         </div>
         <div class="user-info">
-            <a href="#">{{ store.state.userData.name}}</a>님
+            <a href="#">{{ store.state.userData.nickName}}</a>님
             <button type="button" class="btn btn-outline-danger- " @click="logout" style="text-decoration: underline; color: darkgray">로그아웃</button>
         </div>
     </div>
@@ -36,7 +36,7 @@ h1 {
     position: relative;
     display: flex;
     align-items: center;
-    width: 70vw;
+    width: 60vw;
     height: 100%;
 
 }

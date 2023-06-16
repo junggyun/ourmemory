@@ -67,4 +67,20 @@ const getUserAPI = function (userId: any) {
         `/api/users/${userId}`)
 }
 
-export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI }
+const getGroupAPI = function (groupId: any) {
+    return authInstance.get(
+        `/api/groups/${groupId}`)
+}
+
+const createPostAPI = function (createPostRequest: any) {
+    return authInstance.post(
+        "/api/posts", createPostRequest)
+}
+
+const getPostByGroupAPI = function (getPostRequest: any) {
+    return authInstance.get(
+        `/api/posts/byGroup?groupId=${getPostRequest.groupId}&size=${getPostRequest.size}&page=${getPostRequest.page}`)
+}
+
+export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
+    getPostByGroupAPI}

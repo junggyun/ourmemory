@@ -29,4 +29,26 @@ public class PostRepositoryImpl implements CustomPostRepository {
                 .limit(request.getSize())
                 .fetch();
     }
+
+    @Override
+    public List<Post> findPostsByGroup(GetPostRequest request) {
+        return jpaQueryFactory
+                .selectFrom(qPost)
+                .join(qPost.group).fetchJoin()
+                .join(qPost.user).fetchJoin()
+                .where(qPost.group.id.eq(request.getGroupId()))
+                .orderBy(qPost.createdDate.desc())
+                .offset(request.getOffset())
+                .limit(request.getSize())
+                .fetch();
+    }
+
+    @Override
+    public Long countPostsByGroup(GetPostRequest request) {
+        return jpaQueryFactory
+                .select(qPost.count())
+                .from(qPost)
+                .where(qPost.group.id.eq(request.getGroupId()))
+                .fetchFirst();
+    }
 }

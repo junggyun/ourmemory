@@ -17,7 +17,7 @@
 .footer-wrap {
     display: flex;
     align-items: center;
-    width: 70vw;
+    width: 60vw;
     height: 100%;
     position: relative;
 }

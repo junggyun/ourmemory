@@ -93,5 +93,18 @@ public class PostService {
         return postRepository.findPosts(request);
     }
 
+    //그룹별 게시글 페이징 조회
+    public List<Post> findPostsByGroup(GetPostRequest request) {
+        return postRepository.findPostsByGroup(request);
+    }
+
+    //그룹별 게시글 페이지 수
+    public int getPages(GetPostRequest request) {
+        Long totalPosts = postRepository.countPostsByGroup(request);
+        int totalPages = (int) Math.ceil((double) totalPosts / request.getSize());
+
+        return totalPages;
+    }
+
 
 }

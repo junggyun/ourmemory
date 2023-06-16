@@ -71,10 +71,11 @@ const signup = async function () {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 100vw;
 }
 
 video {
-    position: absolute;
+    position: fixed;
     width: 100%;
 }
 
