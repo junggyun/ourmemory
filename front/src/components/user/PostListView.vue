@@ -9,7 +9,22 @@
  const sizeNum = ref(10)
  const pageNum = ref(1)
  const totalPages = ref(0)
- const posts = ref([])
+ const posts = ref([{
+     postId: null,
+     user: {
+         id: null,
+         name: "",
+         nickName: "",
+         email: "",
+         role: ""
+     },
+     title: "",
+     content: "",
+     createdDate: "",
+     createdDateSimple: "",
+     modifiedDate: ""
+ }
+ ])
 
  const nextPage = async function () {
      pageNum.value += 1
@@ -35,7 +50,8 @@
          totalPages.value = result.data.totalPages
 
          for (const post of posts.value) {
-             post.createdDate = moment(post.createdDate, 'YYYY-MM-DD hh:mm:ss').format('YYYY.MM.DD')
+             post.createdDate = moment(post.createdDate, 'YYYY-MM-DD hh:mm:ss').format('YYYY.MM.DD hh:mm')
+             post.createdDateSimple = moment(post.createdDate, 'YYYY-MM-DD hh:mm:ss').format('YYYY.MM.DD')
          }
      } catch (error) {
          console.log(error)
@@ -57,7 +73,7 @@
              <div class="d-flex flex-column justify-content-center position-relative">
 
                  <h3 class="mt-0" @click="viewPost(post)">{{post.title}}</h3>
-                 <span style="font-size: 15px">{{post.createdDate}} / {{post.user.nickName}}</span>
+                 <span style="font-size: 15px">{{post.createdDateSimple}} / {{post.user.nickName}}</span>
              </div>
          </div>
          <div class="btn-cover">

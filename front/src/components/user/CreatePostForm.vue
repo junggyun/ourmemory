@@ -25,6 +25,10 @@ const createPost = async function () {
 
 }
 
+const fileUpload = function () {
+
+}
+
 </script>
 
 <template>
@@ -40,6 +44,7 @@ const createPost = async function () {
                 <div class="mb-3">
                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" placeholder="내용" v-model="content"></textarea>
                 </div>
+                <input multiple type="file" accept="image/*" @change="fileUpload">
             </div>
             <div class="post-form-footer">
                 <div class="post-submit">
