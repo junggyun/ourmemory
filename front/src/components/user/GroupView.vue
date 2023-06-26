@@ -10,6 +10,7 @@ import PostView from "@/components/user/PostView.vue";
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
 const findPost = ref({
+    postId: "",
     title: "",
     content: "",
     createdDate: "",
@@ -29,6 +30,7 @@ const viewCreatePostForm = function () {
 }
 
 const viewPost = function (postData: any) {
+    findPost.value.postId = postData.postId
     findPost.value.title = postData.title
     findPost.value.content = postData.content
     findPost.value.createdDate = postData.createdDate
@@ -69,7 +71,7 @@ const groupHome = function () {
                 <CreatePostForm @groupHome="groupHome"></CreatePostForm>
             </div>
             <div class="post-view" v-if="dynamicComponent === 'ViewPost'">
-                <PostView :postData="findPost"></PostView>
+                <PostView :postData="findPost" @groupHome="groupHome"></PostView>
             </div>
         </div>
     </div>

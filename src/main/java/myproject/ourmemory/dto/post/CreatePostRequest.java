@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 @Getter
 public class CreatePostRequest {
 
+
     private Long userId;
     private Long groupId;
 

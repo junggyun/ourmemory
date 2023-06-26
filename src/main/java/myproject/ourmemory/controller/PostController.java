@@ -1,13 +1,18 @@
 package myproject.ourmemory.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Post;
 import myproject.ourmemory.dto.post.*;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.service.PostService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +23,7 @@ public class PostController {
 
     private final GroupRepository groupRepository;
     private final PostService postService;
+    private final ObjectMapper objectMapper;
 
     /**
      * 게시글 단건 조회
@@ -66,10 +72,12 @@ public class PostController {
     /**
      * 게시글 등록
      */
-    @PostMapping("/posts")
-    public CreatePostResponse createPost(@Valid @RequestBody CreatePostRequest request) {
+    @PostMapping(value = "/posts", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public CreatePostResponse createPost(
+            @RequestPart(name = "request") CreatePostRequest request,
+            @RequestPart(name = "files", required = false) List<MultipartFile> files) throws IOException {
 
-        Long postId = postService.createPost(request);
+        Long postId = postService.createPost(request, files);
 
         return new CreatePostResponse(postId);
     }

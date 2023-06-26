@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import {defineProps, onMounted, ref} from 'vue';
+import {defineProps, onMounted, ref, defineEmits} from 'vue';
+import {deletePostAPI, getUploadByPostAPI} from "@/api";
 
 const props = defineProps({
     postData: {
@@ -8,17 +9,49 @@ const props = defineProps({
     }
 });
 
+const emit= defineEmits(['groupHome'])
+
+const postId = ref("")
 const title = ref("")
 const content = ref("")
 const createdDate = ref("")
 const userNickName = ref("")
+const uploads = ref([{
+    id: null,
+    fileName: "",
+    filePath: "",
+}])
 
 
-const setup = function () {
-    title.value = props.postData.title
-    content.value = props.postData.content
-    createdDate.value = props.postData.createdDate
-    userNickName.value = props.postData.userNickName
+const setup = async function () {
+    try {
+        postId.value = props.postData.postId
+        title.value = props.postData.title
+        content.value = props.postData.content
+        createdDate.value = props.postData.createdDate
+        userNickName.value = props.postData.userNickName
+
+        const result = await getUploadByPostAPI(postId.value);
+        uploads.value = result.data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+const postDelete = async function () {
+    try {
+        const confirmed = window.confirm("정말로 삭제하시겠습니까?");
+        if (confirmed) {
+            await deletePostAPI(postId.value)
+            emit('groupHome')
+        }
+
+    } catch (err) {
+        alert(err.response.data.validation.role)
+    }
+
+
 }
 
 onMounted(setup)
@@ -38,8 +71,15 @@ onMounted(setup)
             <div class="mt-2 mb-2">
                 <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
             </div>
+            <div class="post-edit">
+                <button type="button" class="btn btn-outline-danger- " @click="postDelete" style="text-decoration: underline; color: darkgray">삭제</button>
+            </div>
         </div>
         <div class="post-content">
+            <div v-for="upload in uploads" :key="upload.id" class="post-img">
+                <img :src="upload.filePath">
+            </div>
+
             <pre>{{ content }}</pre>
         </div>
     </div>
@@ -59,8 +99,12 @@ onMounted(setup)
     justify-content: space-between;
 }
 .post-writer {
+    display: flex;
     flex: 1;
     border-bottom: 1px solid gainsboro;
+    justify-content: space-between;
+}
+.post-edit {
 
 }
 .post-date{
@@ -70,8 +114,19 @@ onMounted(setup)
 }
 .post-content {
     flex: 9;
+    margin-left: 20px;
 }
+.post-img {
+    width: 70%;
+    margin: 20px 10px 0 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 pre {
-    margin: 20px 10px 0 20px;
+    margin: 20px 10px 0 0;
 }
 </style>

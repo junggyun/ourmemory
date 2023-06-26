@@ -12,6 +12,11 @@ spring:
 #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
 
 logging:
   level:

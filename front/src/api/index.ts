@@ -9,10 +9,21 @@ const createAuthInstance = function () {
     return setInterceptors(instance)
 }
 
+const createFormDataInstance = function () {
+    const instance = axios.create({
+        baseURL: "http://localhost:3000/",
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    return setInterceptors(instance)
+}
+
 const instance = axios.create({
     baseURL: "http://localhost:3000"
 })
 const authInstance = createAuthInstance()
+const formDataInstance = createFormDataInstance()
 
 const loginAPI = function (loginRequest : any) {
     return instance.post("/api/users/login", loginRequest, {
@@ -72,9 +83,9 @@ const getGroupAPI = function (groupId: any) {
         `/api/groups/${groupId}`)
 }
 
-const createPostAPI = function (createPostRequest: any) {
-    return authInstance.post(
-        "/api/posts", createPostRequest)
+const createPostAPI = function (formData: any) {
+    return formDataInstance.post(
+        "/api/posts", formData)
 }
 
 const getPostByGroupAPI = function (getPostRequest: any) {
@@ -82,5 +93,15 @@ const getPostByGroupAPI = function (getPostRequest: any) {
         `/api/posts/byGroup?groupId=${getPostRequest.groupId}&size=${getPostRequest.size}&page=${getPostRequest.page}`)
 }
 
+const getUploadByPostAPI = function (postId: any) {
+    return authInstance.get(
+        `/api/uploads/${postId}`)
+};
+
+const deletePostAPI = function (postId: any) {
+    return authInstance.delete(
+        `/api/posts/${postId}`)
+}
+
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
-    getPostByGroupAPI}
+    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI }

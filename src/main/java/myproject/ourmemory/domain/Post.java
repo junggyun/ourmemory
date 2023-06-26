@@ -8,6 +8,8 @@ import myproject.ourmemory.dto.post.UpdatePostRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.time.LocalDateTime.*;
 
@@ -37,15 +39,19 @@ public class Post extends BaseTimeEntity{
     @Lob
     private String content;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Upload> uploads = new ArrayList<>();
+
 
     public Post() {
     }
 
     //==생성 메서드==//
     @Builder
-    public Post(User user, Group group, String title, String content) {
+    public Post(User user, Group group, String title, String content, List<Upload> uploads) {
         setUser(user);
         setGroup(group);
+        setUpload(uploads);
         this.title = title;
         this.content = content;
     }
@@ -65,5 +71,12 @@ public class Post extends BaseTimeEntity{
     public void setGroup(Group group) {
         this.group = group;
         group.getPosts().add(this);
+    }
+
+    public void setUpload(List<Upload> uploads) {
+        this.uploads = uploads;
+        for (Upload upload : uploads) {
+            upload.setPost(this);
+        }
     }
 }

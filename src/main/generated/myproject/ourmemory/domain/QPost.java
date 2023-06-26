@@ -38,6 +38,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath title = createString("title");
 
+    public final ListPath<Upload, QUpload> uploads = this.<Upload, QUpload>createList("uploads", Upload.class, QUpload.class, PathInits.DIRECT2);
+
     public final QUser user;
 
     public QPost(String variable) {

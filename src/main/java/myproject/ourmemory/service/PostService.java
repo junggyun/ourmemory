@@ -1,8 +1,10 @@
 package myproject.ourmemory.service;
 
+import com.querydsl.core.util.CollectionUtils;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.Post;
+import myproject.ourmemory.domain.Upload;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.post.CreatePostRequest;
 import myproject.ourmemory.dto.post.GetPostRequest;
@@ -17,8 +19,13 @@ import myproject.ourmemory.repository.PostRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +40,24 @@ public class PostService {
      * 게시글 등록
      */
     @Transactional
-    public Long createPost(CreatePostRequest request) {
+    public Long createPost(CreatePostRequest request, List<MultipartFile> files) throws IOException {
+        List<Upload> uploads = new ArrayList<>();
+
+        if (files != null) {
+            for (MultipartFile file : files) {
+                String uploadPath = System.getProperty("user.dir") + "\\front\\public\\image";
+                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                File saveFile = new File(uploadPath, fileName);
+                file.transferTo(saveFile);
+
+                Upload upload = Upload.builder()
+                        .fileName(fileName)
+                        .filePath("/image/" + fileName)
+                        .fileSize(file.getSize())
+                        .build();
+                uploads.add(upload);
+            }
+        }
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFound::new);
@@ -45,6 +69,7 @@ public class PostService {
                 .group(group)
                 .title(request.getTitle())
                 .content(request.getContent())
+                .uploads(uploads)
                 .build();
 
         postRepository.save(post);
