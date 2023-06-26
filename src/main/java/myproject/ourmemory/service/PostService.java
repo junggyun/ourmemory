@@ -95,6 +95,11 @@ public class PostService {
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
+        List<Upload> uploads = post.getUploads();
+        for (Upload upload : uploads) {
+            File file = new File(System.getProperty("user.dir") + "\\front\\public\\image\\" + upload.getFileName());
+            file.delete();
+        }
 
         postRepository.delete(post);
     }

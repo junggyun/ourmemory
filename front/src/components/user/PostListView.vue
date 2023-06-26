@@ -1,7 +1,7 @@
  <script lang="ts" setup>
  import store from "@/store";
- import {onMounted, ref, defineEmits} from "vue";
- import {getPostByGroupAPI, getUploadByPostAPI} from "@/api";
+ import {defineEmits, onMounted, ref} from "vue";
+ import {getPostByGroupAPI} from "@/api";
  import moment from "moment";
 
  const emit = defineEmits(['viewPost'])
@@ -24,6 +24,11 @@
      createdDateSimple: "",
      modifiedDate: "",
      thumbnailPath: "",
+     uploads: [{
+         id: null,
+         fileName: "",
+         filePath: "",
+     }]
  }
  ])
 
@@ -53,10 +58,7 @@
          for (const post of posts.value) {
              post.createdDate = moment(post.createdDate, 'YYYY-MM-DD hh:mm:ss').format('YYYY.MM.DD hh:mm')
              post.createdDateSimple = moment(post.createdDate, 'YYYY-MM-DD hh:mm:ss').format('YYYY.MM.DD')
-             const result = await getUploadByPostAPI(post.postId);
-             if (result.data.length != 0) {
-                 post.thumbnailPath = result.data[0].filePath
-             }
+
          }
      } catch (error) {
          console.log(error)
@@ -74,8 +76,8 @@
  <template>
      <div class="post-list-wrap">
          <div class="d-flex position-relative mb-2" v-for="post in posts" :key="post.postId">
-             <img v-if="!post.thumbnailPath" src="@/image/no-image.jpg" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
-             <img v-if="post.thumbnailPath" :src="post.thumbnailPath" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
+             <img v-if="post.uploads.length == 0" src="@/image/no-image.jpg" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
+             <img v-if="post.uploads.length > 0" :src="post.uploads[0].filePath" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
              <div class="d-flex flex-column justify-content-center position-relative">
 
                  <h3 class="mt-0" @click="viewPost(post)">{{post.title}}</h3>

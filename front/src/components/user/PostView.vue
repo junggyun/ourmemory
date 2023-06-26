@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {defineProps, onMounted, ref, defineEmits} from 'vue';
 import {deletePostAPI, getUploadByPostAPI} from "@/api";
+import store from "@/store";
 
 const props = defineProps({
     postData: {
@@ -29,7 +30,7 @@ const setup = async function () {
         title.value = props.postData.title
         content.value = props.postData.content
         createdDate.value = props.postData.createdDate
-        userNickName.value = props.postData.userNickName
+        userNickName.value = props.postData.user.nickName
 
         const result = await getUploadByPostAPI(postId.value);
         uploads.value = result.data;
@@ -71,7 +72,7 @@ onMounted(setup)
             <div class="mt-2 mb-2">
                 <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
             </div>
-            <div class="post-edit">
+            <div v-if="userNickName === store.state.userData.nickName" class="post-edit">
                 <button type="button" class="btn btn-outline-danger- " @click="postDelete" style="text-decoration: underline; color: darkgray">삭제</button>
             </div>
         </div>

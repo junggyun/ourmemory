@@ -13,4 +13,5 @@ public interface CustomPostRepository {
     List<Post> findPostsByGroup(GetPostRequest request);
 
     Long countPostsByGroup(GetPostRequest request);
+
 }

@@ -10,11 +10,25 @@ import PostView from "@/components/user/PostView.vue";
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
 const findPost = ref({
-    postId: "",
+    postId: null,
+    user: {
+        id: null,
+        name: "",
+        nickName: "",
+        email: "",
+        role: ""
+    },
     title: "",
     content: "",
     createdDate: "",
-    userNickName: "",
+    createdDateSimple: "",
+    modifiedDate: "",
+    thumbnailPath: "",
+    uploads: [{
+        id: null,
+        fileName: "",
+        filePath: "",
+    }]
 })
 
 const viewGroupKey = function () {
@@ -30,11 +44,12 @@ const viewCreatePostForm = function () {
 }
 
 const viewPost = function (postData: any) {
-    findPost.value.postId = postData.postId
-    findPost.value.title = postData.title
-    findPost.value.content = postData.content
-    findPost.value.createdDate = postData.createdDate
-    findPost.value.userNickName = postData.user.nickName
+    // findPost.value.postId = postData.postId
+    // findPost.value.title = postData.title
+    // findPost.value.content = postData.content
+    // findPost.value.createdDate = postData.createdDate
+    // findPost.value.user.nickName = postData.user.nickName
+    findPost.value = postData
     dynamicComponent.value = "ViewPost"
 }
 
