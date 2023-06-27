@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {defineEmits, ref} from 'vue';
 import store from "@/store";
-import {createPostAPI} from "@/api";
+import {createPostAPI, getPostAPI} from "@/api";
 
-const emit = defineEmits(['groupHome']);
+const emit = defineEmits(['viewPost']);
 const title = ref("")
 const content = ref("")
 const fileInput = ref("")
@@ -25,8 +25,9 @@ const createPost = async function () {
             formData.append('files', files[i])
         }
 
-        await createPostAPI(formData)
-        emit('groupHome')
+        const result = await createPostAPI(formData);
+        const result2 = await getPostAPI(result.data.id);
+        emit('viewPost', result2.data)
     } catch (error) {
         console.log(error)
     }

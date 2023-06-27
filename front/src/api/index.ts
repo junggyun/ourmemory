@@ -88,6 +88,11 @@ const createPostAPI = function (formData: any) {
         "/api/posts", formData)
 }
 
+const getPostAPI = function (postId: any) {
+    return authInstance.get(
+        `/api/posts/${postId}`)
+};
+
 const getPostByGroupAPI = function (getPostRequest: any) {
     return authInstance.get(
         `/api/posts/byGroup?groupId=${getPostRequest.groupId}&size=${getPostRequest.size}&page=${getPostRequest.page}`)
@@ -98,10 +103,15 @@ const getUploadByPostAPI = function (postId: any) {
         `/api/uploads/${postId}`)
 };
 
+const editPostAPI = function (editPostRequest: any) {
+    return authInstance.post(
+        `/api/posts/${editPostRequest.postId}`, editPostRequest)
+};
+
 const deletePostAPI = function (postId: any) {
     return authInstance.delete(
         `/api/posts/${postId}`)
 }
 
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
-    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI }
+    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI }

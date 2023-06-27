@@ -47,6 +47,10 @@ const login = async function () {
 
 }
 
+const loginPage = function () {
+    router.push("/")
+}
+
 const goSignup = function () {
     router.push("/signup")
 }
@@ -61,11 +65,11 @@ const goSignup = function () {
         </video>
         <div class="form">
             <div class="title">
-                <h1>OurMemory</h1>
+                <h1 @click="loginPage">OurMemory</h1>
             </div>
 
             <div id="emailInput">
-                <input class="form-control form-control-lg" type="text" placeholder="이메일" v-model="email" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="email" placeholder="이메일" v-model="email" aria-label=".form-control-lg example">
             </div>
 
             <div id="passwordInput">
@@ -94,6 +98,11 @@ const goSignup = function () {
     align-items: center;
     height: 100vh;
     width: 100vw;
+}
+
+h1 {
+    pointer-events: auto;
+    cursor : pointer;
 }
 
 video {

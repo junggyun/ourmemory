@@ -6,9 +6,13 @@ import CreatePostForm from "@/components/user/CreatePostForm.vue";
 import PostListView from "@/components/user/PostListView.vue";
 import UserListView from "@/components/user/UserListView.vue";
 import PostView from "@/components/user/PostView.vue";
+import EditPostForm from "@/components/user/EditPostForm.vue";
 
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
+const editPostId = ref({
+    postId: null
+})
 const findPost = ref({
     postId: null,
     user: {
@@ -57,6 +61,11 @@ const groupHome = function () {
     dynamicComponent.value = ""
 }
 
+const viewEditPostForm = function (postId: any) {
+    dynamicComponent.value = "EditPostForm"
+    editPostId.value = postId
+}
+
 </script>
 
 <template>
@@ -83,10 +92,13 @@ const groupHome = function () {
                 <PostListView @viewPost="viewPost"></PostListView>
             </div>
             <div class="post-create" v-if="dynamicComponent === 'CreatePostForm'">
-                <CreatePostForm @groupHome="groupHome"></CreatePostForm>
+                <CreatePostForm @viewPost="viewPost"></CreatePostForm>
+            </div>
+            <div class="post-edit" v-if="dynamicComponent === 'EditPostForm'">
+                <EditPostForm :postData="editPostId" @viewPost="viewPost"></EditPostForm>
             </div>
             <div class="post-view" v-if="dynamicComponent === 'ViewPost'">
-                <PostView :postData="findPost" @groupHome="groupHome"></PostView>
+                <PostView :postData="findPost" @groupHome="groupHome" @editPost="viewEditPostForm"></PostView>
             </div>
         </div>
     </div>

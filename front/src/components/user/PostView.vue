@@ -10,7 +10,7 @@ const props = defineProps({
     }
 });
 
-const emit= defineEmits(['groupHome'])
+const emit= defineEmits(['groupHome', 'editPost'])
 
 const postId = ref("")
 const title = ref("")
@@ -51,8 +51,10 @@ const postDelete = async function () {
     } catch (err) {
         alert(err.response.data.validation.role)
     }
+}
 
-
+const viewEditPostForm = function () {
+    emit('editPost', postId.value)
 }
 
 onMounted(setup)
@@ -72,16 +74,19 @@ onMounted(setup)
             <div class="mt-2 mb-2">
                 <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
             </div>
-            <div v-if="userNickName === store.state.userData.nickName" class="post-edit">
-                <button type="button" class="btn btn-outline-danger- " @click="postDelete" style="text-decoration: underline; color: darkgray">삭제</button>
+            <div v-if="userNickName === store.state.userData.nickName" class="post-edit-delete">
+                <button type="button" class="btn btn-outline-danger- " @click="viewEditPostForm" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
+                <button type="button" class="btn btn-outline-danger- " @click="postDelete" style="text-decoration: underline; color: darkgray; ">삭제</button>
             </div>
         </div>
         <div class="post-content">
+
             <div v-for="upload in uploads" :key="upload.id" class="post-img">
                 <img :src="upload.filePath">
             </div>
 
             <pre>{{ content }}</pre>
+
         </div>
     </div>
 </template>
@@ -105,7 +110,7 @@ onMounted(setup)
     border-bottom: 1px solid gainsboro;
     justify-content: space-between;
 }
-.post-edit {
+.post-edit-delete {
 
 }
 .post-date{
@@ -129,5 +134,6 @@ img {
 
 pre {
     margin: 20px 10px 0 0;
+    font-size: 15px;
 }
 </style>

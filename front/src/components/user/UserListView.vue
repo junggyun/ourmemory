@@ -24,7 +24,7 @@ onMounted(getUsers)
             <div class="d-flex position-relative border mt-2 me-3 align-items-center " v-for="user in users" :key="user.user.id" style="height: 50px">
                 <img src="@/image/userImage.jpg" class="flex-shrink-0  " alt="">
                 <div class="d-flex justify-content-center" style="width: 100%">
-                    <span>{{ user.user.nickName }}</span>
+                    <span>{{ user.user.nickName }}({{ user.user.name }})</span>
                     <a href="#" class="stretched-link" ></a>
                 </div>
             </div>
