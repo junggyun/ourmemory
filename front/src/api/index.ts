@@ -55,12 +55,12 @@ const joinGroupAPI = function (joinGroupRequest : any) {
 
 const getGroupByUserAPI = function (userId : any) {
     return authInstance.get(
-        `/api/userGroups/byUser/${userId}`, userId)
+        `/api/userGroups/byUser/${userId}`)
 }
 
 const getUserByGroupAPI = function (groupId : any) {
     return authInstance.get(
-        `/api/userGroups/byGroup/${groupId}`, groupId)
+        `/api/userGroups/byGroup/${groupId}`)
 }
 
 const userListAPI = function (getUserRequest : any) {

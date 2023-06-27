@@ -33,8 +33,10 @@ const viewGroupEnter = async function (group:any, action:any) {
 
 const getGroup = async function () {
     try {
-        const result = await getGroupByUserAPI(store.state.userId);
-        groups.value = result.data.groups
+        if (store.state.userId) {
+            const result = await getGroupByUserAPI(store.state.userId);
+            groups.value = result.data.groups
+        }
     } catch (error) {
         console.log(error)
     }
