@@ -7,6 +7,7 @@ import {getUserAPI, loginAPI} from "@/api";
 
 const email = ref("")
 const password = ref("")
+const valid = ref(false)
 
 interface MyPayload {
     sub: String
@@ -41,7 +42,7 @@ const login = async function () {
             await router.push(`/home/${nickName}`)
         }
     } catch (err) {
-        alert("아이디 또는 비밀번호가 잘못되었습니다.")
+        valid.value = true
         console.log(err)
     }
 
@@ -67,10 +68,11 @@ const goSignup = function () {
 
             <div id="emailInput">
                 <input class="form-control form-control-lg" type="email" placeholder="이메일" v-model="email" aria-label=".form-control-lg example">
+                <span v-show="valid" class="input-error" style="color: red">이메일 또는 비밀번호를 다시 확인해주세요.</span>
             </div>
 
             <div id="passwordInput">
-                <input class="form-control form-control-lg" type="password" placeholder="비밀번호" v-model="password" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="password" placeholder="비밀번호" v-model="password" @keyup.enter="login" aria-label=".form-control-lg example">
             </div>
 
             <div id="loginButton">
@@ -118,9 +120,23 @@ h1 {
     opacity: 0.8;
 }
 
-#emailInput, #passwordInput, #loginButton, #signupButton {
+#loginButton, #signupButton {
     margin-bottom: 20px;
     width: 100%;
     opacity: 0.8;
+}
+#emailInput, #passwordInput {
+    margin-bottom: 30px;
+    width: 100%;
+    opacity: 0.8;
+    position: relative;
+}
+
+.input-error {
+    color: red;
+    /*text-align: left;*/
+    margin-left: 17px;
+    position: absolute;
+    left: 0;
 }
 </style>

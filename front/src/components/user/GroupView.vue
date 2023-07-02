@@ -83,7 +83,7 @@ const groupHome = function () {
 
 const viewEditPostForm = function (postId: any) {
     dynamicComponent.value = "EditPostForm"
-    editPostId.value = postId
+    editPostId.value.postId = postId
 }
 
 </script>
