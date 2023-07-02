@@ -2,9 +2,9 @@
 import {getGroupByUserAPI} from "@/api";
 import {defineEmits, onMounted, ref} from "vue";
 import store from "@/store";
-import CreateGroupView from "@/components/user/CreateGroupView.vue";
-import JoinGroupView from "@/components/user/JoinGroupView.vue";
 import router from "@/router";
+import CreateGroupModal from "@/components/user/CreateGroupModal.vue";
+import JoinGroupModal from "@/components/user/JoinGroupModal.vue";
 
 const groups = ref([])
 const emit = defineEmits(['groupEnter']);
@@ -22,11 +22,13 @@ const viewJoinGroupModal = function () {
 
 const viewGroupEnter = async function (group:any, action:any) {
     emit('groupEnter', action)
-    store.commit('setGroupId', group.id)
-    store.commit('setGroupName', group.name)
-    store.commit('setGroupKey', group.key)
+    store.commit('setGroupId', group.group.id)
+    store.commit('setGroupName', group.group.name)
+    store.commit('setGroupKey', group.group.key)
+    store.commit('setUserGroupRole', group.role)
+    store.commit('setUserGroupId', group.userGroupId)
     store.commit('setDynamicComponent', action)
-    await router.push(`/home/${store.state.userData.nickName}/${group.id}`)
+    await router.push(`/home/${store.state.userData.nickName}/${group.group.id}`)
 
 }
 
@@ -41,6 +43,10 @@ const getGroup = async function () {
         console.log(error)
     }
 };
+
+const closeModal = function () {
+    dynamicComponent.value = ""
+}
 
 onMounted(getGroup)
 
@@ -65,20 +71,22 @@ onMounted(getGroup)
             <img src="@/image/groupImage.jpg" class="flex-shrink-0 me-3" alt="">
             <div class="d-flex justify-content-center me-5" style="width: 100%">
                 <h3>{{ group.group.name }}</h3>
-                <a href="#" class="stretched-link" @click="viewGroupEnter(group.group, 'groupEnter')"></a>
+                <a href="#" class="stretched-link" @click="viewGroupEnter(group, 'groupEnter')"></a>
             </div>
         </div>
         <div class="group-empty" v-if="groups.length == 0">
             <h1>그룹이 없습니다.</h1>
         </div>
+        <div class="create-group" v-if="dynamicComponent === 'CreateGroupModal'">
+            <CreateGroupModal @closeModal="closeModal"></CreateGroupModal>
+        </div>
+        <div class="join-group" v-if="dynamicComponent === 'JoinGroupModal'">
+            <JoinGroupModal @closeModal="closeModal"></JoinGroupModal>
+        </div>
     </div>
 
-    <div v-if="dynamicComponent === 'CreateGroupModal'">
-        <CreateGroupView></CreateGroupView>
-    </div>
-    <div v-if="dynamicComponent === 'JoinGroupModal'">
-        <JoinGroupView></JoinGroupView>
-    </div>
+
+
 
 </template>
 
@@ -97,4 +105,12 @@ img {
     text-align: right;
 }
 
+.create-group, .join-group {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
 </style>

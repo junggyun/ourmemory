@@ -7,9 +7,13 @@ import PostListView from "@/components/user/PostListView.vue";
 import UserListView from "@/components/user/UserListView.vue";
 import PostView from "@/components/user/PostView.vue";
 import EditPostForm from "@/components/user/EditPostForm.vue";
+import DeleteGroupModal from "@/components/user/DeleteGroupModal.vue";
+import LeaveGroupModal from "@/components/user/LeaveGroupModal.vue";
 
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
+const isDeleteGroupModal = ref(false)
+const isLeaveGroupModal = ref(false)
 const editPostId = ref({
     postId: null
 })
@@ -45,6 +49,22 @@ const closeGroupKey = function () {
 
 const viewCreatePostForm = function () {
     dynamicComponent.value = "CreatePostForm"
+}
+
+const viewDeleteGroupModal = function () {
+    isDeleteGroupModal.value = true
+}
+
+const closeDeleteGroupModal = function () {
+    isDeleteGroupModal.value = false
+}
+
+const viewLeaveGroupModal = function () {
+    isLeaveGroupModal.value = true
+}
+
+const closeLeaveGroupModal = function () {
+    isLeaveGroupModal.value = false
 }
 
 const viewPost = function (postData: any) {
@@ -83,9 +103,23 @@ const viewEditPostForm = function (postId: any) {
     <div class="user-post-wrap">
         <div class="group-user-list" v-if="dynamicComponent === ''">
             <UserListView></UserListView>
+            <button v-show="store.state.userGroupRole === 'HOST'" class="btn btn-outline-danger mt-2" @click="viewDeleteGroupModal" >
+                <i class="bi bi-box-arrow-left"></i>
+                그룹 삭제
+            </button>
+            <button v-show="store.state.userGroupRole === 'MEMBER'" class="btn btn-outline-danger mt-2" @click="viewLeaveGroupModal" >
+                <i class="bi bi-box-arrow-left"></i>
+                그룹 탈퇴
+            </button>
         </div>
         <div class="group-code" v-if="isGroupKeyModal">
             <GroupKeyModal @closeGroupKey="closeGroupKey"></GroupKeyModal>
+        </div>
+        <div class="leave-group" v-if="isLeaveGroupModal">
+            <LeaveGroupModal @closeModal="closeLeaveGroupModal"></LeaveGroupModal>
+        </div>
+        <div class="delete-group" v-if="isDeleteGroupModal">
+            <DeleteGroupModal @closeModal="closeDeleteGroupModal"></DeleteGroupModal>
         </div>
         <div class="post-content-wrap mt-2">
             <div class="post-list" v-if="dynamicComponent === ''">
@@ -134,7 +168,7 @@ h4:hover {
 .post-content-wrap {
     flex: 8;
 }
-.group-code {
+.group-code, .delete-group, .leave-group {
     width: 100%;
     height: 100%;
     display: flex;

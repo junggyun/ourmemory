@@ -74,9 +74,6 @@ const loginPage = function () {
 
 <template>
     <div class="main">
-        <video muted autoplay loop>
-            <source src="@/video/mainbackground.mp4" type="video/mp4">
-        </video>
         <div class="form">
             <div class="title">
                 <h1 @click="loginPage">OurMemory</h1>
@@ -119,6 +116,7 @@ const loginPage = function () {
     align-items: center;
     height: 100vh;
     width: 100vw;
+    background-color: darkgray;
 }
 
 h1 {
@@ -132,9 +130,12 @@ video {
 }
 
 .form {
-    width: 400px;
+    width: 500px;
     text-align: center;
     margin-bottom: 50px;
+    background-color: white;
+    padding: 50px 20px 20px 20px;
+    border-radius: 8px;
 
 }
 input::placeholder {

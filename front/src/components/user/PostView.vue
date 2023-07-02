@@ -1,7 +1,10 @@
 <script lang="ts" setup>
-import {defineProps, onMounted, ref, defineEmits} from 'vue';
-import {deletePostAPI, getUploadByPostAPI} from "@/api";
+import {defineEmits, defineProps, onMounted, ref} from 'vue';
+import {getUploadByPostAPI} from "@/api";
 import store from "@/store";
+import DeletePostModal from "@/components/user/DeletePostModal.vue";
+
+const isDeletePostModal = ref(false)
 
 const props = defineProps({
     postData: {
@@ -40,18 +43,14 @@ const setup = async function () {
 
 }
 
-const postDelete = async function () {
-    try {
-        const confirmed = window.confirm("정말로 삭제하시겠습니까?");
-        if (confirmed) {
-            await deletePostAPI(postId.value)
-            emit('groupHome')
-        }
+const viewDeletePostModal = function () {
+    isDeletePostModal.value = true
+};
 
-    } catch (err) {
-        alert(err.response.data.validation.role)
-    }
-}
+const closeDeletePostModal = function () {
+    isDeletePostModal.value = false
+    emit('groupHome')
+};
 
 const viewEditPostForm = function () {
     emit('editPost', postId.value)
@@ -74,15 +73,19 @@ onMounted(setup)
             <div class="mt-2 mb-2">
                 <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
             </div>
-            <div v-if="userNickName === store.state.userData.nickName" class="post-edit-delete">
-                <button type="button" class="btn btn-outline-danger- " @click="viewEditPostForm" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
-                <button type="button" class="btn btn-outline-danger- " @click="postDelete" style="text-decoration: underline; color: darkgray; ">삭제</button>
+            <div class="post-edit-delete">
+                <button v-show="userNickName === store.state.userData.nickName" type="button" class="btn btn-outline-danger- " @click="viewEditPostForm" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
+                <button v-show="userNickName === store.state.userData.nickName || store.state.userGroupRole === 'HOST'" type="button" class="btn btn-outline-danger- " @click="viewDeletePostModal" style="text-decoration: underline; color: darkgray; ">삭제</button>
             </div>
         </div>
         <div class="post-content">
 
             <div v-for="upload in uploads" :key="upload.id" class="post-img">
                 <img :src="upload.filePath">
+            </div>
+
+            <div class="delete-post" v-if="isDeletePostModal">
+                <DeletePostModal :postData="postData" @closeModal="closeDeletePostModal"></DeletePostModal>
             </div>
 
             <pre>{{ content }}</pre>
@@ -121,6 +124,8 @@ onMounted(setup)
 .post-content {
     flex: 9;
     margin-left: 20px;
+    display: flex;
+    flex-direction: column;
 }
 .post-img {
     width: 70%;
@@ -130,6 +135,15 @@ onMounted(setup)
 img {
     max-width: 100%;
     height: auto;
+}
+
+.delete-post {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
 }
 
 pre {

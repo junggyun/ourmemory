@@ -24,10 +24,10 @@ public class Group extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<UserGroup> userGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
     @NotNull

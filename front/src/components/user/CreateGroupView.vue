@@ -16,7 +16,6 @@ const createGroup = async function () {
         if (groupNameInput) {
             groupName.value = groupNameInput
             createGroupRequest.value.groupName = groupName.value
-            console.log(createGroupRequest.value)
 
             await createGroupAPI(createGroupRequest.value);
             window.location.reload()

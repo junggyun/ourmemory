@@ -10,6 +10,7 @@ const getUsers = async function () {
     try {
         const result = await getUserByGroupAPI(store.state.groupData.id);
         users.value = result.data.users
+        console.log(result.data.users)
     } catch (error) {
         console.log(error)
     }
@@ -22,9 +23,10 @@ onMounted(getUsers)
     <div class="user-list-wrap">
         <div class="group-list-wrap">
             <div class="d-flex position-relative border mt-2 me-3 align-items-center " v-for="user in users" :key="user.user.id" style="height: 50px">
-                <img src="@/image/userImage.jpg" class="flex-shrink-0  " alt="">
+                <img v-show="user.role === 'HOST'" src="@/image/host.png" class="flex-shrink-0  " alt="">
+                <img v-show="user.role === 'MEMBER'" src="@/image/userImage.jpg" class="flex-shrink-0  " alt="">
                 <div class="d-flex justify-content-center" style="width: 100%">
-                    <span>{{ user.user.nickName }}({{ user.user.name }})</span>
+                    <span>{{ user.user.nickName }}</span>
                     <a href="#" class="stretched-link" ></a>
                 </div>
             </div>

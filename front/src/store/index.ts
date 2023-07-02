@@ -17,7 +17,9 @@ const store= createStore({
             name: "",
             key: "",
         },
-        dynamicComponent: ""
+        dynamicComponent: "",
+        userGroupRole: "",
+        userGroupId: 0,
     },
     getters: {
         getUserId: function (state) {
@@ -58,6 +60,12 @@ const store= createStore({
         setDynamicComponent(state, dynamicComponent) {
             state.dynamicComponent = dynamicComponent
         },
+        setUserGroupRole(state, userGroupRole) {
+            state.userGroupRole = userGroupRole
+        },
+        setUserGroupId(state, userGroupId) {
+            state.userGroupId = userGroupId
+        },
         clearGroup(state) {
             state.groupData.id = 0
             state.groupData.name = ""
@@ -75,13 +83,15 @@ const store= createStore({
             state.groupData.name = ""
             state.groupData.key = ""
             state.dynamicComponent = ""
+            state.userGroupRole = ""
+            state.userGroupId = 0
         },
 
     },
     actions: {
     },
     plugins: [ createPersistedState({
-        paths: ['userId', 'role', 'token', 'userData', 'groupData', 'dynamicComponent']
+        paths: ['userId', 'role', 'token', 'userData', 'groupData', 'dynamicComponent', 'userGroupRole', 'userGroupId']
     }) ]
 })
 export default store

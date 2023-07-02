@@ -1,21 +1,20 @@
 package myproject.ourmemory.service;
 
 import lombok.RequiredArgsConstructor;
-import myproject.ourmemory.domain.Group;
-import myproject.ourmemory.domain.User;
-import myproject.ourmemory.domain.UserGroup;
-import myproject.ourmemory.domain.UserGroupRole;
+import myproject.ourmemory.domain.*;
 import myproject.ourmemory.dto.usergroup.CreateUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.GetUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.JoinUserGroupRequest;
 import myproject.ourmemory.dto.usergroup.UpdateUserGroupRequest;
 import myproject.ourmemory.exception.*;
 import myproject.ourmemory.repository.GroupRepository;
+import myproject.ourmemory.repository.PostRepository;
 import myproject.ourmemory.repository.UserGroupRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +25,8 @@ public class UserGroupService {
     private final UserGroupRepository userGroupRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final PostRepository postRepository;
+    private final PostService postService;
 
     /**
      * 유저그룹 등록(그룹 생성)
@@ -113,10 +114,19 @@ public class UserGroupService {
         UserGroup userGroup = userGroupRepository.findById(userGroupId)
                 .orElseThrow(UserGroupNotFound::new);
 
-        deleteValidate(userGroup);
+        if (userGroup.getRole().equals(UserGroupRole.HOST)) {
+            groupRepository.delete(userGroup.getGroup());
+        } else if (userGroup.getRole().equals(UserGroupRole.MEMBER)) {
+            List<Post> posts = userGroup.getGroup().getPosts();
+            for (Post post : posts) {
+                postService.deletePost(post.getId());
+            }
+            userGroupRepository.delete(userGroup);
+        }
 
-        userGroupRepository.delete(userGroup);
     }
+
+
 
     /**
      * 유저 기준 조회

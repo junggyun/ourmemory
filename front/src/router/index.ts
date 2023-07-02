@@ -61,6 +61,8 @@ router.beforeEach((to, from, next) => {
         next()
     } else if (to.name === "User") {
         store.commit('clearGroup')
+        store.commit('setUserGroupRole', "")
+        store.commit('setUserGroupId', 0)
         next()
     } else {
         if (store.state.role === 'ROLE_ADMIN' && to.meta.role === store.state.role) {
