@@ -56,6 +56,10 @@ const goSignup = function () {
     router.push("/signup")
 }
 
+const handleEmailInput = function (e) {
+    e.target.value = e.target.value.replace(/[^A-Za-z0-9@.]/ig, '')
+};
+
 
 </script>
 
@@ -67,12 +71,13 @@ const goSignup = function () {
             </div>
 
             <div id="emailInput">
-                <input class="form-control form-control-lg" type="email" placeholder="이메일" v-model="email" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="email" placeholder="이메일" @keyup.enter="login" v-model="email" @input="handleEmailInput" aria-label=".form-control-lg example">
                 <span v-show="valid" class="input-error" style="color: red">이메일 또는 비밀번호를 다시 확인해주세요.</span>
             </div>
 
             <div id="passwordInput">
-                <input class="form-control form-control-lg" type="password" placeholder="비밀번호" v-model="password" @keyup.enter="login" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="password" placeholder="비밀번호"
+                       v-model="password" :minlength="8" :maxlength="16" @keyup.enter="login" aria-label=".form-control-lg example">
             </div>
 
             <div id="loginButton">

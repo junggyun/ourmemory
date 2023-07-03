@@ -3,6 +3,7 @@ import GroupListView from "@/components/user/GroupListView.vue";
 import {computed, ref, watch} from "vue";
 import GroupView from "@/components/user/GroupView.vue";
 import store from "@/store";
+import EditUserModal from "@/components/user/EditUserForm.vue";
 
 const dynamicComponent = ref("")
 
@@ -29,7 +30,11 @@ watch(dynamicComponentComputed, (newVal) => {
             <div v-else-if="dynamicComponent === 'groupEnter'">
                 <GroupView></GroupView>
             </div>
+            <div class="edit-user" v-else-if="dynamicComponent === 'userEdit'">
+                <EditUserModal></EditUserModal>
+            </div>
         </div>
+
     </div>
 </template>
 
@@ -45,5 +50,6 @@ watch(dynamicComponentComputed, (newVal) => {
 .content {
 
 }
+
 
 </style>

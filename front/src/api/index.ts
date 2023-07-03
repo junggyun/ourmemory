@@ -118,5 +118,10 @@ const deleteUserGroupAPI = function (userGroupId: any) {
         `/api/userGroups/${userGroupId}`)
 };
 
+const editUserAPI = function (userId: any, editUserRequest: any) {
+    return authInstance.post(
+        `/api/users/${userId}`, editUserRequest)
+};
+
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
-    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI }
+    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI, editUserAPI }

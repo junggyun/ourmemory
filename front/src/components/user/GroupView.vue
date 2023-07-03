@@ -9,13 +9,21 @@ import PostView from "@/components/user/PostView.vue";
 import EditPostForm from "@/components/user/EditPostForm.vue";
 import DeleteGroupModal from "@/components/user/DeleteGroupModal.vue";
 import LeaveGroupModal from "@/components/user/LeaveGroupModal.vue";
+import UserInfoModal from "@/components/user/UserInfoModal.vue";
 
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
 const isDeleteGroupModal = ref(false)
 const isLeaveGroupModal = ref(false)
+const isUserInfoModal = ref(false)
 const editPostId = ref({
     postId: null
+})
+const infoUser = ref({
+    id: 0,
+    name: "",
+    nickName: "",
+    email: "",
 })
 const findPost = ref({
     postId: null,
@@ -67,6 +75,19 @@ const closeLeaveGroupModal = function () {
     isLeaveGroupModal.value = false
 }
 
+const viewUserInfoModal = function (user: any) {
+    isUserInfoModal.value = true
+    infoUser.value.id = user.id
+    infoUser.value.name = user.name
+    infoUser.value.nickName = user.nickName
+    infoUser.value.email = user.email
+};
+
+const closeUserInfoModal = function () {
+    isUserInfoModal.value = false
+};
+
+
 const viewPost = function (postData: any) {
     // findPost.value.postId = postData.postId
     // findPost.value.title = postData.title
@@ -86,6 +107,7 @@ const viewEditPostForm = function (postId: any) {
     editPostId.value.postId = postId
 }
 
+
 </script>
 
 <template>
@@ -102,7 +124,7 @@ const viewEditPostForm = function (postId: any) {
     </div>
     <div class="user-post-wrap">
         <div class="group-user-list" v-if="dynamicComponent === ''">
-            <UserListView></UserListView>
+            <UserListView @viewUserInfo="viewUserInfoModal"></UserListView>
             <button v-show="store.state.userGroupRole === 'HOST'" class="btn btn-outline-danger mt-2" @click="viewDeleteGroupModal" >
                 <i class="bi bi-box-arrow-left"></i>
                 그룹 삭제
@@ -121,6 +143,10 @@ const viewEditPostForm = function (postId: any) {
         <div class="delete-group" v-if="isDeleteGroupModal">
             <DeleteGroupModal @closeModal="closeDeleteGroupModal"></DeleteGroupModal>
         </div>
+        <div class="info-user" v-if="isUserInfoModal">
+            <UserInfoModal :userData="infoUser" @closeModal="closeUserInfoModal"></UserInfoModal>
+        </div>
+
         <div class="post-content-wrap mt-2">
             <div class="post-list" v-if="dynamicComponent === ''">
                 <PostListView @viewPost="viewPost"></PostListView>
@@ -168,7 +194,7 @@ h4:hover {
 .post-content-wrap {
     flex: 8;
 }
-.group-code, .delete-group, .leave-group {
+.group-code, .delete-group, .leave-group, .info-user {
     width: 100%;
     height: 100%;
     display: flex;

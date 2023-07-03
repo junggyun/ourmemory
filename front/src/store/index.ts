@@ -70,7 +70,6 @@ const store= createStore({
             state.groupData.id = 0
             state.groupData.name = ""
             state.groupData.key = ""
-            state.dynamicComponent = ""
         },
         clearStore(state) {
             state.userId = 0

@@ -65,6 +65,18 @@ const checkPassword = function () {
     }
 }
 
+const handleNameInput = function (e) {
+    e.target.value = e.target.value.replace(/[^ㄱ-ㅎㅏ-ㅣ가-힣]/ig, '')
+};
+
+const handleEmailInput = function (e) {
+    e.target.value = e.target.value.replace(/[^A-Za-z0-9@.]/ig, '')
+};
+
+const handleNickNameInput = function (e) {
+    e.target.value = e.target.value.replace(/[^A-Za-zㄱ-ㅎㅏ-ㅣ가-힣0-9]/ig, '')
+};
+
 const loginPage = function () {
     router.push('/')
 }
@@ -79,23 +91,24 @@ const loginPage = function () {
                 <h1 @click="loginPage">OurMemory</h1>
             </div>
             <div id="nameInput">
-                <input class="form-control form-control-lg" type="text" placeholder="이름" v-model="name" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="text" placeholder="이름" v-model="name" @input="handleNameInput" @keyup.enter="signup" aria-label=".form-control-lg example">
             </div>
 
             <div id="emailInput">
-                <input class="form-control form-control-lg" type="email" placeholder="이메일" v-model="email" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="email" placeholder="이메일" v-model="email" @input="handleEmailInput" @keyup.enter="signup" aria-label=".form-control-lg example">
                 <span v-show="valid.email" class="input-error">이메일 주소를 정확히 입력해주세요.</span>
             </div>
 
             <div id="passwordInput">
                 <input class="form-control form-control-lg" type="password" placeholder="비밀번호 (영문,숫자 조합 8-16자)"
-                       v-model="password" aria-label=".form-control-lg example">
+                       v-model="password" @keyup.enter="signup" :minlength="8" :maxlength="16" aria-label=".form-control-lg example">
                 <span v-show="valid.password" class="input-error">영문,숫자를 조합하여 입력해주세요.(8-16자)</span>
             </div>
 
 
             <div id="nickNameInput">
-                <input class="form-control form-control-lg" type="text" placeholder="닉네임" v-model="nickName" aria-label=".form-control-lg example">
+                <input class="form-control form-control-lg" type="text" placeholder="닉네임" v-model="nickName" @keyup.enter="signup"
+                       :maxlength="8" @input="handleNickNameInput"  aria-label=".form-control-lg example">
                 <span v-show="valid.nickName" class="input-error">이미 사용 중인 닉네임입니다.</span>
             </div>
 

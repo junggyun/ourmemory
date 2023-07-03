@@ -39,7 +39,7 @@ public class Post extends BaseTimeEntity{
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true) //todo CascadeType.ALL 을 안할 시 업로드 안되는 이유??
     private List<Upload> uploads = new ArrayList<>();
 
 

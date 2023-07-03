@@ -7,9 +7,16 @@ const logout = async function () {
 }
 
 const home = async function () {
-    store.commit('clearGroup')
+    store.commit('setDynamicComponent', '')
     await router.push(`/home/${store.state.userData.nickName}`)
 }
+
+const viewEditUserModal = async function () {
+    store.commit('setDynamicComponent', 'userEdit')
+    await router.push(`/home/${store.state.userData.nickName}`)
+
+};
+
 
 </script>
 
@@ -20,9 +27,10 @@ const home = async function () {
             <h1 @click="home">OURMEMORY</h1>
         </div>
         <div class="user-info">
-            <a href="#">{{ store.state.userData.nickName}}</a>님
+            <a href="#" @click="viewEditUserModal">{{ store.state.userData.nickName}}</a>님
             <button type="button" class="btn btn-outline-danger- " @click="logout" style="text-decoration: underline; color: darkgray">로그아웃</button>
         </div>
+
     </div>
 
 </template>
@@ -50,4 +58,5 @@ h1 {
 .user-info span {
 
 }
+
 </style>

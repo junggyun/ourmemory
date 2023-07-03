@@ -3,6 +3,7 @@ package myproject.ourmemory.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.ourmemory.domain.User;
+import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserRole;
 import myproject.ourmemory.dto.user.CreateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
@@ -30,6 +31,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserGroupService userGroupService;
 
     private final PasswordEncoder encoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -63,7 +65,7 @@ public class UserService {
                 .nickName(request.getNickName())
                 .build();
         emailValidate(user);
-        nickNameValidate(user);
+        nickNameValidate(request.getNickName());
         userRepository.save(user);
 
         return user.getId();
@@ -77,6 +79,8 @@ public class UserService {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
 
+        nickNameValidate(request.getNickName());
+
         findUser.updateUser(request);
     }
 
@@ -88,6 +92,10 @@ public class UserService {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
         validateRole(findUser);
+        List<UserGroup> userGroups = findUser.getUserGroups();
+        for (UserGroup userGroup : userGroups) {
+            userGroupService.delete(userGroup.getId());
+        }
 
         userRepository.delete(findUser);
     }
@@ -123,11 +131,11 @@ public class UserService {
     /**
      * 예외처리
      */
-    private void nickNameValidate(User user) {
+    private void nickNameValidate(String nickName) {
         List<User> findUsers = userRepository.findAll();
 
         for (User findUser : findUsers) {
-            if (user.getNickName().equals(findUser.getNickName()))
+            if (nickName.equals(findUser.getNickName()))
                 throw new CreateUserDuplicate("nickName", "이미 사용 중인 닉네임입니다.");
         }
     }

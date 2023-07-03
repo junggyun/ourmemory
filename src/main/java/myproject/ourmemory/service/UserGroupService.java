@@ -115,9 +115,13 @@ public class UserGroupService {
                 .orElseThrow(UserGroupNotFound::new);
 
         if (userGroup.getRole().equals(UserGroupRole.HOST)) {
+            List<Post> posts = userGroup.getGroup().getPosts();
+            for (Post post : posts) {
+                postService.deletePost(post.getId());
+            }
             groupRepository.delete(userGroup.getGroup());
         } else if (userGroup.getRole().equals(UserGroupRole.MEMBER)) {
-            List<Post> posts = userGroup.getGroup().getPosts();
+            List<Post> posts = postRepository.findPostsByUserIdAndGroupId(userGroup.getUser().getId(), userGroup.getGroup().getId());
             for (Post post : posts) {
                 postService.deletePost(post.getId());
             }

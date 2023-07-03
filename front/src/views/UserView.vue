@@ -12,6 +12,7 @@ const userData = ref({
     userNickName: "",
 })
 
+
 const getUser = async function () {
     try {
         const user = await getUserAPI(store.state.userId);
@@ -22,6 +23,7 @@ const getUser = async function () {
     }
 
 }
+
 
 onMounted(getUser)
 
