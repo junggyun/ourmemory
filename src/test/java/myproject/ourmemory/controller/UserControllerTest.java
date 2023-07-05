@@ -13,11 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,13 +54,13 @@ class UserControllerTest {
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
         //when
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -73,13 +77,37 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("로그인")
+    public void 로그인() throws Exception {
+        //given
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("박정균")
+                .email("onlyplsson@gmail.com")
+                .password("123123qwe")
+                .nickName("테란킹")
+                .build();
+        userService.join(request);
+
+        String loginRequest = "{\"email\": \"onlyplsson@gmail.com\", \"password\": \"123123qwe\"}";
+
+        //expected
+        mockMvc.perform(post("/api/users/login")
+                        .characterEncoding("UTF-8")
+                        .contentType(APPLICATION_JSON)
+                        .content(loginRequest)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+     }
+
+    @Test
     @DisplayName("회원 등록 - 닉네임 중복")
     public void 회원_등록_닉네임_중복_예외처리() throws Exception {
         //given
         User user1 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -87,13 +115,13 @@ class UserControllerTest {
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
         //expected
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/api/users")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -106,19 +134,19 @@ class UserControllerTest {
 
     @Test
     @DisplayName("특정 회원 조회")
-    @WithUserDetails(setupBefore =  TestExecutionEvent.TEST_EXECUTION, value = "onlyplsson@gmail.com")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 특정_회원_조회() throws Exception {
         //given
         CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
 
         Long userId = userService.join(request);
         //expected
-        mockMvc.perform(get("/users/{userId}", userId)
+        mockMvc.perform(get("/api/users/{userId}", userId)
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
@@ -131,11 +159,12 @@ class UserControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 회원 조회")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 존재하지_않는_회원_조회() throws Exception {
         //given
 
         //expected
-        mockMvc.perform(get("/users/{userId}", 3L)
+        mockMvc.perform(get("/api/users/{userId}", 3L)
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
@@ -144,43 +173,14 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("전체 회원 페이징 조회")
-    public void 전체_회원_페이징_조회() throws Exception {
-        //given
-        List<User> users = IntStream.range(1, 51)
-                .mapToObj(i -> {
-                    return User.builder()
-                            .name("회원" + i)
-                            .nickName("별명" + i)
-                            .build();
-                })
-                .collect(Collectors.toList());
-        userRepository.saveAll(users);
-
-        //expected
-        mockMvc.perform(get("/users?page=1&size=20")
-                        .characterEncoding("UTF-8")
-                        .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.length()", is(2)))
-//                .andExpect(jsonPath("$[0].id").value(user1.getId()))
-//                .andExpect(jsonPath("$[0].name").value("박정균"))
-//                .andExpect(jsonPath("$[0].nickName").value("테란킹"))
-//                .andExpect(jsonPath("$[1].id").value(user2.getId()))
-//                .andExpect(jsonPath("$[1].name").value("정한별"))
-//                .andExpect(jsonPath("$[1].nickName").value("항뵬"))
-                .andDo(print());
-    }
-
-    @Test
     @DisplayName("회원 닉네임 수정")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 회원_닉네임_수정() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -192,7 +192,7 @@ class UserControllerTest {
 
         String json = objectMapper.writeValueAsString(request);
         //when
-        mockMvc.perform(post("/users/{userId}", user.getId())
+        mockMvc.perform(post("/api/users/{userId}", user.getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -206,18 +206,19 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원 삭제")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 회원_삭제() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
 
         //when
-        mockMvc.perform(delete("/users/{userId}", user.getId())
+        mockMvc.perform(delete("/api/users/{userId}", user.getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )

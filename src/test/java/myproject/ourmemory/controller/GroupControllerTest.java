@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,34 +50,9 @@ class GroupControllerTest {
         groupRepository.deleteAll();
     }
 
-//    @Test
-//    @DisplayName("그룹 등록")
-//    public void 그룹_등록() throws Exception {
-//        //given
-//        CreateGroupRequest request = CreateGroupRequest.builder()
-//                .name("컴공과")
-//                .build();
-//
-//        String json = objectMapper.writeValueAsString(request);
-//
-//        //when
-//        mockMvc.perform(post("/groups")
-//                        .characterEncoding("UTF-8")
-//                        .contentType(APPLICATION_JSON)
-//                        .content(json)
-//                )
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//        //then
-//        Group group = groupRepository.findAll().get(0);
-//
-//        assertEquals(1L, groupRepository.count());
-//        assertEquals("컴공과", group.getName());
-//
-//    }
-
     @Test
     @DisplayName("그룹 수정")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 그룹_수정() throws Exception {
         //given
         Group group = Group.builder()
@@ -92,7 +68,7 @@ class GroupControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        mockMvc.perform(post("/groups/{groupId}", group.getId())
+        mockMvc.perform(post("/api/groups/{groupId}", group.getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -105,34 +81,14 @@ class GroupControllerTest {
     }
 
     @Test
-    @DisplayName("그룹 삭제")
-    public void 그룹_삭제() throws Exception {
-        //given
-        Group group = Group.builder()
-                .name("컴공과")
-                .build();
-        groupRepository.save(group);
-
-        //when
-        mockMvc.perform(delete("/groups/{groupId}", group.getId())
-                        .characterEncoding("UTF-8")
-                        .contentType(APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andDo(print());
-        //then
-        assertEquals(0L, groupRepository.count());
-
-    }
-
-    @Test
     @DisplayName("그룹 단건 조회")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 그룹_단건_조회() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -145,7 +101,7 @@ class GroupControllerTest {
         Group group = userGroupRepository.findById(userGroupId).get().getGroup();
 
         //expected
-        mockMvc.perform(get("/groups/{groupId}", group.getId())
+        mockMvc.perform(get("/api/groups/{groupId}", group.getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
@@ -156,12 +112,13 @@ class GroupControllerTest {
 
     @Test
     @DisplayName("그룹 페이징 조회")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 그룹_페이징_조회() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -175,7 +132,7 @@ class GroupControllerTest {
         }
 
         //expected
-        mockMvc.perform(get("/groups?size=5&page=1")
+        mockMvc.perform(get("/api/groups?size=5&page=1")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )

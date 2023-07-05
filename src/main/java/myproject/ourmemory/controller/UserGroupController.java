@@ -31,27 +31,6 @@ public class UserGroupController {
     /**
      * 특정 회원 그룹 리스트 조회
      */
-//    @GetMapping("/userGroups/byUser")
-//    public GetByUserResponse findAllByUser(@ModelAttribute GetUserGroupRequest request) {
-//
-//        User user = userRepository.findById(request.getUserId())
-//                .orElseThrow(UserNotFound::new);
-//        int totalPages = userGroupService.getPages(request);
-//
-//        List<UserGroup> userGroups = userGroupService.listByUser(request);
-//        List<GroupList> collect = userGroups.stream()
-//                .map(u -> new GroupList(u))
-//                .collect(Collectors.toList());
-//
-//        GetByUserResponse result = GetByUserResponse.builder()
-//                .totalPages(totalPages)
-//                .user(user)
-//                .groups(collect)
-//                .build();
-//
-//        return result;
-//    }
-
     @GetMapping("/userGroups/byUser/{userId}")
     public GetByUserResponse findAllByUser(@PathVariable Long userId) {
 
@@ -93,27 +72,6 @@ public class UserGroupController {
         return result;
     }
 
-//    @GetMapping("/userGroups/byGroup")
-//    public GetByGroupResponse findAllByGroup(@ModelAttribute GetUserGroupRequest request) {
-//
-//        Group group = groupRepository.findById(request.getGroupId())
-//                .orElseThrow(GroupNotFound::new);
-//
-//        List<UserGroup> userGroups = userGroupService.listByGroup(request);
-//        List<UserList> collect = userGroups.stream()
-//                .map(u -> new UserList(u))
-//                .collect(Collectors.toList());
-//
-//        GetByGroupResponse result = GetByGroupResponse.builder()
-//                .group(group)
-//                .users(collect)
-//                .build();
-//
-//        return result;
-//    }
-
-
-
     /**
      * 유저그룹 등록(그룹 생성)
      */
@@ -140,16 +98,9 @@ public class UserGroupController {
      * 유저그룹 수정(ROLE)
      */
     @PostMapping("/userGroups/{groupId}")
-    public UpdateUserGroupResponse updateRole(@PathVariable Long groupId, @RequestBody UpdateUserGroupRequest request) {
+    public void updateRole(@PathVariable Long groupId, @RequestBody UpdateUserGroupRequest request) {
         userGroupService.updateRole(groupId, request);
 
-        UserGroup memberUserGroup = userGroupRepository.findById(request.getHostUserId())
-                .orElseThrow(UserGroupNotFound::new);
-
-        UserGroup hostUserGroup = userGroupRepository.findById(request.getMemberUserId())
-                .orElseThrow(UserGroupNotFound::new);
-
-        return new UpdateUserGroupResponse(hostUserGroup, memberUserGroup);
     }
 
     /**

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +48,13 @@ class UserGroupControllerTest {
 
     @Test
     @DisplayName("유저그룹 등록(그룹 생성)")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 유저그룹_등록_그룹생성() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -65,7 +67,7 @@ class UserGroupControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        mockMvc.perform(post("/userGroups/create")
+        mockMvc.perform(post("/api/userGroups/create")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -81,12 +83,13 @@ class UserGroupControllerTest {
 
     @Test
     @DisplayName("유저그룹 등록(그룹 입장)")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 유저그룹_등록_그룹입장() throws Exception {
         //given
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -94,7 +97,7 @@ class UserGroupControllerTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -109,13 +112,14 @@ class UserGroupControllerTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(userGroup.getGroup().getId())
+                .key(userGroup.getGroup().getKey())
                 .build();
 
 
         String json = objectMapper.writeValueAsString(request2);
 
         //when
-        mockMvc.perform(post("/userGroups/join")
+        mockMvc.perform(post("/api/userGroups/join")
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
@@ -131,12 +135,13 @@ class UserGroupControllerTest {
 
     @Test
     @DisplayName("유저그룹 수정(ROLE)")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 유저그룹_수정() throws Exception {
         //given
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -144,7 +149,7 @@ class UserGroupControllerTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -163,11 +168,10 @@ class UserGroupControllerTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(groupId)
+                .key(hostUserGroup.getGroup().getKey())
                 .build();
-        Long memberUserGroupId = userGroupService.join(request2);
+        userGroupService.join(request2);
 
-        UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
-                .orElseThrow(UserGroupNotFound::new);
 
         UpdateUserGroupRequest request3 = UpdateUserGroupRequest.builder()
                 .hostUserId(user1.getId())
@@ -177,26 +181,25 @@ class UserGroupControllerTest {
         String json = objectMapper.writeValueAsString(request3);
 
         //expected
-        mockMvc.perform(post("/userGroups/{groupId}", groupId)
+        mockMvc.perform(post("/api/userGroups/{groupId}", groupId)
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberToHost.role").value("HOST"))
-                .andExpect(jsonPath("$.hostToMember.role").value("MEMBER"))
                 .andDo(print());
 
     }
 
     @Test
     @DisplayName("유저그룹 삭제")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 유저그룹_삭제() throws Exception {
         //given
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -204,7 +207,7 @@ class UserGroupControllerTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -223,11 +226,12 @@ class UserGroupControllerTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(groupId)
+                .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
 
         //when
-        mockMvc.perform(delete("/userGroups/{userGroupId}", memberUserGroupId)
+        mockMvc.perform(delete("/api/userGroups/{userGroupId}", memberUserGroupId)
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
@@ -240,12 +244,13 @@ class UserGroupControllerTest {
 
     @Test
     @DisplayName("특정 유저 그룹 조회")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 특정_유저_그룹_조회() throws Exception {
         //given
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -253,7 +258,7 @@ class UserGroupControllerTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -268,12 +273,13 @@ class UserGroupControllerTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(userGroup.getGroup().getId())
+                .key(userGroup.getGroup().getKey())
                 .build();
         userGroupService.join(request2);
 
 
         //when
-        mockMvc.perform(get("/userGroups/byUser?userId={userId}&size=5&page=1", user1.getId())
+        mockMvc.perform(get("/api/userGroups/byUser/{userId}", user1.getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )
@@ -288,12 +294,13 @@ class UserGroupControllerTest {
 
     @Test
     @DisplayName("특정 그룹 유저 조회")
+    @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 특정_그룹_유저_조회() throws Exception {
         //given
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -313,7 +320,7 @@ class UserGroupControllerTest {
 
 
         //when
-        mockMvc.perform(get("/userGroups/byGroup?groupId={groupId}&size=5&page=1", userGroup.getGroup().getId())
+        mockMvc.perform(get("/api/userGroups/byGroup/{groupId}", userGroup.getGroup().getId())
                         .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                 )

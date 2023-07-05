@@ -33,8 +33,11 @@ public class PostDto {
         content = post.getContent();
         createdDate = post.getCreatedDate();
         modifiedDate = post.getModifiedDate();
-        uploads = post.getUploads().stream()
-                .map(u -> new UploadDto(u))
-                .collect(Collectors.toList());
+        if (post.getUploads() != null) {
+            uploads = post.getUploads().stream()
+                    .map(u -> new UploadDto(u))
+                    .collect(Collectors.toList());
+        }
+
     }
 }

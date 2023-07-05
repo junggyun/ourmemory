@@ -1,5 +1,6 @@
 package myproject.ourmemory.domain;
 
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class Post extends BaseTimeEntity{
     @Lob
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true) //todo CascadeType.ALL 을 안할 시 업로드 안되는 이유??
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //todo CascadeType.ALL 을 안할 시 업로드 안되는 이유??
     private List<Upload> uploads = new ArrayList<>();
 
 
@@ -51,7 +52,7 @@ public class Post extends BaseTimeEntity{
     public Post(User user, Group group, String title, String content, List<Upload> uploads) {
         setUser(user);
         setGroup(group);
-        setUpload(uploads);
+        setUploads(uploads);
         this.title = title;
         this.content = content;
     }
@@ -73,10 +74,12 @@ public class Post extends BaseTimeEntity{
         group.getPosts().add(this);
     }
 
-    public void setUpload(List<Upload> uploads) {
+    public void setUploads(List<Upload> uploads) {
         this.uploads = uploads;
-        for (Upload upload : uploads) {
-            upload.setPost(this);
+        if (uploads != null) {
+            for (Upload upload : uploads) {
+                upload.setPost(this);
+            }
         }
     }
 }

@@ -97,7 +97,7 @@ class GroupServiceTest {
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -123,7 +123,7 @@ class GroupServiceTest {
             User user = User.builder()
                     .name("박정균")
                     .email("onlyplsson@gmail.com")
-                    .password("1234")
+                    .password("123123qwe")
                     .nickName("테란킹")
                     .build();
             userRepository.save(user);

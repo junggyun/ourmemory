@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -47,7 +48,7 @@ class UserGroupServiceTest {
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);
@@ -73,7 +74,7 @@ class UserGroupServiceTest {
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -81,7 +82,7 @@ class UserGroupServiceTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("저그한별")
                 .build();
         userRepository.save(user2);
@@ -97,6 +98,7 @@ class UserGroupServiceTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(userGroup1.getGroup().getId())
+                .key(userGroup1.getGroup().getKey())
                 .build();
 
         //when
@@ -116,7 +118,7 @@ class UserGroupServiceTest {
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -124,7 +126,7 @@ class UserGroupServiceTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -141,6 +143,7 @@ class UserGroupServiceTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(groupId)
+                .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
         UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
@@ -167,7 +170,7 @@ class UserGroupServiceTest {
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -175,7 +178,7 @@ class UserGroupServiceTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -192,6 +195,7 @@ class UserGroupServiceTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(groupId)
+                .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
         UserGroup memberUserGroup = userGroupRepository.findById(memberUserGroupId)
@@ -213,7 +217,7 @@ class UserGroupServiceTest {
         User user1 = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user1);
@@ -221,7 +225,7 @@ class UserGroupServiceTest {
         User user2 = User.builder()
                 .name("정한별")
                 .email("wjdgksquf@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("항뵬")
                 .build();
         userRepository.save(user2);
@@ -237,6 +241,7 @@ class UserGroupServiceTest {
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
                 .groupId(userGroup.getGroup().getId())
+                .key(userGroup.getGroup().getKey())
                 .build();
         userGroupService.join(request2);
 
@@ -261,7 +266,7 @@ class UserGroupServiceTest {
         User user = User.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("1234")
+                .password("123123qwe")
                 .nickName("테란킹")
                 .build();
         userRepository.save(user);

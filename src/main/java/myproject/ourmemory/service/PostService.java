@@ -1,6 +1,7 @@
 package myproject.ourmemory.service;
 
 import com.querydsl.core.util.CollectionUtils;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.Post;
@@ -96,10 +97,13 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
         List<Upload> uploads = post.getUploads();
-        for (Upload upload : uploads) {
-            File file = new File(System.getProperty("user.dir") + "\\front\\public\\image\\" + upload.getFileName());
-            file.delete();
+        if (uploads != null) {
+            for (Upload upload : uploads) {
+                File file = new File(System.getProperty("user.dir") + "\\front\\public\\image\\" + upload.getFileName());
+                file.delete();
+            }
         }
+
 
         postRepository.delete(post);
     }
