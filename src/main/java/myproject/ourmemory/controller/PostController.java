@@ -62,6 +62,7 @@ public class PostController {
 
         GetPostByGroupResponse result = GetPostByGroupResponse.builder()
                 .totalPages(totalPages)
+                .groupId(request.getGroupId())
                 .posts(collect)
                 .build();
 

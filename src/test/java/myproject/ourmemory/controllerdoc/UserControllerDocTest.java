@@ -2,6 +2,7 @@ package myproject.ourmemory.controllerdoc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import myproject.ourmemory.dto.user.CreateUserRequest;
+import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +24,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -55,6 +55,8 @@ public class UserControllerDocTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation)
+                        .uris().withScheme("https").withHost("ourmemory.api.com").withPort(443)
+                        .and()
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())
                         .withResponseDefaults(prettyPrint())
@@ -75,9 +77,8 @@ public class UserControllerDocTest {
                 .build();
         String json = objectMapper.writeValueAsString(request);
 
-        //when
+        //expected
         mockMvc.perform(post("/api/users")
-                        .characterEncoding("UTF-8")
                         .contentType(APPLICATION_JSON)
                         .content(json)
                         .accept(APPLICATION_JSON)
@@ -95,7 +96,6 @@ public class UserControllerDocTest {
                                 fieldWithPath("id").description("회원 ID")
                         )
                 ));
-        //then
 
     }
 
@@ -123,11 +123,11 @@ public class UserControllerDocTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 ID"),
-                                fieldWithPath("name").description("이름"),
-                                fieldWithPath("nickName").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("createdDate").description("가입 일자"),
-                                fieldWithPath("role").description("권한")
+                                fieldWithPath("name").description("회원명"),
+                                fieldWithPath("nickName").description("회원 닉네임"),
+                                fieldWithPath("email").description("회원 이메일"),
+                                fieldWithPath("createdDate").description("회원 가입 일자"),
+                                fieldWithPath("role").description("계정 권한")
                         )
                 ));
 
@@ -164,6 +164,76 @@ public class UserControllerDocTest {
                                 fieldWithPath("grantType").description("인증 방식"),
                                 fieldWithPath("accessToken").description("액세스 토큰"),
                                 fieldWithPath("refreshToken").description("리프레쉬 토큰")
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("회원 정보 수정")
+    public void editUser() throws Exception {
+        //given
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("박아워")
+                .email("our@memory.com")
+                .password("our123123")
+                .nickName("테란킹")
+                .build();
+        Long userId = userService.join(request);
+
+        UpdateUserRequest request1 = UpdateUserRequest.builder()
+                .nickName("저그킹")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request1);
+
+
+        //expected
+        mockMvc.perform(post("/api/users/{userId}", userId)
+                        .accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user/{methodName}",
+                        pathParameters(
+                                parameterWithName("userId").description("회원 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("nickName").description("회원 닉네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID")
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴")
+    public void deleteUser() throws Exception {
+        //given
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("박아워")
+                .email("our@memory.com")
+                .password("our123123")
+                .nickName("테란킹")
+                .build();
+
+        Long userId = userService.join(request);
+        //expected
+        mockMvc.perform(delete("/api/users/{userId}", userId)
+
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user/{methodName}",
+                        pathParameters(
+                                parameterWithName("userId").description("회원 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID")
                         )
                 ));
 

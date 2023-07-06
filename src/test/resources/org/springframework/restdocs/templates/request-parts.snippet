@@ -1,12 +1,11 @@
 |===
-|필드명|타입|설명|필수값
+|파트명|설명|필수값
 
-{{#fields}}
+{{#requestParts}}
 
-|{{#tableCellContent}}`+{{path}}+`{{/tableCellContent}}
-|{{#tableCellContent}}`+{{type}}+`{{/tableCellContent}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
 |{{#tableCellContent}}{{description}}{{/tableCellContent}}
 |{{#tableCellContent}}{{^optional}}true{{/optional}}{{#optional}}false{{/optional}}{{/tableCellContent}}
 
-{{/fields}}
+{{/requestParts}}
 |===

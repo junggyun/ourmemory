@@ -97,7 +97,6 @@ class UserGroupServiceTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroup1.getGroup().getId())
                 .key(userGroup1.getGroup().getKey())
                 .build();
 
@@ -142,7 +141,6 @@ class UserGroupServiceTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(groupId)
                 .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
@@ -194,7 +192,6 @@ class UserGroupServiceTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(groupId)
                 .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
@@ -240,7 +237,6 @@ class UserGroupServiceTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroup.getGroup().getId())
                 .key(userGroup.getGroup().getKey())
                 .build();
         userGroupService.join(request2);

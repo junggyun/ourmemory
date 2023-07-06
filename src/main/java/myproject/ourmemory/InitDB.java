@@ -93,7 +93,7 @@ public class InitDB {
                 for (int j = 1; j <= 49; j++) {
                     JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                             .userId(users.get(j).getId())
-                            .groupId(userGroup.getGroup().getId())
+                            .key(userGroup.getGroup().getKey())
                             .build();
                     userGroupService.join(request2);
                 }

@@ -1,4 +1,4 @@
-= OurMemory
+= OurMemory API
 :toc-title: 목차
 :source-highlighter: highlightjs
 :toc: left
@@ -43,3 +43,167 @@ include::{snippets}/user/getUser/path-parameters.adoc[]
 .응답
 include::{snippets}/user/getUser/http-response.adoc[]
 include::{snippets}/user/getUser/response-fields.adoc[]
+
+'''
+=== 회원 정보 수정
+'''
+
+.요청
+include::{snippets}/user/editUser/http-request.adoc[]
+include::{snippets}/user/editUser/path-parameters.adoc[]
+include::{snippets}/user/editUser/request-fields.adoc[]
+
+.응답
+include::{snippets}/user/editUser/http-response.adoc[]
+include::{snippets}/user/editUser/response-fields.adoc[]
+
+'''
+=== 회원 탈퇴
+'''
+
+.요청
+include::{snippets}/user/deleteUser/http-request.adoc[]
+include::{snippets}/user/deleteUser/path-parameters.adoc[]
+
+.응답
+include::{snippets}/user/deleteUser/http-response.adoc[]
+include::{snippets}/user/deleteUser/response-fields.adoc[]
+
+== *회원그룹 API*
+
+'''
+=== 그룹 생성
+'''
+
+.요청
+include::{snippets}/userGroup/createGroup/http-request.adoc[]
+include::{snippets}/userGroup/createGroup/request-fields.adoc[]
+
+.응답
+include::{snippets}/userGroup/createGroup/http-response.adoc[]
+include::{snippets}/userGroup/createGroup/response-fields.adoc[]
+
+'''
+=== 그룹 참가
+'''
+
+.요청
+include::{snippets}/userGroup/joinGroup/http-request.adoc[]
+include::{snippets}/userGroup/joinGroup/request-fields.adoc[]
+
+.응답
+include::{snippets}/userGroup/joinGroup/http-response.adoc[]
+include::{snippets}/userGroup/joinGroup/response-fields.adoc[]
+
+'''
+=== 그룹별 회원 목록 조회
+'''
+
+.요청
+include::{snippets}/userGroup/getUsersByGroup/http-request.adoc[]
+include::{snippets}/userGroup/getUsersByGroup/path-parameters.adoc[]
+
+.응답
+include::{snippets}/userGroup/getUsersByGroup/http-response.adoc[]
+include::{snippets}/userGroup/getUsersByGroup/response-fields.adoc[]
+
+'''
+=== 회원별 그룹 목록 조회
+'''
+
+.요청
+include::{snippets}/userGroup/getGroupsByUser/http-request.adoc[]
+include::{snippets}/userGroup/getGroupsByUser/path-parameters.adoc[]
+
+.응답
+include::{snippets}/userGroup/getGroupsByUser/http-response.adoc[]
+include::{snippets}/userGroup/getGroupsByUser/response-fields.adoc[]
+
+'''
+=== 그룹 탈퇴,삭제
+'''
+
+.요청
+include::{snippets}/userGroup/deleteUserGroup/http-request.adoc[]
+include::{snippets}/userGroup/deleteUserGroup/path-parameters.adoc[]
+
+.응답
+include::{snippets}/userGroup/deleteUserGroup/http-response.adoc[]
+include::{snippets}/userGroup/deleteUserGroup/response-fields.adoc[]
+
+== *게시글 API*
+
+'''
+=== 게시글 작성
+'''
+
+.요청
+include::{snippets}/post/createPost/curl-request.adoc[]
+include::{snippets}/post/createPost/request-parts.adoc[]
+
+.응답
+include::{snippets}/post/createPost/http-response.adoc[]
+include::{snippets}/post/createPost/response-fields.adoc[]
+
+'''
+=== 게시글 단건 조회
+'''
+
+.요청
+include::{snippets}/post/getPost/http-request.adoc[]
+include::{snippets}/post/getPost/path-parameters.adoc[]
+
+.응답
+include::{snippets}/post/getPost/http-response.adoc[]
+include::{snippets}/post/getPost/response-fields.adoc[]
+
+'''
+=== 그룹별 게시글 목록 조회
+'''
+
+.요청
+include::{snippets}/post/getPostsByGroup/http-request.adoc[]
+include::{snippets}/post/getPostsByGroup/query-parameters.adoc[]
+
+.응답
+include::{snippets}/post/getPostsByGroup/http-response.adoc[]
+include::{snippets}/post/getPostsByGroup/response-fields.adoc[]
+
+'''
+=== 게시글 수정
+'''
+
+.요청
+include::{snippets}/post/editPost/http-request.adoc[]
+include::{snippets}/post/editPost/path-parameters.adoc[]
+include::{snippets}/post/editPost/request-fields.adoc[]
+
+.응답
+include::{snippets}/post/editPost/http-response.adoc[]
+include::{snippets}/post/editPost/response-fields.adoc[]
+
+'''
+=== 게시글 삭제
+'''
+
+.요청
+include::{snippets}/post/deletePost/http-request.adoc[]
+include::{snippets}/post/deletePost/path-parameters.adoc[]
+
+.응답
+include::{snippets}/post/deletePost/http-response.adoc[]
+include::{snippets}/post/deletePost/response-fields.adoc[]
+
+== *업로드 API*
+
+'''
+=== 게시글별 파일 목록 조회
+'''
+
+.요청
+include::{snippets}/upload/getUploadsByPost/http-request.adoc[]
+include::{snippets}/upload/getUploadsByPost/path-parameters.adoc[]
+
+.응답
+include::{snippets}/upload/getUploadsByPost/http-response.adoc[]
+include::{snippets}/upload/getUploadsByPost/response-fields.adoc[]

@@ -111,7 +111,6 @@ class UserGroupControllerTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroup.getGroup().getId())
                 .key(userGroup.getGroup().getKey())
                 .build();
 
@@ -167,7 +166,6 @@ class UserGroupControllerTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(groupId)
                 .key(hostUserGroup.getGroup().getKey())
                 .build();
         userGroupService.join(request2);
@@ -225,7 +223,6 @@ class UserGroupControllerTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(groupId)
                 .key(hostUserGroup.getGroup().getKey())
                 .build();
         Long memberUserGroupId = userGroupService.join(request2);
@@ -272,7 +269,6 @@ class UserGroupControllerTest {
 
         JoinUserGroupRequest request2 = JoinUserGroupRequest.builder()
                 .userId(user2.getId())
-                .groupId(userGroup.getGroup().getId())
                 .key(userGroup.getGroup().getKey())
                 .build();
         userGroupService.join(request2);
