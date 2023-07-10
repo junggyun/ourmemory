@@ -10,7 +10,6 @@ const getUsers = async function () {
     try {
         const result = await getUserByGroupAPI(store.state.groupData.id);
         users.value = result.data.users
-        console.log(result.data.users)
     } catch (error) {
         console.log(error)
     }

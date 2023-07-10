@@ -1,4 +1,16 @@
 spring:
+  profiles:
+    group:
+      "local": "testDB, common"
+      "prod": "prodDB, common"
+    active: "local"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "testDB"
   datasource:
     url: jdbc:mysql://localhost:3306/ourmemory?userSSL=false&userUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: admin
@@ -7,16 +19,45 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+upload:
+  path:
+    C:\workspace_spring\ourmemory\front\public\image\
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "prodDB"
+  datasource:
+    url: jdbc:mysql://db-ourmemory-prod.cobl8ihfvxqj.ap-northeast-2.rds.amazonaws.com:3306/ourmemory_prod?userSSL=false&userUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: admin
+    password: wjaqkr0956
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+upload:
+  path:
+    /var/www/html/dist/image
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "common"
+  jpa:
     properties:
       hibernate:
-#        show_sql: true
+        #        show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQL57Dialect
-#        auto_quote_keyword: true
+        #        auto_quote_keyword: true
         globally_quoted_identifiers: true
       database-platform: org.hibernate.dialect.MySQL8Dialect
-
   servlet:
     multipart:
       max-file-size: 20MB
@@ -34,3 +75,6 @@ server:
 jwt:
   secret:
     b25seXBsc3NvbnRlcnJhbmtpbmdiYWNrZW5kbmV3YmllbXluYW1laXNwYXJranVuZ2d5dW5wbGVhc2VlbmNvZGVvdmVyMjU2Yml0cw==
+
+
+---

@@ -50,6 +50,7 @@ const login = async function () {
 
 const loginPage = function () {
     router.push("/")
+    console.log(process.env)
 }
 
 const goSignup = function () {

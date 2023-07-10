@@ -2,6 +2,7 @@ package myproject.ourmemory.service;
 
 import com.querydsl.core.util.CollectionUtils;
 import jakarta.annotation.Nullable;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.Post;
@@ -18,6 +19,9 @@ import myproject.ourmemory.repository.*;
 import myproject.ourmemory.repository.GroupRepository;
 import myproject.ourmemory.repository.PostRepository;
 import myproject.ourmemory.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,16 +41,20 @@ public class PostService {
     private final GroupRepository groupRepository;
     private final PostRepository postRepository;
 
+    @Value("${upload.path}") private String uploadPath;
+
     /**
      * 게시글 등록
      */
     @Transactional
+
     public Long createPost(CreatePostRequest request, List<MultipartFile> files) throws IOException {
         List<Upload> uploads = new ArrayList<>();
 
+
         if (files != null) {
             for (MultipartFile file : files) {
-                String uploadPath = System.getProperty("user.dir") + "\\front\\public\\image";
+
                 String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
                 File saveFile = new File(uploadPath, fileName);
                 file.transferTo(saveFile);
@@ -99,7 +107,8 @@ public class PostService {
         List<Upload> uploads = post.getUploads();
         if (uploads != null) {
             for (Upload upload : uploads) {
-                File file = new File(System.getProperty("user.dir") + "\\front\\public\\image\\" + upload.getFileName());
+                File file = new File(uploadPath + "/" + upload.getFileName());
+
                 file.delete();
             }
         }

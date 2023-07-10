@@ -31,23 +31,13 @@ public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return new WebSecurityCustomizer() {
-            @Override
-            public void customize(WebSecurity web) {
-                web.ignoring()
-                        .requestMatchers("/favicon.ico")
-                        .requestMatchers("/error");
-//                        .requestMatchers(toH2Console());
-            }
-        };
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests()
+                .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/error").permitAll()
                 .requestMatchers("/docs/index.html").permitAll()
                 .requestMatchers(POST, "/api/users").permitAll()
                 .requestMatchers("/api/users/login").permitAll()

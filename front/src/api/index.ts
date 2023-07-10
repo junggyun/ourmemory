@@ -4,14 +4,14 @@ import store from "@/store";
 
 const createAuthInstance = function () {
     const instance = axios.create({
-        baseURL: "http://localhost:3000/",
+        baseURL: process.env.APP_VUE_BASE_URL,
     })
     return setInterceptors(instance)
 }
 
 const createFormDataInstance = function () {
     const instance = axios.create({
-        baseURL: "http://localhost:3000/",
+        baseURL: process.env.APP_VUE_BASE_URL,
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -20,7 +20,7 @@ const createFormDataInstance = function () {
 }
 
 const instance = axios.create({
-    baseURL: "http://localhost:3000"
+    baseURL: process.env.APP_VUE_BASE_URL
 })
 const authInstance = createAuthInstance()
 const formDataInstance = createFormDataInstance()

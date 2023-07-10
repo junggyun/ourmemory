@@ -15,6 +15,7 @@ const props = defineProps({
 
 const emit= defineEmits(['groupHome', 'editPost'])
 
+
 const postId = ref(0)
 const title = ref("")
 const content = ref("")
