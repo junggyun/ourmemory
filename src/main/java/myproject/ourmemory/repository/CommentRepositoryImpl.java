@@ -28,6 +28,7 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
                 .where(qComment.post.id.eq(request.getPostId()))
                 .offset(request.getOffset())
                 .limit(request.getSize())
+                .orderBy(qComment.id.desc())
                 .fetch();
     }
 

@@ -87,7 +87,7 @@
                      <span style="font-size: 15px">{{post.createdDateSimple}} / {{post.user.nickName}}</span>
                  </div>
                  <div class="post-list-view-count">
-                     <span style="font-size: 15px">조회 수 : {{post.viewCount}}</span>
+                     <span style="font-size: 15px; margin-right: 10px">조회 수 : {{post.viewCount}}</span>
                  </div>
              </div>
          </div>
