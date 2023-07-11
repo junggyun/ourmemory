@@ -102,4 +102,13 @@ public class PostController {
 
         return new DeletePostResponse(postId);
     }
+
+    /**
+     * 게시글 조회 수 증가
+     */
+    @PostMapping("/posts/{postId}/view")
+    public void addViewCount(@PathVariable Long postId) {
+        postService.addViewCount(postId);
+
+    }
 }

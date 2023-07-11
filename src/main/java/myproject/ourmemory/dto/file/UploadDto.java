@@ -14,7 +14,6 @@ public class UploadDto {
     public UploadDto() {
     }
 
-    @Builder
     public UploadDto(Upload upload) {
         id = upload.getId();
         fileName = upload.getFileName();

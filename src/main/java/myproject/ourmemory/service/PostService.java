@@ -47,10 +47,8 @@ public class PostService {
      * 게시글 등록
      */
     @Transactional
-
     public Long createPost(CreatePostRequest request, List<MultipartFile> files) throws IOException {
         List<Upload> uploads = new ArrayList<>();
-
 
         if (files != null) {
             for (MultipartFile file : files) {
@@ -147,6 +145,16 @@ public class PostService {
         int totalPages = (int) Math.ceil((double) totalPosts / request.getSize());
 
         return totalPages;
+    }
+
+    /**
+     * 게시글 조회 수 증가
+     */
+    @Transactional
+    public void addViewCount(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+        post.addViewCount();
     }
 
 

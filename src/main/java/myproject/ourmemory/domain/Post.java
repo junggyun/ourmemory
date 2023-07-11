@@ -33,6 +33,9 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
+
     @NotNull
     private String title;
 
@@ -43,6 +46,7 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //todo CascadeType.ALL 을 안할 시 업로드 안되는 이유??
     private List<Upload> uploads = new ArrayList<>();
 
+    private Long viewCount;
 
     public Post() {
     }
@@ -55,12 +59,18 @@ public class Post extends BaseTimeEntity{
         setUploads(uploads);
         this.title = title;
         this.content = content;
+        this.viewCount = 0L;
     }
 
     //==변경 메서드==//
     public void updatePost(UpdatePostRequest request) {
         title = request.getTitle();
         content = request.getContent();
+    }
+
+    //==비즈니스 로직==//
+    public void addViewCount() {
+        this.viewCount += 1;
     }
 
     //==연관관계 메서드==//

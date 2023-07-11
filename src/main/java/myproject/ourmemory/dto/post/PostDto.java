@@ -21,6 +21,7 @@ public class PostDto {
     private String content;
     private String createdDate;
     private String modifiedDate;
+    private Long viewCount;
     private List<UploadDto> uploads;
 
     public PostDto() {
@@ -33,6 +34,7 @@ public class PostDto {
         content = post.getContent();
         createdDate = post.getCreatedDate();
         modifiedDate = post.getModifiedDate();
+        viewCount = post.getViewCount();
         if (post.getUploads() != null) {
             uploads = post.getUploads().stream()
                     .map(u -> new UploadDto(u))

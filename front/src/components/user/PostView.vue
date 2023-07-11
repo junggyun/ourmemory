@@ -3,6 +3,7 @@ import {defineEmits, defineProps, onMounted, ref} from 'vue';
 import {getUploadByPostAPI} from "@/api";
 import store from "@/store";
 import DeletePostModal from "@/components/user/DeletePostModal.vue";
+import CommentListView from "@/components/user/CommentListView.vue";
 
 const isDeletePostModal = ref(false)
 
@@ -20,6 +21,7 @@ const postId = ref(0)
 const title = ref("")
 const content = ref("")
 const createdDate = ref("")
+const viewCount = ref(0)
 const userNickName = ref("")
 const uploads = ref([{
     id: null,
@@ -35,6 +37,7 @@ const setup = async function () {
         content.value = props.postData.content
         createdDate.value = props.postData.createdDate
         userNickName.value = props.postData.user.nickName
+        viewCount.value = props.postData.viewCount
 
         const result = await getUploadByPostAPI(postId.value);
         uploads.value = result.data;
@@ -67,7 +70,8 @@ onMounted(setup)
                 <span style="font-size: 30px; margin-left: 20px">{{ title }}</span>
             </div>
             <div class="post-date">
-                <span style="font-size: 15px;">{{ createdDate }}</span>
+                <span style="font-size: 15px; margin-top: 5px;">{{ createdDate }}</span>
+                <span style="font-size: 15px;">조회 수 : {{ viewCount }}</span>
             </div>
         </div>
         <div class="post-writer">
@@ -91,6 +95,9 @@ onMounted(setup)
 
             <pre>{{ content }}</pre>
 
+        </div>
+        <div class="post-comment">
+            <CommentListView :postData="postData"></CommentListView>
         </div>
     </div>
 </template>
@@ -120,7 +127,9 @@ onMounted(setup)
 .post-date{
     margin-right: 10px;
     display: flex;
+    flex-direction: column;
     align-items: end;
+    justify-content: space-between;
 }
 .post-content {
     flex: 9;

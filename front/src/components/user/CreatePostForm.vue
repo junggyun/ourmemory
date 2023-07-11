@@ -52,7 +52,7 @@ const uploadFile = function (event: any) {
             </div>
             <div class="post-form-body">
                 <div class="mb-3">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" placeholder="내용" v-model="content"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" style="resize: none;" rows="20" placeholder="내용" v-model="content"></textarea>
                 </div>
                 <input multiple type="file" accept="image/*" ref="fileInput" @change="uploadFile">
             </div>

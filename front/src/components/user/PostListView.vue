@@ -1,7 +1,7 @@
  <script lang="ts" setup>
  import store from "@/store";
  import {defineEmits, onMounted, ref} from "vue";
- import {getPostByGroupAPI} from "@/api";
+ import {addViewCountAPI, getPostByGroupAPI} from "@/api";
  import moment from "moment";
 
  const emit = defineEmits(['viewPost'])
@@ -24,6 +24,7 @@
      createdDateSimple: "",
      modifiedDate: "",
      thumbnailPath: "",
+     viewCount: 0,
      uploads: [{
          id: null,
          fileName: "",
@@ -65,7 +66,9 @@
      }
  }
 
- const viewPost = function (post: any) {
+ const viewPost = async function (post: any) {
+     await addViewCountAPI(post.postId)
+     post.viewCount += 1
      emit('viewPost', post)
  }
 
@@ -78,10 +81,14 @@
          <div class="d-flex position-relative mb-2" v-for="post in posts" :key="post.postId">
              <img v-if="post.uploads.length == 0" src="@/image/no-image.jpg" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
              <img v-if="post.uploads.length > 0" :src="post.uploads[0].filePath" class="flex-shrink-0 me-3" alt="..." @click="viewPost(post)">
-             <div class="d-flex flex-column justify-content-center position-relative">
-
-                 <h3 class="mt-0" @click="viewPost(post)">{{post.title}}</h3>
-                 <span style="font-size: 15px">{{post.createdDateSimple}} / {{post.user.nickName}}</span>
+             <div class="post-list-item">
+                 <div class="post-list-title">
+                     <h3 class="mt-0" @click="viewPost(post)">{{post.title}}</h3>
+                     <span style="font-size: 15px">{{post.createdDateSimple}} / {{post.user.nickName}}</span>
+                 </div>
+                 <div class="post-list-view-count">
+                     <span style="font-size: 15px">조회 수 : {{post.viewCount}}</span>
+                 </div>
              </div>
          </div>
          <div class="btn-cover">
@@ -112,6 +119,20 @@ h3:hover {
     width: 5rem;
     height: 2rem;
     letter-spacing: 0.5px;
+}
+.post-list-item{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.post-list-title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.post-list-view-count{
+    display: flex;
+    align-items: center;
 }
 .btn-cover .page-count {
     padding: 0 1rem;

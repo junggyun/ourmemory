@@ -67,6 +67,21 @@ public class InitDB {
                                 userService.join(request);
                             }
                     );
+            userRepository.findByEmail("user")
+                    .ifPresentOrElse(
+                            user -> {
+
+                            },
+                            () -> {
+                                CreateUserRequest request = CreateUserRequest.builder()
+                                        .email("user")
+                                        .password("wjaqkr0956")
+                                        .name("박정균")
+                                        .nickName("개발자")
+                                        .build();
+                                userService.join(request);
+                            }
+                    );
         }
 
         public void DBInit1() {

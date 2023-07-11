@@ -10,6 +10,7 @@ import EditPostForm from "@/components/user/EditPostForm.vue";
 import DeleteGroupModal from "@/components/user/DeleteGroupModal.vue";
 import LeaveGroupModal from "@/components/user/LeaveGroupModal.vue";
 import UserInfoModal from "@/components/user/UserInfoModal.vue";
+import router from "@/router";
 
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
@@ -40,6 +41,7 @@ const findPost = ref({
     createdDateSimple: "",
     modifiedDate: "",
     thumbnailPath: "",
+    viewCount: 0,
     uploads: [{
         id: null,
         fileName: "",
@@ -89,17 +91,14 @@ const closeUserInfoModal = function () {
 
 
 const viewPost = function (postData: any) {
-    // findPost.value.postId = postData.postId
-    // findPost.value.title = postData.title
-    // findPost.value.content = postData.content
-    // findPost.value.createdDate = postData.createdDate
-    // findPost.value.user.nickName = postData.user.nickName
+
     findPost.value = postData
     dynamicComponent.value = "ViewPost"
 }
 
 const groupHome = function () {
     dynamicComponent.value = ""
+    router.push(`/home/${store.state.userData.nickName}/${store.state.groupData.id}`)
 }
 
 const viewEditPostForm = function (postId: any) {

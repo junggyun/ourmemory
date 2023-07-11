@@ -35,6 +35,7 @@ const viewGroupEnter = async function (group:any, action:any) {
 
 const getGroup = async function () {
     store.commit('setDynamicComponent', '')
+    store.commit('clearGroup')
     try {
         if (store.state.userId) {
             const result = await getGroupByUserAPI(store.state.userId);

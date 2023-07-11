@@ -132,6 +132,11 @@ const deletePostAPI = function (postId: any) {
     return authInstance.delete(
         `/api/posts/${postId}`)
 }
+// 게시글 조회 수 증가
+const addViewCountAPI = function (postId: any) {
+    return authInstance.post(
+        `/api/posts/${postId}/view`)
+};
 /**
  * UPLOAD API
  */
@@ -141,5 +146,30 @@ const getUploadByPostAPI = function (postId: any) {
         `/api/uploads/${postId}`)
 };
 
+/**
+ * 댓글 API
+ */
+//댓글 작성
+const createCommentAPI = function (createCommentRequest: any) {
+    return authInstance.post(
+        `/api/comments`, createCommentRequest)
+}
+//댓글 단건 조회
+const getCommentAPI = function (commentId: any) {
+    return authInstance.get(
+        `/api/comments/${commentId}`)
+};
+//게시글별 댓글 목록 조회
+const getCommentsByPostAPI = function (getCommentsRequest: any) {
+    return authInstance.get(
+        `/api/comments/byPost?postId=${getCommentsRequest.postId}&size=${getCommentsRequest.size}&page=${getCommentsRequest.page}`)
+}
+//댓글 삭제
+const deleteCommentAPI = function (commentId: any) {
+    return authInstance.delete(
+        `/api/comments/${commentId}`)
+};
+
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
-    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI, editUserAPI }
+    getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI, editUserAPI,
+    addViewCountAPI, createCommentAPI, getCommentAPI, getCommentsByPostAPI, deleteCommentAPI }
