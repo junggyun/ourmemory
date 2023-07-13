@@ -67,11 +67,11 @@ onMounted(setup)
     <div class="post-wrap">
         <div class="post-title">
             <div class="mt-2 mb-2">
-                <span style="font-size: 30px; margin-left: 20px">{{ title }}</span>
+                <span style="font-size: 20px; margin-left: 20px">{{ title }}</span>
             </div>
             <div class="post-date">
-                <span style="font-size: 15px; margin-top: 5px;">{{ createdDate }}</span>
-                <span style="font-size: 15px;">조회 수 : {{ viewCount }}</span>
+                <span style="font-size: 13px;">{{ createdDate }}</span>
+                <span style="font-size: 13px;">조회 {{ viewCount }}</span>
             </div>
         </div>
         <div class="post-writer">
@@ -136,6 +136,7 @@ onMounted(setup)
     margin-left: 20px;
     display: flex;
     flex-direction: column;
+    min-height: 100px;
 }
 .post-img {
     width: 70%;

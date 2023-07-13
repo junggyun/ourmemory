@@ -75,10 +75,9 @@ onMounted(getUser)
     display: flex;
     justify-content: center;
     width: 100vw;
-    height: 200px;
-    border-top: 1px solid darkgray;
-    margin-top: 30px;
-    background-color: darkgray;
+    height: 60px;
+    border-top: 1px solid rgba(0,0,0,0.2);
+    margin-top: 70px;
     flex-shrink: 0;
 }
 

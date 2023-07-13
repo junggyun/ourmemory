@@ -6,7 +6,8 @@
 
     <div class="footer-wrap">
         <div class="copyright">
-            <span>ⓒterrnaking1</span>
+            <span style="font-size: 14px">Copyright 2023 OurMemory All Rights Reserved.</span>
+            <span style="font-size: 14px">Email : onlyplsson@naver.com</span>
         </div>
     </div>
 
@@ -17,14 +18,16 @@
 .footer-wrap {
     display: flex;
     align-items: center;
-    width: 60vw;
+    width: 50vw;
     height: 100%;
     position: relative;
+
 }
 .copyright {
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
 }
 
 .copyright p {

@@ -27,10 +27,10 @@ onMounted(getUsers)
         <div class="group-list-wrap">
             <div class="d-flex position-relative border mt-2 me-3 align-items-center " v-for="user in users" :key="user.user.id"
                  @click="viewUserInfo(user.user)" style="height: 50px">
-                <img v-show="user.role === 'HOST'" src="@/image/host.png" class="flex-shrink-0  " alt="">
-                <img v-show="user.role === 'MEMBER'" src="@/image/userImage.jpg" class="flex-shrink-0  " alt="">
+                <img v-show="user.role === 'HOST'" src="@/image/host.png" class="flex-shrink-0 ms-1  " alt="">
+                <img v-show="user.role === 'MEMBER'" src="@/image/userImage.jpg" class="flex-shrink-0 ms-1  " alt="">
                 <div class="d-flex justify-content-center" style="width: 100%">
-                    <span>{{ user.user.nickName }}</span>
+                    <span style="font-size: 14px">{{ user.user.nickName }}</span>
                     <a href="#" class="stretched-link" ></a>
                 </div>
             </div>

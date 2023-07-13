@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.0",
     "bootstrap-icons": "^1.10.5",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.9",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "vue": "^3.2.36",
