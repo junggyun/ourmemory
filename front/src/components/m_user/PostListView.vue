@@ -60,6 +60,7 @@
          const currDate = dayjs()
          for (const post of posts.value) {
              const dayDiff = currDate.diff(post.createdDate, 'day')
+             post.createdDate = dayjs(post.createdDate).format('YYYY.MM.DD HH:mm');
              if (dayDiff == 0) {
                  post.createdDateSimple = dayjs(post.createdDate).format('HH:mm')
              } else {
@@ -140,6 +141,7 @@ img {
     justify-content: space-between;
 }
 .post-items {
+    min-height: 540px;
 }
 .post-list-item{
     width: 100%;

@@ -4,8 +4,6 @@ import {getUploadByPostAPI} from "@/api";
 import store from "@/store";
 import DeletePostModal from "@/components/user/DeletePostModal.vue";
 import CommentListView from "@/components/user/CommentListView.vue";
-import {onBeforeRouteLeave} from "vue-router";
-import router from "@/router";
 
 const isDeletePostModal = ref(false)
 
@@ -61,12 +59,6 @@ const closeDeletePostModal = function () {
 const viewEditPostForm = function () {
     emit('editPost', postId.value)
 }
-
-onBeforeRouteLeave(() => {
-    console.log("뒤로가기")
-    router.push(`/home/${store.state.userData.nickName}/${store.state.groupData.id}`)
-    emit('groupHome')
-})
 
 onMounted(setup)
 </script>

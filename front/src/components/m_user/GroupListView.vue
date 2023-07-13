@@ -69,15 +69,15 @@ onMounted(getGroup)
     </div>
 
     <div class="group-list-wrap justify-content-between" style="display: flex; flex-wrap: wrap; ">
-        <div class="d-flex position-relative border mt-3 align-items-center " v-for="group in groups" :key="group.group.id" style="width: 48%; min-height: 50px">
-            <img src="@/image/groupImage.jpg" class="flex-shrink-0" alt="">
-            <div class="d-flex justify-content-center" style="width: 100%">
-                <span>{{ group.group.name }}</span>
+        <div class="d-flex position-relative border mt-3 align-items-center " v-for="group in groups" :key="group.group.id" style="width: 45%">
+            <img src="@/image/groupImage.jpg" class="flex-shrink-0 me-3" alt="">
+            <div class="d-flex justify-content-center me-5" style="width: 100%">
+                <h3>{{ group.group.name }}</h3>
                 <a href="#" class="stretched-link" @click="viewGroupEnter(group, 'groupEnter')"></a>
             </div>
         </div>
         <div class="group-empty" v-if="groups.length == 0">
-            <h1 class="mt-3">그룹이 없습니다.</h1>
+            <h1>그룹이 없습니다.</h1>
         </div>
         <div class="create-group" v-if="dynamicComponent === 'CreateGroupModal'">
             <CreateGroupModal @closeModal="closeModal"></CreateGroupModal>
@@ -99,11 +99,8 @@ onMounted(getGroup)
 }
 
 img {
-    width: 150px;
-    height: 150px;
-}
-span {
-    font-size: 25px;
+    width: 200px;
+    height: 200px;
 }
 
 .group-add {
@@ -118,39 +115,4 @@ span {
     justify-content: center;
     position: absolute;
 }
-
-@media screen and (max-width: 768px) {
-.group-list-wrap {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-img {
-    width: 30px;
-    height: 30px;
-}
-span {
-    font-size: 14px;
-}
-
-.group-add {
-    text-align: right;
-}
-
-.group-add button {
-
-    font-size: 13px;
-}
-
-.create-group, .join-group {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-}
-
-}
-
 </style>

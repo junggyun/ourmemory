@@ -89,4 +89,43 @@ onMounted(getUser)
     justify-content: center;
 }
 
+@media screen and (max-width: 768px) {
+    .wrap {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 100vh;
+
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+        width: 100vw;
+        height: 70px;
+        border-bottom: 1px solid darkgray;
+        margin-bottom: 30px;
+        flex-shrink: 0;
+    }
+
+
+    .footer {
+        display: flex;
+        justify-content: center;
+        width: 100vw;
+        height: 50px;
+        border-top: 1px solid rgba(0,0,0,0.2);
+        margin-top: 70px;
+        flex-shrink: 0;
+    }
+
+    .body {
+        flex: 1;
+        width: 100vw;
+        height: auto;
+        display: flex;
+        justify-content: center;
+    }
+}
+
 </style>

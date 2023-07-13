@@ -23,7 +23,7 @@ const closeModal = function () {
     <div class="info-user-modal">
         <div class="info-user-modal-content">
             <div class="info-user-modal-content-header">
-                <b>회원 정보</b>
+                <h5>회원 정보</h5>
             </div>
             <div class="info-user-modal-content-body">
                 <span>이름 : {{ props.userData.name }}</span>
@@ -39,9 +39,7 @@ const closeModal = function () {
 </template>
 
 <style scoped>
-b {
-    font-size: 20px;
-}
+
 .info-user-modal {
     width: 300px; height: 200px;
     border: 1px solid darkgray;
@@ -87,60 +85,6 @@ b {
     border-bottom-right-radius: 8px;
 }
 
-@media screen and (max-width: 768px) {
-    b {
-        font-size: 15px;
-    }
-    .info-user-modal {
-        width: 200px; height: 150px;
-        border: 1px solid darkgray;
-        border-radius: 8px;
-        z-index: 999;
-        position: absolute;
-        top: 10px;
-        background: white;
-    }
-    .info-user-modal-content {
-        width: 100%; height: 100%;
-        display: flex;
-        flex-direction: column;
-
-    }
-    .info-user-modal-content-header {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-    }
-    .info-user-modal-content-body {
-        flex: 2;
-        border-top: 1px solid darkgray;
-        border-bottom: 1px solid darkgray;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .info-user-modal-content-body span {
-        width: 90%;
-    }
-
-    .info-user-modal-content-footer {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
-    button {
-        font-size: 11px;
-        padding: 5px 10px 5px 10px
-    }
-    span {
-        font-size: 10px;
-    }
+.info-user-modal-content button {
 }
 </style>

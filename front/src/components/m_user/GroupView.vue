@@ -122,7 +122,7 @@ const viewEditPostForm = function (postId: any) {
         </button>
     </div>
     <div class="user-post-wrap">
-        <div class="post-del" v-if="dynamicComponent === ''">
+        <div class="group-user-list" v-if="dynamicComponent === ''">
             <UserListView @viewUserInfo="viewUserInfoModal"></UserListView>
             <button v-show="store.state.userGroupRole === 'HOST'" class="btn btn-outline-danger mt-2" @click="viewDeleteGroupModal" >
                 <i class="bi bi-box-arrow-left"></i>
@@ -171,7 +171,6 @@ h4 {
     cursor : pointer;
     margin-bottom: 20px;
     color: darkgray;
-    display: inline-block;
 }
 h4:hover {
     text-decoration: underline;
@@ -188,7 +187,7 @@ h4:hover {
 .user-post-wrap {
     display: flex;
 }
-.post-del {
+.group-user-list {
     flex: 2;
 }
 .post-content-wrap {
@@ -202,63 +201,4 @@ h4:hover {
     justify-content: center;
     position: absolute;
 }
-@media screen and (max-width: 768px) {
-    h4 {
-        pointer-events: auto;
-        cursor : pointer;
-        margin-bottom: 20px;
-        color: darkgray;
-    }
-    h4:hover {
-        text-decoration: underline;
-    }
-    .post-add {
-        display: flex;
-        justify-content: space-between;
-        border: 1px solid darkgray;
-        border-radius: 8px;
-    }
-    .post-add button {
-        margin: 0.5em;
-        padding: 5px 10px 5px 10px;
-        font-size: 13px;
-    }
-    .user-post-wrap {
-        display: flex;
-        flex-direction: column-reverse;
-    }
-    .post-del {
-        flex: 2;
-    }
-    .post-del button {
-        padding: 5px 10px 5px 10px;
-        font-size: 13px;
-    }
-    .post-content-wrap {
-        flex: 8;
-    }
-    .group-code, .delete-group, .leave-group, .info-user {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .user-post-wrap {
-        position: relative;
-    }
-    .group-code, .delete-group, .leave-group, .info-user {
-        width: 100%;
-        height: 100%;
-
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-}
-
 </style>

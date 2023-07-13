@@ -201,15 +201,4 @@ onMounted(getPost)
     left: 50%;
     margin: -150px 0 0 -100px;
 }
-
-@media screen and (max-width: 768px) {
-    .btn-cover {
-        margin-top: 40px;
-        text-align: center;
-        font-size: 12px;
-    }
-    .comment-title {
-        font-size: 13px;
-    }
-}
 </style>

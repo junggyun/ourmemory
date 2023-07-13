@@ -27,8 +27,8 @@ const viewEditUserModal = async function () {
             <h1 @click="home">OURMEMORY</h1>
         </div>
         <div class="user-info">
-            <button class="btn btn-secondary-" @click="viewEditUserModal" style="margin-top: 5px; color: darkgray">내 정보</button>
-            <button type="button" class="btn btn-light- " @click="logout" style=" color: darkgray;">로그아웃</button>
+            <button class="btn btn-secondary-" @click="viewEditUserModal" style="margin-top: 5px; font-size: 14px; color: darkgray">내 정보</button>
+            <button type="button" class="btn btn-light- " @click="logout" style=" color: darkgray;  font-size: 14px">로그아웃</button>
         </div>
 
     </div>
@@ -55,45 +55,14 @@ h1 {
     top: 0;
     right: 0;
 }
-.user-info button {
-    font-size: 14px;
+.user-info span {
+
 }
 button {
     padding: 0;
     margin-top: 5px;
     margin-left: 5px;
 
-}
-
-@media screen and (max-width: 768px) {
-    h1 {
-        pointer-events: auto;
-        cursor : pointer;
-    }
-    .header-wrap {
-        position: relative;
-        display: flex;
-        align-items: center;
-        width: 90vw;
-        height: 100%;
-
-    }
-    .user-info {
-        display: flex;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-    .user-info button {
-        font-size: 14px;
-    }
-    button {
-        padding: 0;
-        margin-top: 5px;
-        margin-left: 5px;
-
-    }
 }
 
 </style>

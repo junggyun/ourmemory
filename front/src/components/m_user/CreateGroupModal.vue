@@ -34,7 +34,7 @@ const createGroup = async function () {
     <div class="group-key-modal">
         <div class="group-key-modal-content">
             <div class="group-key-modal-content-header">
-                <span>그룹 생성</span>
+                <h5>그룹 생성</h5>
             </div>
             <div class="group-key-modal-content-body">
                 <input type="text" v-model="createGroupRequest.groupName" placeholder="그룹명">
@@ -49,9 +49,7 @@ const createGroup = async function () {
 </template>
 
 <style scoped>
-span {
-    font-size: 20px;
-}
+
 .group-key-modal {
     width: 300px; height: 200px;
     border: 1px solid darkgray;
@@ -92,55 +90,6 @@ span {
     border-bottom-right-radius: 8px;
 }
 
-@media screen and (max-width: 768px) {
-    span {
-        font-size: 15px;
-    }
-    .group-key-modal {
-        width: 200px; height: 150px;
-        border: 1px solid darkgray;
-        border-radius: 8px;
-        z-index: 999;
-        position: absolute;
-        top: 10px;
-        background: white;
-    }
-    .group-key-modal-content {
-        width: 100%; height: 100%;
-        display: flex;
-        flex-direction: column;
-
-    }
-    .group-key-modal-content-header {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-    }
-    .group-key-modal-content-body {
-        flex: 2;
-        border-top: 1px solid darkgray;
-        border-bottom: 1px solid darkgray;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .group-key-modal-content-footer {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
-    button {
-        font-size: 11px;
-        padding: 5px 10px 5px 10px;
-    }
-    input {
-        font-size: 12px;
-    }
+.group-key-modal-content button {
 }
 </style>

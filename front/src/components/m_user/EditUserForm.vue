@@ -55,25 +55,24 @@ onMounted(async function () {
 <template>
     <div class="edit-user-form-wrap">
         <div class="edit-user-form">
-            <div class="mb-3 d">
-                <label class="key col-sm-2 col-form-label">이메일</label>
-                <label class="value col-sm-2 col-form-label">{{ userData.email }}</label>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">이메일</label>
+                <label class="col-sm-2 col-form-label">{{ userData.email }}</label>
             </div>
-            <div class="mb-3">
-                <label class="key col-sm-2 col-form-label">이름</label>
-                <label class="value col-sm-2 col-form-label">{{ userData.name }}</label>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">이름</label>
+                <label class="col-sm-2 col-form-label">{{ userData.name }}</label>
             </div>
-            <div class="mb-3" style="display: flex">
-                <label for="inputNickName" class="key col-sm-2 col-form-label">닉네임</label>
-                <div class="value col-sm-10 me-3">
-                    <input type="text" class="form-control" id="inputNickName" :maxlength="8" v-model="nickName">
-                    <label v-show="isValidError" class="valid-error">* {{ validateError }}</label>
+            <div class="row mb-3" style="display: flex">
+                <label for="inputNickName" class="col-sm-2 col-form-label">닉네임</label>
+                <div class="col-sm-10" style="width: 200px">
+                    <input type="email" class="form-control" id="inputNickName" :maxlength="8" v-model="nickName">
                 </div>
-
+                <label v-show="isValidError" class="valid-error">* {{ validateError }}</label>
             </div>
-            <div class="mb-3">
-                <label class="key col-sm-2 col-form-label">가입 일자</label>
-                <label class="value col-sm-2 col-form-label" style="width: 50%">{{ userData.createdDate }}</label>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">가입 일자</label>
+                <label class="col-sm-2 col-form-label" style="width: 50%">{{ userData.createdDate }}</label>
             </div>
             <div class="edit-user-form-footer">
                 <div class="edit-user-submit">
@@ -90,8 +89,7 @@ onMounted(async function () {
 </template>
 
 <style scoped>
-.key {
-    width: 100px;
+.edit-user-form-wrap {
 }
 .edit-user-form {
     width: 50vw;
@@ -116,36 +114,5 @@ onMounted(async function () {
     display: flex;
     align-items: center;
     color: red;
-}
-input {
-    width: 200px;
-}
-
-@media screen and (max-width: 768px) {
-    .edit-user-form {
-        width: 90vw;
-        background: rgba(0,0,0,0.1);
-        border-radius: 8px;
-        padding: 20px;
-    }
-    .edit-user-form-footer {
-        display: flex;
-        justify-content: right;
-    }
-    .delete-user {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-    }
-    .valid-error {
-        width: auto;
-        display: flex;
-        align-items: center;
-        color: red;
-        font-size: 13px;
-    }
 }
 </style>

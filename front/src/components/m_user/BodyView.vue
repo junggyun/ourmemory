@@ -47,14 +47,9 @@ watch(dynamicComponentComputed, (newVal) => {
     height: 100%;
 }
 
-@media screen and (max-width: 768px) {
-    .body-wrap {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 90vw;
-        height: 100%;
-    }
+.content {
+
 }
+
 
 </style>

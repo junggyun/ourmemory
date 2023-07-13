@@ -77,20 +77,4 @@ const uploadFile = function (event: any) {
     display: flex;
     justify-content: right;
 }
-@media screen and (max-width: 768px) {
-    .post-form {
-        width: 90vw;
-        background: rgba(0,0,0,0.1);
-        border-radius: 8px;
-        padding: 20px;
-    }
-    .post-form-footer {
-        display: flex;
-        justify-content: right;
-    }
-    textarea {
-        height: 300px;
-    }
-
-}
 </style>
