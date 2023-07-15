@@ -131,6 +131,21 @@ include::{snippets}/userGroup/deleteUserGroup/path-parameters.adoc[]
 include::{snippets}/userGroup/deleteUserGroup/http-response.adoc[]
 include::{snippets}/userGroup/deleteUserGroup/response-fields.adoc[]
 
+== *그룹 API*
+
+'''
+=== 그룹명 변경
+'''
+
+.요청
+include::{snippets}/group/updateGroup/curl-request.adoc[]
+include::{snippets}/group/updateGroup/path-parameters.adoc[]
+include::{snippets}/group/updateGroup/request-fields.adoc[]
+
+.응답
+include::{snippets}/group/updateGroup/http-response.adoc[]
+include::{snippets}/group/updateGroup/response-fields.adoc[]
+
 == *게시글 API*
 
 '''

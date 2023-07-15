@@ -1,11 +1,11 @@
 import axios from "axios";
 import {setInterceptors} from "@/api/common/interceptors";
-import store from "@/store";
 
 const createAuthInstance = function () {
     const instance = axios.create({
         baseURL: process.env.APP_VUE_BASE_URL,
     })
+
     return setInterceptors(instance)
 }
 
@@ -37,12 +37,14 @@ const registerUserAPI = function (registerRequest : any) {
 }
 // 로그인
 const loginAPI = function (loginRequest : any) {
-    return instance.post("/api/users/login", loginRequest, {
-        // headers: {
-        //     Authorization: `Bearer ${store.state.token}`
-        // }
-    })
+    return instance.post(
+        "/api/users/login", loginRequest)
 }
+// 토큰 재발급
+const refreshAPI = function (userId: any, refreshTokenRequest: any) {
+    return instance.post(
+        `/api/users/refresh/${userId}`, refreshTokenRequest)
+};
 // 회원 단건 조회
 const getUserAPI = function (userId: any) {
     return authInstance.get(
@@ -71,6 +73,9 @@ const getGroupAPI = function (groupId: any) {
     return authInstance.get(
         `/api/groups/${groupId}`)
 }
+const editGroupAPI = function (groupId:any, updateGroupRequest: any) {
+    return authInstance.post(`/api/groups/${groupId}`, updateGroupRequest)
+};
 
 // const getGroupAPI = function (getGroupRequest : any) {
 //     return authInstance.get(
@@ -172,4 +177,4 @@ const deleteCommentAPI = function (commentId: any) {
 
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
     getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI, editUserAPI,
-    addViewCountAPI, createCommentAPI, getCommentAPI, getCommentsByPostAPI, deleteCommentAPI }
+    addViewCountAPI, createCommentAPI, getCommentAPI, getCommentsByPostAPI, deleteCommentAPI, editGroupAPI, refreshAPI }

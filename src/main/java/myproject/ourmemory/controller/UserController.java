@@ -2,20 +2,19 @@ package myproject.ourmemory.controller;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.domain.User;
-import myproject.ourmemory.domain.UserRole;
+import myproject.ourmemory.dto.refreshToken.RefreshTokenRequest;
 import myproject.ourmemory.dto.user.*;
-import myproject.ourmemory.exception.NotUser;
 import myproject.ourmemory.jwt.JwtToken;
+import myproject.ourmemory.jwt.JwtTokenProvider;
 import myproject.ourmemory.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 로그인
@@ -36,6 +36,23 @@ public class UserController {
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();
+    }
+
+    /**
+     * 토큰 재발급
+     */
+    @PostMapping("/users/refresh/{userId}")
+    public ResponseEntity<JwtToken> refresh(@PathVariable Long userId, @RequestBody RefreshTokenRequest request) {
+        String refreshToken = request.getRefreshToken();
+        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken);
+            JwtToken newToken = jwtTokenProvider.generateToken(userId, authentication);
+            String accessToken = newToken.getAccessToken();
+            if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+                return new ResponseEntity<>(newToken, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     /**

@@ -201,6 +201,7 @@ public class PostControllerDocTest {
                                 fieldWithPath("modifiedDate").description("게시글 수정 일자"),
                                 fieldWithPath("viewCount").description("게시글 조회 수"),
                                 fieldWithPath("commentCount").description("게시글 댓글 수"),
+                                fieldWithPath("newCommentDate").description("게시글 최신 댓글 일자"),
                                 subsectionWithPath("uploads").description("파일 목록")
                         )
                 ));

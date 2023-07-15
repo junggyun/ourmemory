@@ -3,7 +3,7 @@ import router from "@/router";
 import store from "@/store";
 
 const logout = async function () {
-    await router.push('/')
+    await router.replace('/')
 }
 
 const home = async function () {

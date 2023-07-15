@@ -11,12 +11,14 @@ import DeleteGroupModal from "@/components/user/DeleteGroupModal.vue";
 import LeaveGroupModal from "@/components/user/LeaveGroupModal.vue";
 import UserInfoModal from "@/components/user/UserInfoModal.vue";
 import router from "@/router";
+import EditGroupModal from "@/components/user/EditGroupModal.vue";
 
 const dynamicComponent = ref("")
 const isGroupKeyModal = ref(false)
 const isDeleteGroupModal = ref(false)
 const isLeaveGroupModal = ref(false)
 const isUserInfoModal = ref(false)
+const isEditGroupModal = ref(false)
 const editPostId = ref({
     postId: null
 })
@@ -106,11 +108,23 @@ const viewEditPostForm = function (postId: any) {
     editPostId.value.postId = postId
 }
 
+const viewEditGroupModal = function () {
+    isEditGroupModal.value = true
+}
+
+const closeEditGroupModal = function () {
+    isEditGroupModal.value = false
+};
+
 
 </script>
 
 <template>
-    <h4 @click="groupHome">{{ store.state.groupData.name }}</h4>
+    <div>
+        <h4 @click="groupHome">{{ store.state.groupData.name }}</h4>
+        <i v-show="store.state.userGroupRole === 'HOST'" @click="viewEditGroupModal" class="edit-group-btn bi-pencil-square"></i>
+    </div>
+
     <div class="post-add" v-if="dynamicComponent === ''">
         <button class="btn btn-outline-success" @click="viewGroupKey">
             <i class="bi bi-folder-plus"></i>
@@ -145,6 +159,9 @@ const viewEditPostForm = function (postId: any) {
         <div class="info-user" v-if="isUserInfoModal">
             <UserInfoModal :userData="infoUser" @closeModal="closeUserInfoModal"></UserInfoModal>
         </div>
+        <div class="edit-group" v-if="isEditGroupModal">
+            <EditGroupModal @closeModal="closeEditGroupModal"></EditGroupModal>
+        </div>
 
         <div class="post-content-wrap mt-2">
             <div class="post-list" v-if="dynamicComponent === ''">
@@ -173,6 +190,12 @@ h4 {
     color: darkgray;
     display: inline-block;
 }
+.edit-group-btn {
+    pointer-events: auto;
+    cursor : pointer;
+    margin-left: 30px;
+    color: rgba(0,0,0,0.2);
+}
 h4:hover {
     text-decoration: underline;
 }
@@ -190,6 +213,7 @@ h4:hover {
 }
 .post-del {
     flex: 2;
+    margin-right: 10px;
 }
 .post-content-wrap {
     flex: 8;
@@ -208,9 +232,17 @@ h4:hover {
         cursor : pointer;
         margin-bottom: 20px;
         color: darkgray;
+        display: inline-block;
     }
     h4:hover {
         text-decoration: underline;
+    }
+    .edit-group-btn {
+        pointer-events: auto;
+        cursor : pointer;
+        margin-left: 30px;
+        color: rgba(0,0,0,0.2);
+        display: inline-block;
     }
     .post-add {
         display: flex;
@@ -237,7 +269,7 @@ h4:hover {
     .post-content-wrap {
         flex: 8;
     }
-    .group-code, .delete-group, .leave-group, .info-user {
+    .group-code, .delete-group, .leave-group, .info-user, .edit-group {
         width: 100%;
         height: 100%;
         display: flex;
@@ -251,13 +283,23 @@ h4:hover {
     .user-post-wrap {
         position: relative;
     }
-    .group-code, .delete-group, .leave-group, .info-user {
+    .group-code, .delete-group, .leave-group, .info-user, .edit-group {
         width: 100%;
         height: 100%;
 
         position: absolute;
         top: 0;
         left: 0;
+    }
+    .post-del {
+        margin-right: 0;
+    }
+    .edit-group-btn {
+        pointer-events: auto;
+        cursor : pointer;
+        margin-left: 20px;
+        color: rgba(0,0,0,0.2);
+        display: inline-block;
     }
 }
 

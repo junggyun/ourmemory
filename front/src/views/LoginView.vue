@@ -23,12 +23,18 @@ const login = async function () {
         }
         const res = await loginAPI(loginRequest);
         const token = res.data.accessToken
+        const refreshToken = res.data.refreshToken
+        const tokenExp = jwtDecode<MyPayload>(token).exp
         const userId = jwtDecode<MyPayload>(token).sub
         const role = jwtDecode<MyPayload>(token).auth
+        const refreshTokenExp = jwtDecode<MyPayload>(refreshToken).exp
 
         store.commit('setUserId', userId)
         store.commit('setRole', role)
         store.commit('setToken', token)
+        store.commit('setTokenExp', tokenExp)
+        store.commit('setRefreshToken', refreshToken)
+        store.commit('setRefreshTokenExp', refreshTokenExp)
 
         const user = await getUserAPI(store.state.userId)
         store.commit('setEmail', user.data.email)
@@ -37,9 +43,9 @@ const login = async function () {
 
         const nickName = store.state.userData.nickName
         if (role === "ROLE_ADMIN") {
-            await router.push('/admin')
+            await router.replace('/admin')
         } else if (role === "ROLE_USER") {
-            await router.push(`/home/${nickName}`)
+            await router.replace(`/home/${nickName}`)
         }
     } catch (err) {
         valid.value = true

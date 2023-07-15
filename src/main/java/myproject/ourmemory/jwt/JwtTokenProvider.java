@@ -3,6 +3,7 @@ package myproject.ourmemory.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -25,8 +27,8 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String grantType = "Bearer";
-    private static final Long accessTokenValidTime = 1000 * 60 * 60L; // 60분
-    private static final Long refreshTokenValidTime = 1000 * 60 * 60 * 24L; // 1일
+    private static final Long accessTokenValidTime = 1000 * 60 * 30L; // 30분
+    private static final Long refreshTokenValidTime = 1000 * 60 * 60 * 24 * 30L; // 30일
     private final Key key;
 
 
@@ -48,6 +50,8 @@ public class JwtTokenProvider {
                 .compact();
         //Refresh Token
         String refreshToken = Jwts.builder()
+                .setSubject(userId.toString())
+                .claim("auth", authorities)
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidTime))
                 .signWith(key)
                 .compact();
@@ -89,6 +93,14 @@ public class JwtTokenProvider {
             log.info("JWT claims string is empty.", e);
         }
         return false;
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     private Claims parseClaims(String accessToken) {

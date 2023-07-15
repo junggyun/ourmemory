@@ -62,6 +62,10 @@ const viewEditPostForm = function () {
     emit('editPost', postId.value)
 }
 
+window.addEventListener('popstate', function () {
+    history.pushState(null,document.title, )
+})
+
 onBeforeRouteLeave(() => {
     console.log("뒤로가기")
     router.push(`/home/${store.state.userData.nickName}/${store.state.groupData.id}`)

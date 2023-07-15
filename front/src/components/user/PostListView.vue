@@ -26,6 +26,8 @@
      thumbnailPath: "",
      viewCount: 0,
      commentCount: 0,
+     newCommentDate: "",
+     isNewComment: false,
      uploads: [{
          id: null,
          fileName: "",
@@ -59,11 +61,17 @@
 
          const currDate = dayjs()
          for (const post of posts.value) {
-             const dayDiff = currDate.diff(post.createdDate, 'day')
-             if (dayDiff == 0) {
+             const daySame = currDate.isSame(post.createdDate, 'day')
+             if (daySame) {
                  post.createdDateSimple = dayjs(post.createdDate).format('HH:mm')
              } else {
                  post.createdDateSimple = dayjs(post.createdDate).format('YYYY.MM.DD')
+             }
+             const hourDiff = currDate.diff(post.newCommentDate, 'hour')
+             if (hourDiff < 6) {
+                 post.isNewComment = true
+             } else {
+                 post.isNewComment = false
              }
 
 
@@ -93,7 +101,10 @@
                  <img v-if="post.uploads.length > 0" :src="post.uploads[0].filePath" class="flex-shrink-0 me-2" alt="..." @click="viewPost(post)">
                  <div class="post-list-item">
                      <div class="post-list-title">
-                         <span class="post-title" style="color: black" @click="viewPost(post)">{{post.title}} [{{ post.commentCount }}]</span>
+                         <div>
+                             <span class="post-title" style="color: black" @click="viewPost(post)">{{post.title}} [{{ post.commentCount }}]</span>
+                             <img v-if="post.isNewComment" src="@/image/new.png" style="width: 17px; height: 17px; margin-left: 5px">
+                         </div>
                          <span style="font-size: 13px; color: lightslategray">{{post.createdDateSimple}} / {{post.user.nickName}}</span>
                      </div>
                      <div class="post-list-view-count">

@@ -2,6 +2,7 @@ package myproject.ourmemory.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import myproject.ourmemory.domain.RefreshToken;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserRole;
@@ -14,6 +15,7 @@ import myproject.ourmemory.exception.NotUser;
 import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
+import myproject.ourmemory.repository.RefreshTokenRepository;
 import myproject.ourmemory.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,6 +34,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserGroupService userGroupService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final PasswordEncoder encoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -40,11 +43,11 @@ public class UserService {
     /**
      * 로그인
      */
+    @Transactional
     public JwtToken login(String email, String password) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFound::new);
 
@@ -52,6 +55,7 @@ public class UserService {
 
         return token;
     }
+
 
     /**
      * 회원 등록

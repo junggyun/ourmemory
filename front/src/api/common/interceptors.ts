@@ -1,13 +1,45 @@
 import store from "@/store";
 import {AxiosInstance, InternalAxiosRequestConfig} from "axios";
+import {refreshAPI} from "@/api";
+import jwtDecode from "jwt-decode";
+import router from "@/router";
 
+interface MyPayload {
+    sub: String
+    auth: String
+    exp: number
+}
 
 const setInterceptors = function (instance : AxiosInstance) {
     instance.interceptors.request.use(
-        (config: InternalAxiosRequestConfig) => {
-            const token = store.state.token
-            config.headers.Authorization = `Bearer ${token}`
-            return config
+        async (config: InternalAxiosRequestConfig) => {
+            try {
+                const token = store.state.token
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (store.state.tokenExp <= currentTime) {
+                    const refreshTokenRequest = {
+                        refreshToken: store.state.refreshToken
+                    }
+                    const result = await refreshAPI(store.state.userId, refreshTokenRequest);
+                    const newToken = result.data.accessToken;
+                    const refreshToken = result.data.refreshToken
+                    const tokenExp = jwtDecode<MyPayload>(newToken).exp
+                    const refreshTokenExp = jwtDecode<MyPayload>(refreshToken).exp
+                    store.commit('setToken', newToken)
+                    store.commit('setTokenExp', tokenExp)
+                    store.commit('setRefreshToken', refreshToken)
+                    store.commit('setRefreshTokenExp', refreshTokenExp)
+                    config.headers.Authorization = `Bearer ${newToken}`
+                } else {
+                    config.headers.Authorization = `Bearer ${token}`
+                }
+            } catch (error: any) {
+                if (error.response.status == 401) {
+                    await router.replace("/")
+                }
+            }
+
+            return config;
         },
         (error) => {
             return Promise.reject(error)
@@ -24,5 +56,7 @@ const setInterceptors = function (instance : AxiosInstance) {
     )
     return instance
 }
+
+
 
 export { setInterceptors }

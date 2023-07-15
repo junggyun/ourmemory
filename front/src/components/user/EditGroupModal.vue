@@ -1,37 +1,46 @@
 <script lang="ts" setup>
-import {defineEmits, defineProps} from 'vue'
+import {defineEmits, ref} from 'vue'
+import store from "@/store";
+import {editGroupAPI} from "@/api";
 
+const updateGroupRequest = ref({
+    name: ""
+})
 
 const emit = defineEmits(['closeModal']);
-
-const props = defineProps({
-    userData: {
-        type: Object,
-        required: true
-    }
-});
 
 const closeModal = function () {
     emit('closeModal')
 }
 
+const updateGroup = async function () {
+    try {
+        if (updateGroupRequest.value.name) {
 
+            await editGroupAPI(store.state.groupData.id, updateGroupRequest.value);
+            store.commit('setGroupName', updateGroupRequest.value.name)
+            closeModal()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 </script>
 
 <template>
-    <div class="info-user-modal">
-        <div class="info-user-modal-content">
-            <div class="info-user-modal-content-header">
-                <b>회원 정보</b>
+    <div class="group-key-modal">
+        <div class="group-key-modal-content">
+            <div class="group-key-modal-content-header">
+                <span>그룹명 변경</span>
             </div>
-            <div class="info-user-modal-content-body">
-                <span>이름 : {{ props.userData.name }}</span>
-                <span>닉네임 : {{ props.userData.nickName }}</span>
-                <span>이메일 : {{ props.userData.email }}</span>
+            <div class="group-key-modal-content-body">
+                <input type="text" v-model="updateGroupRequest.name" placeholder="그룹명">
 
             </div>
-            <div class="info-user-modal-content-footer">
+            <div class="group-key-modal-content-footer">
+                <button class="btn btn-secondary me-3" @click="updateGroup">변경</button>
                 <button class="btn btn-secondary" @click="closeModal">닫기</button>
             </div>
         </div>
@@ -39,11 +48,11 @@ const closeModal = function () {
 </template>
 
 <style scoped>
-b {
+span {
     font-size: 20px;
 }
-.info-user-modal {
-    width: 350px; height: 250px;
+.group-key-modal {
+    width: 300px; height: 200px;
     border: 1px solid darkgray;
     border-radius: 8px;
     z-index: 999;
@@ -51,13 +60,13 @@ b {
     top: 10px;
     background: white;
 }
-.info-user-modal-content {
+.group-key-modal-content {
     width: 100%; height: 100%;
     display: flex;
     flex-direction: column;
 
 }
-.info-user-modal-content-header {
+.group-key-modal-content-header {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -65,20 +74,15 @@ b {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 }
-.info-user-modal-content-body {
+.group-key-modal-content-body {
     flex: 2;
     border-top: 1px solid darkgray;
     border-bottom: 1px solid darkgray;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.info-user-modal-content-body span {
-    width: 80%;
-}
-
-.info-user-modal-content-footer {
+.group-key-modal-content-footer {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -88,11 +92,11 @@ b {
 }
 
 @media screen and (max-width: 768px) {
-    b {
+    span {
         font-size: 15px;
     }
-    .info-user-modal {
-        width: 250px; height: 150px;
+    .group-key-modal {
+        width: 200px; height: 150px;
         border: 1px solid darkgray;
         border-radius: 8px;
         z-index: 999;
@@ -100,13 +104,13 @@ b {
         top: 10px;
         background: white;
     }
-    .info-user-modal-content {
+    .group-key-modal-content {
         width: 100%; height: 100%;
         display: flex;
         flex-direction: column;
 
     }
-    .info-user-modal-content-header {
+    .group-key-modal-content-header {
         flex: 1;
         display: flex;
         justify-content: center;
@@ -114,20 +118,15 @@ b {
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
     }
-    .info-user-modal-content-body {
+    .group-key-modal-content-body {
         flex: 2;
         border-top: 1px solid darkgray;
         border-bottom: 1px solid darkgray;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    .info-user-modal-content-body span {
-        width: 90%;
-    }
-
-    .info-user-modal-content-footer {
+    .group-key-modal-content-footer {
         flex: 1;
         display: flex;
         justify-content: center;
@@ -137,10 +136,10 @@ b {
     }
     button {
         font-size: 11px;
-        padding: 5px 10px 5px 10px
+        padding: 5px 10px 5px 10px;
     }
-    span {
-        font-size: 10px;
+    input {
+        font-size: 12px;
     }
 }
 </style>

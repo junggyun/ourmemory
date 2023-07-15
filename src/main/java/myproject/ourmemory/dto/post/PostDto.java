@@ -23,6 +23,7 @@ public class PostDto {
     private String modifiedDate;
     private Long viewCount;
     private int commentCount;
+    private String newCommentDate;
     private List<UploadDto> uploads;
 
     public PostDto() {
@@ -41,6 +42,11 @@ public class PostDto {
             uploads = post.getUploads().stream()
                     .map(u -> new UploadDto(u))
                     .collect(Collectors.toList());
+        }
+        if (commentCount > 0) {
+            newCommentDate = post.getComments().get(commentCount-1).getCreatedDate();
+        } else {
+            newCommentDate = "";
         }
 
     }

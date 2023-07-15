@@ -7,6 +7,9 @@ const store= createStore({
         userId : 0,
         role : "",
         token : "",
+        tokenExp : 0,
+        refreshToken: "",
+        refreshTokenExp: 0,
         userData: {
             email: "",
             name: "",
@@ -38,6 +41,15 @@ const store= createStore({
         },
         setToken(state, token) {
             state.token =token
+        },
+        setTokenExp(state, tokenExp) {
+            state.tokenExp =tokenExp
+        },
+        setRefreshToken(state, refreshToken) {
+            state.refreshToken =refreshToken
+        },
+        setRefreshTokenExp(state, refreshTokenExp) {
+            state.refreshTokenExp =refreshTokenExp
         },
         setEmail(state, email) {
             state.userData.email = email
@@ -75,6 +87,9 @@ const store= createStore({
             state.userId = 0
             state.role = ""
             state.token = ""
+            state.tokenExp = 0
+            state.refreshToken = ""
+            state.refreshTokenExp = 0
             state.userData.name = ""
             state.userData.nickName = ""
             state.userData.email = ""
@@ -90,7 +105,7 @@ const store= createStore({
     actions: {
     },
     plugins: [ createPersistedState({
-        paths: ['userId', 'role', 'token', 'userData', 'groupData', 'dynamicComponent', 'userGroupRole', 'userGroupId']
+        paths: ['userId', 'role', 'token', 'tokenExp', 'refreshToken', 'refreshTokenExp', 'userData', 'groupData', 'dynamicComponent', 'userGroupRole', 'userGroupId']
     }) ]
 })
 export default store
