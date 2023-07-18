@@ -1,18 +1,19 @@
 <script lang="ts" setup>
-import {defineEmits, defineProps, onMounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {editPostAPI, getPostAPI} from "@/api";
+import store from "@/store";
+import router from "@/router";
 
-const props = defineProps({
-    postData: {
-        type: Object,
-        required: true
-    }
-});
+const userId = ref(store.state.userId)
+const groupId = ref(store.state.groupData.id)
+const postId = ref(store.state.postData.id)
+const title = ref("")
+const content = ref("")
 
 const post = ref({
-    postId: null,
+    postId: 0,
     user: {
-        id: null,
+        id: 0,
         name: "",
         nickName: "",
         email: "",
@@ -25,22 +26,25 @@ const post = ref({
     modifiedDate: "",
     thumbnailPath: "",
     uploads: [{
-        id: null,
+        id: 0,
         fileName: "",
         filePath: "",
     }]
 })
 
 const setup = async function () {
-    const result = await getPostAPI(props.postData.postId);
+    const result = await getPostAPI(postId.value);
     post.value = result.data
     title.value = post.value.title
     content.value = post.value.content
 }
 
-const emit = defineEmits(['viewPost']);
-const title = ref("")
-const content = ref("")
+const goGroup = function () {
+    store.commit('clearPost')
+    router.push(`/${userId.value}/${groupId.value}`)
+}
+
+
 
 const editPost = async function () {
     try {
@@ -51,9 +55,8 @@ const editPost = async function () {
         }
 
         await editPostAPI(editPostRequest)
-        const result = await getPostAPI(post.value.postId);
-        console.log(post.value)
-        emit('viewPost', result.data)
+
+        await router.replace(`/${userId.value}/${groupId.value}/${postId.value}`)
 
     } catch (error) {
         console.log(error)
@@ -68,6 +71,9 @@ onMounted(setup)
 <template>
 
     <div class="post-form-wrap">
+        <div>
+            <h4 @click="goGroup">{{ store.state.groupData.name }}</h4>
+        </div>
         <div class="post-form">
             <div class="post-form-header">
                 <div class="mb-3 mt-3">
@@ -76,7 +82,7 @@ onMounted(setup)
             </div>
             <div class="post-form-body">
                 <div class="mb-3">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"  v-model="content"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" style="resize: none" v-model="content"></textarea>
                 </div>
             </div>
             <div class="post-form-footer">
@@ -90,6 +96,16 @@ onMounted(setup)
 </template>
 
 <style scoped>
+h4 {
+    pointer-events: auto;
+    cursor : pointer;
+    margin-bottom: 20px;
+    color: darkgray;
+    display: inline-block;
+}
+h4:hover {
+    text-decoration: underline;
+}
 .post-form {
     width: 50vw;
     background: rgba(0,0,0,0.1);
@@ -99,5 +115,21 @@ onMounted(setup)
 .post-form-footer {
     display: flex;
     justify-content: right;
+}
+
+@media screen and (max-width: 768px) {
+    .post-form {
+        width: 90vw;
+        background: rgba(0,0,0,0.1);
+        border-radius: 8px;
+        padding: 20px;
+    }
+    .post-form-footer {
+        display: flex;
+        justify-content: right;
+    }
+    textarea {
+        height: 300px;
+    }
 }
 </style>

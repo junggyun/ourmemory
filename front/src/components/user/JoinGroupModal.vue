@@ -3,6 +3,21 @@ import {defineEmits, ref} from 'vue'
 import store from "@/store";
 import {joinGroupAPI} from "@/api";
 
+
+const group = ref({
+    userGroupId: 0,
+    role: "",
+    group: {
+        id: 0,
+        name: "",
+        key: "",
+        createdDate: "",
+        postCount: "",
+        newPostDate: "",
+        isNewPost: false
+    }
+})
+
 const joinGroupRequest = ref({
     userId: store.state.userId,
     key: ""
@@ -10,19 +25,24 @@ const joinGroupRequest = ref({
 
 const errorMessage = ref("")
 
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(['enterModal', 'closeModal']);
 
 const closeModal = function () {
     emit('closeModal')
 }
 
+const enterModal = function () {
+    emit('enterModal', group.value)
+}
+
 const joinGroup = async function () {
     if (joinGroupRequest.value.key) {
         try {
-            await joinGroupAPI(joinGroupRequest.value);
-            closeModal()
-            window.location.reload()
-        } catch (error) {
+            const result = await joinGroupAPI(joinGroupRequest.value);
+            group.value = result.data
+
+            enterModal()
+        } catch (error: any) {
             if (error.response.data.validation.groupId) {
                 errorMessage.value = error.response.data.validation.groupId
             } else {

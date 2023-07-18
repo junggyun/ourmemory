@@ -68,7 +68,7 @@
                  post.createdDateSimple = dayjs(post.createdDate).format('YYYY.MM.DD')
              }
              const hourDiff = currDate.diff(post.newCommentDate, 'hour')
-             if (hourDiff < 6) {
+             if (hourDiff < 24) {
                  post.isNewComment = true
              } else {
                  post.isNewComment = false

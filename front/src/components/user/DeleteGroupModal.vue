@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import {defineEmits} from 'vue'
+import {defineEmits, ref} from 'vue'
 import store from "@/store";
 import {deleteUserGroupAPI} from "@/api";
+import router from "@/router";
 
 const emit = defineEmits(['closeModal']);
+const userId = ref(store.state.userId)
 
 const closeModal = function () {
     emit('closeModal')
@@ -13,7 +15,7 @@ const deleteGroup = async function () {
     try {
         await deleteUserGroupAPI(store.state.userGroupId)
         closeModal()
-        window.location.reload()
+        await router.push(`/${userId.value}/home`)
     } catch (error) {
         console.log(error)
     }

@@ -35,6 +35,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserGroupService userGroupService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
 
     private final PasswordEncoder encoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -52,6 +53,12 @@ public class UserService {
                 .orElseThrow(UserNotFound::new);
 
         JwtToken token = jwtTokenProvider.generateToken(user.getId(), authentication);
+        refreshTokenService.deleteToken(user);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .user(user)
+                .refreshToken(token.getRefreshToken())
+                .build();
+        refreshTokenService.save(refreshToken);
 
         return token;
     }

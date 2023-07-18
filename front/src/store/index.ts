@@ -1,6 +1,5 @@
-import { createStore} from 'vuex'
+import {createStore} from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-import {ref} from "vue";
 
 const store= createStore({
     state: {
@@ -14,13 +13,21 @@ const store= createStore({
             email: "",
             name: "",
             nickName: "",
+            createdDate: "",
         },
         groupData: {
             id: 0,
             name: "",
             key: "",
         },
-        dynamicComponent: "",
+        postData: {
+            id: 0,
+            title: "",
+            content: "",
+            createdDate: "",
+            userNickName: "",
+            viewCount: 0,
+        },
         userGroupRole: "",
         userGroupId: 0,
     },
@@ -30,11 +37,14 @@ const store= createStore({
         },
         getRole: function (state) {
             return state.role
-        }
+        },
+        getRefreshToken: function (state) {
+            return state.refreshToken
+        },
     },
     mutations: {
         setUserId(state, userId) {
-            state.userId = parseInt(userId)
+            state.userId = userId
         },
         setRole(state, role) {
             state.role = role
@@ -60,6 +70,9 @@ const store= createStore({
         setUserName(state, name) {
             state.userData.name = name
         },
+        setUserCreatedDate(state, createdDate) {
+            state.userData.createdDate = createdDate
+        },
         setGroupId(state, id) {
             state.groupData.id = id
         },
@@ -69,8 +82,23 @@ const store= createStore({
         setGroupKey(state, key) {
             state.groupData.key = key
         },
-        setDynamicComponent(state, dynamicComponent) {
-            state.dynamicComponent = dynamicComponent
+        setPostId(state, id) {
+            state.postData.id = id
+        },
+        setPostTitle(state, title) {
+            state.postData.title = title
+        },
+        setPostContent(state, content) {
+            state.postData.content = content
+        },
+        setPostCreatedDate(state, createdDate) {
+            state.postData.createdDate = createdDate
+        },
+        setPostUserNickName(state, userNickName) {
+            state.postData.userNickName = userNickName
+        },
+        setPostViewCount(state, viewCount) {
+            state.postData.viewCount = viewCount
         },
         setUserGroupRole(state, userGroupRole) {
             state.userGroupRole = userGroupRole
@@ -83,6 +111,14 @@ const store= createStore({
             state.groupData.name = ""
             state.groupData.key = ""
         },
+        clearPost(state) {
+            state.postData.id = 0
+            state.postData.title = ""
+            state.postData.content = ""
+            state.postData.createdDate = ""
+            state.postData.userNickName = ""
+            state.postData.viewCount = 0
+        },
         clearStore(state) {
             state.userId = 0
             state.role = ""
@@ -93,10 +129,16 @@ const store= createStore({
             state.userData.name = ""
             state.userData.nickName = ""
             state.userData.email = ""
+            state.userData.createdDate = ""
             state.groupData.id = 0
             state.groupData.name = ""
             state.groupData.key = ""
-            state.dynamicComponent = ""
+            state.postData.id = 0
+            state.postData.title = ""
+            state.postData.content = ""
+            state.postData.createdDate = ""
+            state.postData.userNickName = ""
+            state.postData.viewCount = 0
             state.userGroupRole = ""
             state.userGroupId = 0
         },
@@ -105,7 +147,7 @@ const store= createStore({
     actions: {
     },
     plugins: [ createPersistedState({
-        paths: ['userId', 'role', 'token', 'tokenExp', 'refreshToken', 'refreshTokenExp', 'userData', 'groupData', 'dynamicComponent', 'userGroupRole', 'userGroupId']
+        paths: ['userId', 'role', 'token', 'tokenExp', 'refreshToken', 'refreshTokenExp', 'userData', 'groupData', 'postData', 'userGroupRole', 'userGroupId']
     }) ]
 })
 export default store

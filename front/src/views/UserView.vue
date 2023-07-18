@@ -1,32 +1,7 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
-import {getUserAPI} from "@/api";
-import store from "@/store";
 import HeaderView from "@/components/user/HeaderView.vue";
 import FooterView from "@/components/user/FooterView.vue";
 import BodyView from "@/components/user/BodyView.vue";
-
-
-const userData = ref({
-    userName: "",
-    userNickName: "",
-})
-
-
-const getUser = async function () {
-    try {
-        const user = await getUserAPI(store.state.userId);
-        userData.value.userName = user.data.name
-        userData.value.userNickName = user.data.nickName
-    } catch (error) {
-        console.log(error)
-    }
-
-}
-
-
-onMounted(getUser)
-
 </script>
 
 <template>

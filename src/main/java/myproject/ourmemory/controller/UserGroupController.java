@@ -76,22 +76,26 @@ public class UserGroupController {
      * 유저그룹 등록(그룹 생성)
      */
     @PostMapping("/userGroups/create")
-    public CreateUserGroupResponse create(@Valid @RequestBody CreateUserGroupRequest request) {
+    public GroupList create(@Valid @RequestBody CreateUserGroupRequest request) {
 
         Long userGroupId = userGroupService.create(request);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId)
+                .orElseThrow(UserGroupNotFound::new);
 
-        return new CreateUserGroupResponse(userGroupId);
+        return new GroupList(userGroup);
     }
 
     /**
      * 유저그룹 등록(그룹 입장)
      */
     @PostMapping("/userGroups/join")
-    public JoingUserGroupResponse join(@Valid @RequestBody JoinUserGroupRequest request) {
+    public GroupList join(@Valid @RequestBody JoinUserGroupRequest request) {
 
         Long userGroupId = userGroupService.join(request);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId)
+                .orElseThrow(UserGroupNotFound::new);
 
-        return new JoingUserGroupResponse(userGroupId);
+        return new GroupList(userGroup);
     }
 
     /**

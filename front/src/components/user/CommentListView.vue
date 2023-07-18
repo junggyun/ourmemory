@@ -199,7 +199,7 @@ onMounted(getPost)
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -150px 0 0 -100px;
+    margin: -100px 0 0 -150px;
 }
 
 @media screen and (max-width: 768px) {
@@ -210,6 +210,12 @@ onMounted(getPost)
     }
     .comment-title {
         font-size: 13px;
+    }
+    .comment-modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -75px 0 0 -100px;
     }
 }
 </style>

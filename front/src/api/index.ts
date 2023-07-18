@@ -1,5 +1,9 @@
 import axios from "axios";
 import {setInterceptors} from "@/api/common/interceptors";
+import {configs} from "@typescript-eslint/eslint-plugin";
+import store from "@/store";
+import jwtDecode from "jwt-decode";
+import router from "@/router";
 
 const createAuthInstance = function () {
     const instance = axios.create({

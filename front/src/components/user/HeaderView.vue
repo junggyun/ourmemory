@@ -1,19 +1,23 @@
 <script lang="ts" setup>
 import router from "@/router";
 import store from "@/store";
+import {ref} from "vue";
+
+const userId = ref(store.state.userId)
 
 const logout = async function () {
     await router.replace('/')
 }
 
 const home = async function () {
-    store.commit('setDynamicComponent', '')
-    await router.push(`/home/${store.state.userData.nickName}`)
+    store.commit('clearGroup')
+    store.commit('clearPost')
+    await router.push(`/${userId.value}/home`)
 }
 
-const viewEditUserModal = async function () {
-    store.commit('setDynamicComponent', 'userEdit')
-    await router.push(`/home/${store.state.userData.nickName}`)
+const goUserInfo = async function () {
+
+    await router.push(`/${userId.value}/userinfo`)
 
 };
 
@@ -27,7 +31,7 @@ const viewEditUserModal = async function () {
             <h1 @click="home">OURMEMORY</h1>
         </div>
         <div class="user-info">
-            <button class="btn btn-secondary-" @click="viewEditUserModal" style="margin-top: 5px; color: darkgray">내 정보</button>
+            <button class="btn btn-secondary-" @click="goUserInfo" style="margin-top: 5px; color: darkgray">내 정보</button>
             <button type="button" class="btn btn-light- " @click="logout" style=" color: darkgray;">로그아웃</button>
         </div>
 
@@ -67,6 +71,7 @@ button {
 
 @media screen and (max-width: 768px) {
     h1 {
+        margin-top: 5px;
         pointer-events: auto;
         cursor : pointer;
     }

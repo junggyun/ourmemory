@@ -43,7 +43,7 @@ b {
     font-size: 20px;
 }
 .info-user-modal {
-    width: 350px; height: 250px;
+    width: 300px; height: 200px;
     border: 1px solid darkgray;
     border-radius: 8px;
     z-index: 999;
@@ -92,7 +92,7 @@ b {
         font-size: 15px;
     }
     .info-user-modal {
-        width: 250px; height: 150px;
+        width: 200px; height: 150px;
         border: 1px solid darkgray;
         border-radius: 8px;
         z-index: 999;

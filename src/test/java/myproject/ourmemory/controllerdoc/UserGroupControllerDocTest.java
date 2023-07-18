@@ -104,7 +104,9 @@ public class UserGroupControllerDocTest {
                                 fieldWithPath("groupName").description("그룹명")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("그룹 ID")
+                                fieldWithPath("userGroupId").description("회원그룹 ID"),
+                                fieldWithPath("role").description("그룹 권한"),
+                                subsectionWithPath("group.").description("그룹 정보")
                         )
                 ));
 
@@ -160,7 +162,9 @@ public class UserGroupControllerDocTest {
                                 fieldWithPath("key").description("그룹 코드")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("그룹 ID")
+                                fieldWithPath("userGroupId").description("회원그룹 ID"),
+                                fieldWithPath("role").description("그룹 권한"),
+                                subsectionWithPath("group.").description("그룹 정보")
                         )
                 ));
 
@@ -268,7 +272,9 @@ public class UserGroupControllerDocTest {
                                 fieldWithPath("groups.[].group.id").description("그룹 ID"),
                                 fieldWithPath("groups.[].group.name").description("그룹명"),
                                 fieldWithPath("groups.[].group.key").description("그룹 코드"),
-                                fieldWithPath("groups.[].group.createdDate").description("회원 가입 일자")
+                                fieldWithPath("groups.[].group.createdDate").description("그룹 생성 일자"),
+                                fieldWithPath("groups.[].group.postCount").description("게시글 수"),
+                                fieldWithPath("groups.[].group.newPostDate").description("최신 게시글 작성 일자")
                         )
                 ));
 

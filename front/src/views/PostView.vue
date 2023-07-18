@@ -1,23 +1,16 @@
 <script lang="ts" setup>
-import {defineEmits, defineProps, onMounted, ref} from 'vue';
-import {getUploadByPostAPI} from "@/api";
+import {onMounted, ref} from 'vue';
+import {getPostAPI, getUploadByPostAPI} from "@/api";
 import store from "@/store";
 import DeletePostModal from "@/components/user/DeletePostModal.vue";
 import CommentListView from "@/components/user/CommentListView.vue";
+import router from "@/router";
 
 const isDeletePostModal = ref(false)
 
-const props = defineProps({
-    postData: {
-        type: Object,
-        required: true
-    }
-});
-
-const emit= defineEmits(['groupHome', 'editPost'])
-
-
-const postId = ref(0)
+const userId = ref(store.state.userId)
+const groupId = ref(store.state.groupData.id)
+const postId = ref(store.state.postData.id)
 const title = ref("")
 const content = ref("")
 const createdDate = ref("")
@@ -29,16 +22,29 @@ const uploads = ref([{
     filePath: "",
 }])
 
+const postData = ref({
+    postId: postId.value
+})
+
+const goGroup = function () {
+    store.commit('clearPost')
+    router.push(`/${userId.value}/${groupId.value}`)
+}
 
 const setup = async function () {
     try {
-        postId.value = props.postData.postId
-        title.value = props.postData.title
-        content.value = props.postData.content
-        createdDate.value = props.postData.createdDate
-        userNickName.value = props.postData.user.nickName
-        viewCount.value = props.postData.viewCount
-
+        const postResult = await getPostAPI(postId.value);
+        store.commit('setPostId', postResult.data.postId)
+        store.commit('setPostTitle', postResult.data.title)
+        store.commit('setPostContent', postResult.data.content)
+        store.commit('setPostCreatedDate', postResult.data.createdDate)
+        store.commit('setPostUserNickName', postResult.data.user.nickName)
+        store.commit('setPostViewCount', postResult.data.viewCount)
+        title.value = postResult.data.title
+        content.value = postResult.data.content
+        createdDate.value = postResult.data.createdDate
+        viewCount.value = postResult.data.viewCount
+        userNickName.value = postResult.data.user.nickName
         const result = await getUploadByPostAPI(postId.value);
         uploads.value = result.data;
     } catch (error) {
@@ -47,24 +53,28 @@ const setup = async function () {
 
 }
 
+const goEditPost = function () {
+    router.push(`/${userId.value}/${groupId.value}/${postId.value}/edit`)
+}
+
 const viewDeletePostModal = function () {
     isDeletePostModal.value = true
 };
 
 const closeDeletePostModal = function () {
     isDeletePostModal.value = false
-    emit('groupHome')
+
 };
 
-const viewEditPostForm = function () {
-    emit('editPost', postId.value)
-}
 
 onMounted(setup)
 </script>
 
 <template>
     <div class="post-wrap">
+        <div>
+            <h4 @click="goGroup">{{ store.state.groupData.name }}</h4>
+        </div>
         <div class="post-title">
             <div class="mt-2 mb-2">
                 <span style="font-size: 20px; margin-left: 20px">{{ title }}</span>
@@ -79,7 +89,7 @@ onMounted(setup)
                 <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
             </div>
             <div class="post-edit-delete">
-                <button v-show="userNickName === store.state.userData.nickName" type="button" class="btn btn-outline-danger- " @click="viewEditPostForm" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
+                <button v-show="userNickName === store.state.userData.nickName" type="button" class="btn btn-outline-danger- " @click="goEditPost" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
                 <button v-show="userNickName === store.state.userData.nickName || store.state.userGroupRole === 'HOST'" type="button" class="btn btn-outline-danger- " @click="viewDeletePostModal" style="text-decoration: underline; color: darkgray; ">삭제</button>
             </div>
         </div>
@@ -89,15 +99,16 @@ onMounted(setup)
                 <img :src="upload.filePath">
             </div>
 
-            <div class="delete-post" v-if="isDeletePostModal">
-                <DeletePostModal :postData="postData" @closeModal="closeDeletePostModal"></DeletePostModal>
-            </div>
-
             <pre>{{ content }}</pre>
 
         </div>
         <div class="post-comment">
             <CommentListView :postData="postData"></CommentListView>
+        </div>
+        <div class="post-modal">
+            <div class="delete-post" v-if="isDeletePostModal">
+                <DeletePostModal :postData="postData" @closeModal="closeDeletePostModal"></DeletePostModal>
+            </div>
         </div>
     </div>
 </template>
@@ -106,6 +117,18 @@ onMounted(setup)
 .post-wrap {
     display: flex;
     flex-direction: column;
+    width: 50vw;
+    position: relative;
+}
+h4 {
+    pointer-events: auto;
+    cursor : pointer;
+    margin-bottom: 20px;
+    color: darkgray;
+    display: inline-block;
+}
+h4:hover {
+    text-decoration: underline;
 }
 .post-title {
     flex: 1;
@@ -148,17 +171,27 @@ img {
     height: auto;
 }
 
-.delete-post {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-}
+
 
 pre {
     margin: 20px 10px 0 0;
     font-size: 15px;
+}
+.post-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -250px 0 0 -150px;
+}
+@media screen and (max-width: 768px){
+    .post-wrap {
+        width: 90vw;
+    }
+    .post-modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -200px 0 0 -100px;
+    }
 }
 </style>

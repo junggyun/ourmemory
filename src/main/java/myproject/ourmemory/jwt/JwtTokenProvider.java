@@ -3,8 +3,9 @@ package myproject.ourmemory.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import myproject.ourmemory.exception.UserNotFound;
+import myproject.ourmemory.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -27,12 +27,16 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String grantType = "Bearer";
+//    private static final Long accessTokenValidTime = 1000 * 7L; // 7초
     private static final Long accessTokenValidTime = 1000 * 60 * 30L; // 30분
+//    private static final Long refreshTokenValidTime = 1000 * 10L; // 30일
     private static final Long refreshTokenValidTime = 1000 * 60 * 60 * 24 * 30L; // 30일
     private final Key key;
+    private final UserRepository userRepository;
 
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
+        this.userRepository = userRepository;
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
     }
@@ -41,10 +45,18 @@ public class JwtTokenProvider {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+
+        myproject.ourmemory.domain.User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
         //Access Token
         String accessToken = Jwts.builder()
                 .setSubject(userId.toString())
                 .claim("auth", authorities)
+                .claim("email", user.getEmail())
+                .claim("name", user.getName())
+                .claim("nickName", user.getNickName())
+                .claim("createdDate", user.getCreatedDate())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidTime))
                 .signWith(key)
                 .compact();
@@ -93,14 +105,6 @@ public class JwtTokenProvider {
             log.info("JWT claims string is empty.", e);
         }
         return false;
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 
     private Claims parseClaims(String accessToken) {

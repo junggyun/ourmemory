@@ -3,7 +3,7 @@ import router from "@/router";
 import {ref} from "vue"
 import jwtDecode from "jwt-decode";
 import store from "@/store";
-import {getUserAPI, loginAPI} from "@/api";
+import {loginAPI} from "@/api";
 
 const email = ref("")
 const password = ref("")
@@ -12,6 +12,10 @@ const valid = ref(false)
 interface MyPayload {
     sub: String
     auth: String
+    email: String,
+    name: String,
+    nickName: String,
+    createdDate: String,
     exp: number
 }
 
@@ -26,6 +30,9 @@ const login = async function () {
         const refreshToken = res.data.refreshToken
         const tokenExp = jwtDecode<MyPayload>(token).exp
         const userId = jwtDecode<MyPayload>(token).sub
+        const userName = jwtDecode<MyPayload>(token).name
+        const userNickName = jwtDecode<MyPayload>(token).nickName
+        const createdDate = jwtDecode<MyPayload>(token).createdDate
         const role = jwtDecode<MyPayload>(token).auth
         const refreshTokenExp = jwtDecode<MyPayload>(refreshToken).exp
 
@@ -36,16 +43,17 @@ const login = async function () {
         store.commit('setRefreshToken', refreshToken)
         store.commit('setRefreshTokenExp', refreshTokenExp)
 
-        const user = await getUserAPI(store.state.userId)
-        store.commit('setEmail', user.data.email)
-        store.commit('setUserName', user.data.name)
-        store.commit('setUserNickName', user.data.nickName)
+        store.commit('setEmail', loginRequest.email)
+        store.commit('setUserName', userName)
+        store.commit('setUserNickName', userNickName)
+        store.commit('setUserCreatedDate', createdDate)
 
-        const nickName = store.state.userData.nickName
         if (role === "ROLE_ADMIN") {
             await router.replace('/admin')
         } else if (role === "ROLE_USER") {
-            await router.replace(`/home/${nickName}`)
+            if (userId.toString() != '0') {
+                await router.replace(`/${userId}/home`);
+            }
         }
     } catch (err) {
         valid.value = true
@@ -63,7 +71,7 @@ const goSignup = function () {
     router.push("/signup")
 }
 
-const handleEmailInput = function (e) {
+const handleEmailInput = function (e: any) {
     e.target.value = e.target.value.replace(/[^A-Za-z0-9@.]/ig, '')
 };
 

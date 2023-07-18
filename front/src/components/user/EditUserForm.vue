@@ -1,20 +1,14 @@
 <script lang="ts" setup>
 import store from "../../store";
-import {onMounted, ref} from "vue";
-import {editUserAPI, getUserAPI} from "@/api";
+import {ref} from "vue";
+import {editUserAPI} from "@/api";
 import DeleteUserModal from "@/components/user/DeleteUserModal.vue";
 
 const nickName = ref(store.state.userData.nickName)
 const isDeleteUserModal = ref(false)
 const isValidError = ref(false)
 const validateError = ref("")
-const userData = ref({
-    id: 0,
-    name: "",
-    nickName: "",
-    email: "",
-    createdDate: "",
-})
+
 
 const viewDeleteUserModal = function () {
     isDeleteUserModal.value = true
@@ -29,11 +23,10 @@ const editUser = async function () {
         const editUserRequest = {
             nickName: nickName.value
         }
-
         await editUserAPI(store.state.userId, editUserRequest)
         store.commit('setUserNickName', editUserRequest.nickName)
         window.location.reload()
-    } catch (error) {
+    } catch (error: any) {
         if (error.response.data.validation.nickName) {
             isValidError.value = true
             validateError.value = error.response.data.validation.nickName
@@ -41,14 +34,6 @@ const editUser = async function () {
     }
 };
 
-onMounted(async function () {
-    try {
-        const result = await getUserAPI(store.state.userId);
-        userData.value = result.data;
-    } catch (error) {
-        console.log(error)
-    }
-});
 
 </script>
 
@@ -57,11 +42,11 @@ onMounted(async function () {
         <div class="edit-user-form">
             <div class="mb-3 d">
                 <label class="key col-sm-2 col-form-label">이메일</label>
-                <label class="value col-sm-2 col-form-label">{{ userData.email }}</label>
+                <label class="value col-sm-2 col-form-label">{{ store.state.userData.email }}</label>
             </div>
             <div class="mb-3">
                 <label class="key col-sm-2 col-form-label">이름</label>
-                <label class="value col-sm-2 col-form-label">{{ userData.name }}</label>
+                <label class="value col-sm-2 col-form-label">{{ store.state.userData.name }}</label>
             </div>
             <div class="mb-3" style="display: flex">
                 <label for="inputNickName" class="key col-sm-2 col-form-label">닉네임</label>
@@ -73,7 +58,7 @@ onMounted(async function () {
             </div>
             <div class="mb-3">
                 <label class="key col-sm-2 col-form-label">가입 일자</label>
-                <label class="value col-sm-2 col-form-label" style="width: 50%">{{ userData.createdDate }}</label>
+                <label class="value col-sm-2 col-form-label" style="width: 50%">{{ store.state.userData.createdDate }}</label>
             </div>
             <div class="edit-user-form-footer">
                 <div class="edit-user-submit">

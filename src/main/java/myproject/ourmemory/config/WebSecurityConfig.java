@@ -2,6 +2,7 @@ package myproject.ourmemory.config;
 
 import lombok.RequiredArgsConstructor;
 import myproject.ourmemory.jwt.JwtAuthenticationFilter;
+import myproject.ourmemory.jwt.JwtExceptionFilter;
 import myproject.ourmemory.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ import static org.springframework.http.HttpMethod.*;
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
 
     @Bean
@@ -51,6 +53,7 @@ public class WebSecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                 .build();
 
 

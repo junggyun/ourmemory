@@ -6,8 +6,10 @@ import lombok.Getter;
 public class CreateUserGroupResponse {
 
     private Long id;
+    private Long groupId;
 
-    public CreateUserGroupResponse(Long id) {
+    public CreateUserGroupResponse(Long id, Long groupId) {
         this.id = id;
+        this.groupId = groupId;
     }
 }

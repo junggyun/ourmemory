@@ -1,12 +1,20 @@
 <script lang="ts" setup>
-import {defineEmits, ref} from 'vue';
+import {ref} from 'vue';
 import store from "@/store";
-import {createPostAPI, getPostAPI} from "@/api";
+import {createPostAPI} from "@/api";
+import router from "@/router";
 
-const emit = defineEmits(['viewPost']);
+const userId = ref(store.state.userId)
+const groupId = ref(store.state.groupData.id)
+
 const title = ref("")
 const content = ref("")
 const fileInput = ref("")
+
+const goGroup = function () {
+    store.commit('clearPost')
+    router.push(`/${userId.value}/${groupId.value}`)
+}
 
 const createPost = async function () {
     try {
@@ -26,8 +34,8 @@ const createPost = async function () {
         }
 
         const result = await createPostAPI(formData);
-        const result2 = await getPostAPI(result.data.id);
-        emit('viewPost', result2.data)
+        store.commit('setPostId', result.data.id)
+        await router.replace(`/${userId.value}/${groupId.value}/${result.data.id}`)
     } catch (error) {
         console.log(error)
     }
@@ -44,6 +52,9 @@ const uploadFile = function (event: any) {
 <template>
 
     <div class="post-form-wrap">
+        <div>
+            <h4 @click="goGroup">{{ store.state.groupData.name }}</h4>
+        </div>
         <div class="post-form">
             <div class="post-form-header">
                 <div class="mb-3 mt-3">
@@ -67,6 +78,16 @@ const uploadFile = function (event: any) {
 </template>
 
 <style scoped>
+h4 {
+    pointer-events: auto;
+    cursor : pointer;
+    margin-bottom: 20px;
+    color: darkgray;
+    display: inline-block;
+}
+h4:hover {
+    text-decoration: underline;
+}
 .post-form {
     width: 50vw;
     background: rgba(0,0,0,0.1);
@@ -76,5 +97,21 @@ const uploadFile = function (event: any) {
 .post-form-footer {
     display: flex;
     justify-content: right;
+}
+@media screen and (max-width: 768px) {
+    .post-form {
+        width: 90vw;
+        background: rgba(0,0,0,0.1);
+        border-radius: 8px;
+        padding: 20px;
+    }
+    .post-form-footer {
+        display: flex;
+        justify-content: right;
+    }
+    textarea {
+        height: 300px;
+    }
+
 }
 </style>

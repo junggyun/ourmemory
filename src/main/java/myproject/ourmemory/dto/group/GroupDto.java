@@ -15,6 +15,8 @@ public class GroupDto {
     private String name;
     private String key;
     private String createdDate;
+    private int postCount;
+    private String newPostDate;
 
 
     public GroupDto(Group group) {
@@ -22,6 +24,12 @@ public class GroupDto {
         name = group.getName();
         key = group.getKey();
         createdDate = group.getCreatedDate();
+        postCount = group.getPosts().size();
+        if (postCount > 0) {
+            newPostDate = group.getPosts().get(postCount-1).getCreatedDate();
+        } else {
+            newPostDate = "";
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {onMounted, ref, defineEmits} from "vue";
+import {defineEmits, onBeforeMount, ref} from "vue";
 import {getUserByGroupAPI} from "@/api";
 import store from "@/store";
 
@@ -19,7 +19,7 @@ const viewUserInfo = function (user: any) {
     emit('viewUserInfo', user)
 };
 
-onMounted(getUsers)
+onBeforeMount(getUsers)
 </script>
 
 <template>

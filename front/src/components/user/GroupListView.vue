@@ -5,11 +5,26 @@ import store from "@/store";
 import router from "@/router";
 import CreateGroupModal from "@/components/user/CreateGroupModal.vue";
 import JoinGroupModal from "@/components/user/JoinGroupModal.vue";
+import dayjs from "dayjs";
 
-const groups = ref([])
 const emit = defineEmits(['groupEnter']);
 
 const dynamicComponent = ref("")
+
+const groups = ref([{
+    userGroupId: null,
+    role: "",
+    group: {
+        id: null,
+        name: "",
+        key: "",
+        createdDate: "",
+        postCount: "",
+        newPostDate: "",
+        isNewPost: false
+    }
+}
+])
 
 
 const viewCreateGroupModal = function () {
@@ -40,6 +55,18 @@ const getGroup = async function () {
         if (store.state.userId) {
             const result = await getGroupByUserAPI(store.state.userId);
             groups.value = result.data.groups
+
+            const currDate = dayjs()
+                //todo groups가 undefined일 경우 처리
+                for (const group of groups.value) {
+                    const hourDiff = currDate.diff(group.group.newPostDate, 'hour');
+                    if (hourDiff < 24) {
+                        group.group.isNewPost = true
+                    } else {
+                        group.group.isNewPost = false
+                    }
+                }
+
         }
     } catch (error) {
         console.log(error)
@@ -73,6 +100,7 @@ onMounted(getGroup)
             <img src="@/image/groupImage.jpg" class="flex-shrink-0" alt="">
             <div class="d-flex justify-content-center" style="width: 100%">
                 <span>{{ group.group.name }}</span>
+                <img class="new-post-img" v-if="group.group.isNewPost" src="@/image/new.png">
                 <a href="#" class="stretched-link" @click="viewGroupEnter(group, 'groupEnter')"></a>
             </div>
         </div>
@@ -101,6 +129,11 @@ onMounted(getGroup)
 img {
     width: 150px;
     height: 150px;
+}
+.new-post-img {
+    width: 17px;
+    height: 17px;
+    margin-left: 5px
 }
 span {
     font-size: 25px;
@@ -149,6 +182,11 @@ span {
     align-items: center;
     justify-content: center;
     position: absolute;
+}
+.new-post-img {
+    width: 13px;
+    height: 13px;
+    margin-left: 5px;
 }
 
 }

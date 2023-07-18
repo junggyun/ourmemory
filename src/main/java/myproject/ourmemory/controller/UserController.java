@@ -1,11 +1,15 @@
 package myproject.ourmemory.controller;
 
 import lombok.RequiredArgsConstructor;
+import myproject.ourmemory.domain.RefreshToken;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.refreshToken.RefreshTokenRequest;
 import myproject.ourmemory.dto.user.*;
+import myproject.ourmemory.exception.RefreshTokenNotFound;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
+import myproject.ourmemory.repository.RefreshTokenRepository;
+import myproject.ourmemory.service.RefreshTokenService;
 import myproject.ourmemory.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +28,9 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
+
 
     /**
      * 로그인
@@ -44,14 +52,21 @@ public class UserController {
     @PostMapping("/users/refresh/{userId}")
     public ResponseEntity<JwtToken> refresh(@PathVariable Long userId, @RequestBody RefreshTokenRequest request) {
         String refreshToken = request.getRefreshToken();
-        if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken);
-            JwtToken newToken = jwtTokenProvider.generateToken(userId, authentication);
-            String accessToken = newToken.getAccessToken();
-            if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-                return new ResponseEntity<>(newToken, HttpStatus.OK);
+        RefreshToken savedToken = refreshTokenRepository.findRefreshTokenByRefreshToken(refreshToken)
+                .orElseThrow(RefreshTokenNotFound::new);
+        User user = savedToken.getUser();
+        if (Objects.equals(user.getId(), userId)) {
+            if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken);
+                JwtToken newToken = jwtTokenProvider.generateToken(userId, authentication);
+                String accessToken = newToken.getAccessToken();
+                if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+                    refreshTokenService.update(savedToken, newToken.getRefreshToken());
+                    return new ResponseEntity<>(newToken, HttpStatus.OK);
+                }
             }
         }
+
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 

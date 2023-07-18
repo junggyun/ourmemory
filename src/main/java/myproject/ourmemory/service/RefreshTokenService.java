@@ -48,5 +48,13 @@ public class RefreshTokenService {
                 .orElseThrow(RefreshTokenNotFound::new);
     }
 
+    /**
+     * 토큰 업데이트
+     */
+    @Transactional
+    public void update(RefreshToken refreshToken, String newToken) {
+        refreshToken.updateToken(newToken);
+    }
+
 
 }
