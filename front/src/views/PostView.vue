@@ -77,16 +77,16 @@ onMounted(setup)
         </div>
         <div class="post-title">
             <div class="mt-2 mb-2">
-                <span style="font-size: 20px; margin-left: 20px">{{ title }}</span>
+                <span style="margin-left: 20px">{{ title }}</span>
             </div>
             <div class="post-date">
-                <span style="font-size: 13px;">{{ createdDate }}</span>
-                <span style="font-size: 13px;">조회 {{ viewCount }}</span>
+                <span>{{ createdDate }}</span>
+                <span>조회 {{ viewCount }}</span>
             </div>
         </div>
         <div class="post-writer">
             <div class="mt-2 mb-2">
-                <span style="font-size: 15px; margin-left: 20px">{{ userNickName }}</span>
+                <span style="margin-left: 20px">{{ userNickName }}</span>
             </div>
             <div class="post-edit-delete">
                 <button v-show="userNickName === store.state.userData.nickName" type="button" class="btn btn-outline-danger- " @click="goEditPost" style="text-decoration: underline; color: darkgray; padding: 0">수정</button>
@@ -119,6 +119,10 @@ onMounted(setup)
     flex-direction: column;
     width: 50vw;
     position: relative;
+
+}
+span {
+    font-size: 20px;
 }
 h4 {
     pointer-events: auto;
@@ -131,7 +135,6 @@ h4:hover {
     text-decoration: underline;
 }
 .post-title {
-    flex: 1;
     border-top: 1px solid gainsboro;
     border-bottom: 1px solid gainsboro;
     background: rgba(0,0,0,0.05);
@@ -140,12 +143,11 @@ h4:hover {
 }
 .post-writer {
     display: flex;
-    flex: 1;
     border-bottom: 1px solid gainsboro;
     justify-content: space-between;
 }
-.post-edit-delete {
-
+.post-writer span {
+    font-size: 15px;
 }
 .post-date{
     margin-right: 10px;
@@ -154,8 +156,10 @@ h4:hover {
     align-items: end;
     justify-content: space-between;
 }
+.post-date span {
+    font-size: 13px
+}
 .post-content {
-    flex: 9;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
@@ -170,18 +174,14 @@ img {
     max-width: 100%;
     height: auto;
 }
-
-
-
 pre {
     margin: 20px 10px 0 0;
     font-size: 15px;
 }
 .post-modal {
     position: absolute;
-    top: 50%;
     left: 50%;
-    margin: -250px 0 0 -150px;
+    margin: 200px 0 0 -150px;
 }
 @media screen and (max-width: 768px){
     .post-wrap {
@@ -189,9 +189,17 @@ pre {
     }
     .post-modal {
         position: absolute;
-        top: 50%;
         left: 50%;
-        margin: -200px 0 0 -100px;
+        margin: 200px 0 0 -100px;
+    }
+    span {
+        font-size: 15px;
+    }
+    .post-writer span {
+        font-size: 13px;
+    }
+    pre {
+        font-size: 13px;
     }
 }
 </style>

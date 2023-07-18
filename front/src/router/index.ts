@@ -145,7 +145,7 @@ router.beforeEach((to, from, next) => {
     } else if (store.state.userId == 0) {
         next("/");
     } else if (to.params?.userId !== store.state.userId.toString()) {
-        next(`${store.state.userId}/home`);
+        next(`/${store.state.userId}/home`);
     } else {
         next();
     }

@@ -18,7 +18,7 @@ const deletePost = function () {
     <div class="delete-group-modal">
         <div class="delete-group-modal-content">
             <div class="delete-group-modal-content-header">
-                <span>게시글 삭제</span>
+                <span>댓글 삭제</span>
             </div>
             <div class="delete-group-modal-content-body">
                 <b>정말로 삭제하시겠습니까?</b>
