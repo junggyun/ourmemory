@@ -34,6 +34,7 @@ public class Group extends BaseTimeEntity {
     private String name;
 
     @NotNull
+    @Column(unique = true)
     private String key;
 
 

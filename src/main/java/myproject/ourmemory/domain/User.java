@@ -34,6 +34,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String nickName;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

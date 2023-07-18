@@ -6,9 +6,11 @@ import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.refreshToken.RefreshTokenRequest;
 import myproject.ourmemory.dto.user.*;
 import myproject.ourmemory.exception.RefreshTokenNotFound;
+import myproject.ourmemory.exception.UserNotFound;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
 import myproject.ourmemory.repository.RefreshTokenRepository;
+import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.RefreshTokenService;
 import myproject.ourmemory.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class UserController {
 
+    private final UserRepository userRepository;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -44,6 +47,16 @@ public class UserController {
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();
+    }
+
+    /**
+     * 로그아웃
+     */
+    @DeleteMapping("/users/logout/{userId}")
+    public void logout(@PathVariable Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+        refreshTokenService.deleteToken(user);
     }
 
     /**

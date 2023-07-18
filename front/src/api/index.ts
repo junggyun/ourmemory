@@ -44,6 +44,11 @@ const loginAPI = function (loginRequest : any) {
     return instance.post(
         "/api/users/login", loginRequest)
 }
+// 로그아웃
+const logoutAPI = function (userId: any) {
+    return instance.delete(
+        `/api/users/logout/${userId}`)
+};
 // 토큰 재발급
 const refreshAPI = function (userId: any, refreshTokenRequest: any) {
     return instance.post(
@@ -181,4 +186,5 @@ const deleteCommentAPI = function (commentId: any) {
 
 export { loginAPI, registerUserAPI, userListAPI, deleteUserAPI, getUserAPI, createGroupAPI, getGroupByUserAPI, joinGroupAPI, getUserByGroupAPI, getGroupAPI, createPostAPI,
     getPostByGroupAPI, getUploadByPostAPI, deletePostAPI, getPostAPI, editPostAPI, deleteUserGroupAPI, editUserAPI,
-    addViewCountAPI, createCommentAPI, getCommentAPI, getCommentsByPostAPI, deleteCommentAPI, editGroupAPI, refreshAPI }
+    addViewCountAPI, createCommentAPI, getCommentAPI, getCommentsByPostAPI, deleteCommentAPI, editGroupAPI, refreshAPI,
+    logoutAPI }
