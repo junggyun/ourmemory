@@ -8,6 +8,7 @@ import router from "@/router";
 
 const isDeletePostModal = ref(false)
 
+const isReq = ref(false)
 const userId = ref(store.state.userId)
 const groupId = ref(store.state.groupData.id)
 const postId = ref(store.state.postData.id)
@@ -21,10 +22,6 @@ const uploads = ref([{
     fileName: "",
     filePath: "",
 }])
-
-const postData = ref({
-    postId: postId.value
-})
 
 const goGroup = function () {
     store.commit('clearPost')
@@ -47,6 +44,7 @@ const setup = async function () {
         userNickName.value = postResult.data.user.nickName
         const result = await getUploadByPostAPI(postId.value);
         uploads.value = result.data;
+        isReq.value = true
     } catch (error) {
         console.log(error)
     }
@@ -103,11 +101,11 @@ onMounted(setup)
 
         </div>
         <div class="post-comment">
-            <CommentListView :postData="postData"></CommentListView>
+            <CommentListView v-if="isReq"></CommentListView>
         </div>
         <div class="post-modal">
             <div class="delete-post" v-if="isDeletePostModal">
-                <DeletePostModal :postData="postData" @closeModal="closeDeletePostModal"></DeletePostModal>
+                <DeletePostModal @closeModal="closeDeletePostModal"></DeletePostModal>
             </div>
         </div>
     </div>
