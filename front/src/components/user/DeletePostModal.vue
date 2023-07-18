@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineEmits, defineProps, ref} from 'vue'
+import {defineEmits, ref} from 'vue'
 import {deletePostAPI} from "@/api";
 import router from "@/router";
 import store from "@/store";
@@ -7,12 +7,6 @@ import store from "@/store";
 const userId = ref(store.state.userId)
 const groupId = ref(store.state.groupData.id)
 
-const props = defineProps({
-    postData: {
-        type: Object,
-        required: true
-    }
-});
 
 const emit = defineEmits(['closeModal']);
 
@@ -22,7 +16,7 @@ const closeModal = function () {
 
 const deletePost = async function () {
     try {
-        await deletePostAPI(props.postData.postId)
+        await deletePostAPI(store.state.postData.id)
         closeModal()
         await router.push(`/${userId.value}/${groupId.value}`)
     } catch (error) {

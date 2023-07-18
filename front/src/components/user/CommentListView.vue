@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {deleteCommentAPI, getCommentsByPostAPI, getPostAPI} from "@/api";
-import {defineProps, onMounted, ref} from "vue";
+import {deleteCommentAPI, getCommentsByPostAPI} from "@/api";
+import {onMounted, ref} from "vue";
 import CreateCommentForm from "@/components/user/CreateCommentForm.vue";
 import store from "@/store";
 import DeleteCommentModal from "@/components/user/DeleteCommentModal.vue";
 import dayjs from "dayjs";
 
-const postNickName = ref(0)
+const postNickName = ref(store.state.postData.userNickName)
 const myNickName = store.state.userData.nickName
 const sizeNum = ref(20)
 const pageNum = ref(1)
@@ -15,12 +15,7 @@ const totalCount = ref(0)
 
 const dynamicComponent = ref("")
 
-const props = defineProps({
-    postData: {
-        type: Object,
-        required: true
-    }
-});
+
 
 const delCommentId = ref(0)
 
@@ -45,7 +40,7 @@ const prevPage = async function () {
 const getComments = async function () {
     try {
         const getCommentsRequest = {
-            postId: props.postData.postId,
+            postId: store.state.postData.id,
             size: sizeNum.value,
             page: pageNum.value
 
@@ -98,9 +93,6 @@ const deleteComment = async function () {
 
 const getPost = async function () {
     try {
-        const postId = props.postData.postId
-        const result = await getPostAPI(postId);
-        postNickName.value = result.data.user.nickName
         await getComments()
     } catch (error) {
         console.log(error)
@@ -137,7 +129,7 @@ onMounted(getPost)
             <button :disabled="pageNum >= totalPages" @click="nextPage" class="page-btn">다음</button>
         </div>
         <div class="comment-create">
-            <CreateCommentForm :postData="postData" @refresh="getComments"></CreateCommentForm>
+            <CreateCommentForm @refresh="getComments"></CreateCommentForm>
         </div>
         <div class="comment-modal">
             <DeleteCommentModal v-show="dynamicComponent === 'deleteCommentModal'" @deleteComment="deleteComment" @closeModal="closeDeleteCommentModal"></DeleteCommentModal>

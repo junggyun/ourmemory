@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {defineProps, defineEmits, ref} from "vue";
+import {defineEmits, ref} from "vue";
 import store from "@/store";
 import {createCommentAPI} from "@/api";
 
@@ -8,18 +8,12 @@ const content = ref("")
 
 const emit = defineEmits(['refresh'])
 
-const props = defineProps({
-    postData: {
-        type: Object,
-        required: true
-    }
-});
 
 const createComment = async function () {
     try {
         const createCommentRequest = {
             userId: store.state.userId,
-            postId: props.postData.postId,
+            postId: store.state.postData.id,
             content: content.value
         }
         await createCommentAPI(createCommentRequest);
