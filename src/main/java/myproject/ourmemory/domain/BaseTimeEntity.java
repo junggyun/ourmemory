@@ -1,5 +1,6 @@
 package myproject.ourmemory.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,9 +18,11 @@ import java.time.format.DateTimeFormatter;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
+    @NotNull
     @CreatedDate
     private String createdDate;
 
+    @NotNull
     @LastModifiedDate
     private String modifiedDate;
 

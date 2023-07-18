@@ -1,6 +1,7 @@
 package myproject.ourmemory.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,14 +16,18 @@ public class Upload {
     @Column(name = "upload_id")
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @NotNull
     private String fileName;
 
+    @NotNull
     private String filePath;
 
+    @NotNull
     private Long fileSize;
 
     public Upload() {

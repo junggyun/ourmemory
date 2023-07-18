@@ -2,10 +2,12 @@
 import router from "@/router";
 import store from "@/store";
 import {ref} from "vue";
+import {logoutAPI} from "@/api";
 
 const userId = ref(store.state.userId)
 
 const logout = async function () {
+    await logoutAPI(userId.value)
     await router.replace('/')
 }
 

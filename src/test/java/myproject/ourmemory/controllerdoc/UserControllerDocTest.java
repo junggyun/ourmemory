@@ -170,6 +170,33 @@ public class UserControllerDocTest {
     }
 
     @Test
+    @DisplayName("로그아웃")
+    public void logout() throws Exception {
+        //given
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("박아워")
+                .email("our@memory.com")
+                .password("our123123")
+                .nickName("테란킹")
+                .build();
+        Long userId = userService.join(request);
+
+        userService.login(request.getEmail(), request.getPassword());
+
+        //expected
+        mockMvc.perform(delete("/api/users/logout/{userId}", userId)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user/{methodName}",
+                        pathParameters(
+                                parameterWithName("userId").description("회원 ID")
+                        )
+                ));
+
+    }
+
+    @Test
     @DisplayName("회원 정보 수정")
     public void editUser() throws Exception {
         //given

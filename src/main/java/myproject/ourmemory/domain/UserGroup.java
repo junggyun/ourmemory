@@ -1,5 +1,6 @@
 package myproject.ourmemory.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
@@ -17,16 +18,20 @@ import jakarta.persistence.*;
 public class UserGroup extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_group_id")
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private UserGroupRole role;
 

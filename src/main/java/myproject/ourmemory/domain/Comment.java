@@ -29,6 +29,7 @@ public class Comment extends BaseTimeEntity {
     private Post post;
 
     @NotNull
+    @Lob
     private String content;
 
     public Comment() {
