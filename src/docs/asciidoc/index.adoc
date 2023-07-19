@@ -145,11 +145,23 @@ include::{snippets}/userGroup/deleteUserGroup/response-fields.adoc[]
 == *그룹 API*
 
 '''
+=== 그룹 단건 조회
+'''
+
+.요청
+include::{snippets}/group/getGroup/http-request.adoc[]
+include::{snippets}/group/getGroup/path-parameters.adoc[]
+
+.응답
+include::{snippets}/group/getGroup/http-response.adoc[]
+include::{snippets}/group/getGroup/response-fields.adoc[]
+
+'''
 === 그룹명 변경
 '''
 
 .요청
-include::{snippets}/group/updateGroup/curl-request.adoc[]
+include::{snippets}/group/updateGroup/http-request.adoc[]
 include::{snippets}/group/updateGroup/path-parameters.adoc[]
 include::{snippets}/group/updateGroup/request-fields.adoc[]
 
