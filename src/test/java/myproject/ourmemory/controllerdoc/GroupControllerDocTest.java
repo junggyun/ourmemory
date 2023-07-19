@@ -31,6 +31,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -65,7 +66,7 @@ public class GroupControllerDocTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation)
-                        .uris().withScheme("https").withHost("ourmemory.api.com").withPort(443)
+                        .uris().withScheme("https").withHost("ourmemory.shop").withPort(443)
                         .and()
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())
@@ -74,6 +75,47 @@ public class GroupControllerDocTest {
                 .build();
 
     }
+
+    @Test
+    @DisplayName("그룹 단건 조회")
+    public void getGroup() throws Exception {
+        //given
+        User user = User.builder()
+                .name("박아워")
+                .email("our@memory.com")
+                .password("our123123")
+                .nickName("테란킹")
+                .build();
+        userRepository.save(user);
+        CreateUserGroupRequest request1 = CreateUserGroupRequest.builder()
+                .userId(user.getId())
+                .groupName("개발 모임")
+                .build();
+        Long userGroupId = userGroupService.create(request1);
+        UserGroup userGroup = userGroupRepository.findById(userGroupId)
+                .orElseThrow(UserGroupNotFound::new);
+
+        //expected
+        mockMvc.perform(get("/api/groups/{groupId}", userGroup.getGroup().getId())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("group/{methodName}",
+                        pathParameters(
+                                parameterWithName("groupId").description("그룹 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("그룹 ID"),
+                                fieldWithPath("name").description("그룹명"),
+                                fieldWithPath("key").description("그룹 코드"),
+                                fieldWithPath("createdDate").description("그룹 생성 일자"),
+                                fieldWithPath("postCount").description("그룹 게시글 수"),
+                                fieldWithPath("newPostDate").description("그룹 새 게시글 등록 일자")
+                        )
+                ));
+
+    }
+
 
     @Test
     @DisplayName("그룹명 변경")

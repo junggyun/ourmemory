@@ -61,7 +61,7 @@ public class UserGroupControllerDocTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation)
-                        .uris().withScheme("https").withHost("ourmemory.api.com").withPort(443)
+                        .uris().withScheme("https").withHost("ourmemory.shop").withPort(443)
                         .and()
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())
