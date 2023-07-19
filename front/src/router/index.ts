@@ -95,7 +95,15 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/GroupView.vue'),
         meta: {
             role: 'ROLE_USER'
-        }
+        },
+        beforeEnter: (to, from, next) => {
+            if (store.state.groupData.id == 0) {
+                store.commit('setGroupId', to.params?.groupId)
+                next()
+            } else {
+                next();
+            }
+        },
     },
     {
         path: '/:userId/:groupId/post',
@@ -103,7 +111,15 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/CreatePostView.vue'),
         meta: {
             role: 'ROLE_USER'
-        }
+        },
+        beforeEnter: (to, from, next) => {
+            if (store.state.groupData.id == 0) {
+                store.commit('setGroupId', to.params?.groupId)
+                next()
+            } else {
+                next();
+            }
+        },
     },
     {
         path: '/:userId/:groupId/:postId',
@@ -111,7 +127,18 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/PostView.vue'),
         meta: {
             role: 'ROLE_USER'
-        }
+        },
+        beforeEnter: (to, from, next) => {
+            if (store.state.groupData.id == 0) {
+                store.commit('setGroupId', to.params?.groupId)
+                next()
+            } else if (store.state.postData.id == 0) {
+                store.commit('setPostId', to.params?.postId)
+                next()
+            } else {
+                next();
+            }
+        },
     },
     {
         path: '/:userId/:groupId/:postId/edit',
@@ -119,7 +146,18 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/EditPostView.vue'),
         meta: {
             role: 'ROLE_USER'
-        }
+        },
+        beforeEnter: (to, from, next) => {
+            if (store.state.groupData.id == 0) {
+                store.commit('setGroupId', to.params?.groupId)
+                next()
+            } else if (store.state.postData.id == 0) {
+                store.commit('setPostId', to.params?.postId)
+                next()
+            } else {
+                next();
+            }
+        },
     },
     {
         path: '/admin',
