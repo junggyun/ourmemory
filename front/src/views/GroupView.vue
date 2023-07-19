@@ -7,7 +7,7 @@ import LeaveGroupModal from "@/components/user/LeaveGroupModal.vue";
 import UserInfoModal from "@/components/user/UserInfoModal.vue";
 import router from "@/router";
 import EditGroupModal from "@/components/user/EditGroupModal.vue";
-import {addViewCountAPI, getPostByGroupAPI, getUserByGroupAPI} from "@/api";
+import {addViewCountAPI, getGroupAPI, getPostByGroupAPI, getUserByGroupAPI} from "@/api";
 import dayjs from "dayjs";
 
 const userId = ref(store.state.userId)
@@ -17,7 +17,7 @@ const isDeleteGroupModal = ref(false)
 const isLeaveGroupModal = ref(false)
 const isUserInfoModal = ref(false)
 const isEditGroupModal = ref(false)
-
+const users = ref([])
 const infoUser = ref({
     id: 0,
     name: "",
@@ -54,6 +54,16 @@ const posts = ref([{
     }]
 }
 ])
+
+const nextPage = async function () {
+    pageNum.value += 1
+    await getPostByGroup()
+}
+
+const prevPage = async function () {
+    pageNum.value -= 1
+    await getPostByGroup()
+}
 
 const viewGroupKey = function () {
     isGroupKeyModal.value = true
@@ -108,33 +118,24 @@ const goGroup = function () {
     window.location.reload()
 }
 
+const goPost = async function (post: any) {
 
-//UserList
-const users = ref([])
-const getUsers = async function () {
+    await store.commit('setPostId', post.postId)
+    await addViewCountAPI(post.postId)
+
+    await router.push(`/${userId.value}/${groupId.value}/${post.postId}`)
+}
+
+const getGroup = async function () {
     try {
-        const result = await getUserByGroupAPI(store.state.groupData.id);
-        users.value = result.data.users
-        await getPostByGroup()
+        const result = await getGroupAPI(groupId.value);
+        store.commit('setGroupName', result.data.name)
+        store.commit('setGroupKey', result.data.key)
+
     } catch (error) {
         console.log(error)
     }
-}
-
-//UserList End
-
-//PostList
-
-
-const nextPage = async function () {
-    pageNum.value += 1
-    await getPostByGroup()
-}
-
-const prevPage = async function () {
-    pageNum.value -= 1
-    await getPostByGroup()
-}
+};
 
 const getPostByGroup = async function () {
     try {
@@ -144,6 +145,7 @@ const getPostByGroup = async function () {
             page: pageNum.value,
         }
 
+        await getGroup()
         const result = await getPostByGroupAPI(getPostRequest);
         posts.value = result.data.posts
 
@@ -169,14 +171,16 @@ const getPostByGroup = async function () {
     }
 }
 
-const goPost = async function (post: any) {
-
-    await store.commit('setPostId', post.postId)
-    await addViewCountAPI(post.postId)
-
-    await router.push(`/${userId.value}/${groupId.value}/${post.postId}`)
+const getUsers = async function () {
+    try {
+        const result = await getUserByGroupAPI(store.state.groupData.id);
+        users.value = result.data.users
+        await getPostByGroup()
+    } catch (error) {
+        console.log(error)
+    }
 }
-//PostList End
+
 
 onMounted(getUsers)
 </script>
