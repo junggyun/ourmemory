@@ -2,6 +2,7 @@ package myproject.ourmemory.controllerdoc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import myproject.ourmemory.dto.user.CreateUserRequest;
+import myproject.ourmemory.dto.user.DeleteUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserService;
@@ -28,8 +29,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -249,15 +249,19 @@ public class UserControllerDocTest {
                 .build();
 
         Long userId = userService.join(request);
-        //expected
-        mockMvc.perform(delete("/api/users/{userId}", userId)
 
+
+        //expected
+        mockMvc.perform(delete("/api/users/{userId}?password=our123123", userId)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("user/{methodName}",
                         pathParameters(
                                 parameterWithName("userId").description("회원 ID")
+                        ),
+                        queryParameters(
+                                parameterWithName("password").description("회원 비밀번호")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 ID")

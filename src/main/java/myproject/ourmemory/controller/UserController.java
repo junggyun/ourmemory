@@ -137,8 +137,8 @@ public class UserController {
      * 회원 삭제
      */
     @DeleteMapping("/users/{userId}")
-    public DeleteUserResponse deleteUser(@PathVariable Long userId) {
-        userService.delete(userId);
+    public DeleteUserResponse deleteUser(@PathVariable Long userId, @RequestParam String password) {
+        userService.delete(userId, password);
 
         return new DeleteUserResponse(userId);
     }
