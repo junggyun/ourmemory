@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineEmits} from 'vue'
+import {defineEmits, ref} from 'vue'
 import store from "@/store";
 import {deleteUserAPI} from "@/api";
 import router from "@/router";
@@ -10,13 +10,22 @@ const closeModal = function () {
     emit('closeModal')
 }
 
+const password = ref("")
+
+const isValidError = ref(false)
+const errorMessage = ref("")
+
 const deleteUser = async function () {
     try {
-        await deleteUserAPI(store.state.userId)
+
+        await deleteUserAPI(store.state.userId, password.value)
         closeModal()
         await router.push('/')
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        if (error.response.data.validation.password) {
+            isValidError.value = true
+            errorMessage.value = error.response.data.validation.password
+        }
     }
 
 }
@@ -31,6 +40,8 @@ const deleteUser = async function () {
             </div>
             <div class="delete-user-modal-content-body">
                 <b>정말로 탈퇴하시겠습니까?</b>
+                <input type="password" v-model="password" placeholder="비밀번호 확인">
+                <span v-show="errorMessage" class="valid-error" style="font-size: 13px">{{ errorMessage }}</span>
                 <b style="color: red">(회원님의 모든 정보가 삭제됩니다!)</b>
 
             </div>
@@ -85,6 +96,12 @@ span {
     align-items: center;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
+}
+.valid-error {
+    width: auto;
+    display: flex;
+    align-items: center;
+    color: red;
 }
 
 @media screen and (max-width: 768px) {
