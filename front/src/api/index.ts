@@ -65,9 +65,11 @@ const editUserAPI = function (userId: any, editUserRequest: any) {
         `/api/users/${userId}`, editUserRequest)
 };
 // 회원 삭제
-const deleteUserAPI = function (userId: any) {
+const deleteUserAPI = function (userId: any, password: any) {
     return authInstance.delete(
-        `/api/users/${userId}`)
+        `/api/users/${userId}`, {params: {
+            password: password
+            }})
 }
 
 // admin

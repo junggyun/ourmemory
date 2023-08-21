@@ -75,6 +75,7 @@ include::{snippets}/user/editUser/response-fields.adoc[]
 .요청
 include::{snippets}/user/deleteUser/http-request.adoc[]
 include::{snippets}/user/deleteUser/path-parameters.adoc[]
+include::{snippets}/user/deleteUser/query-parameters.adoc[]
 
 .응답
 include::{snippets}/user/deleteUser/http-response.adoc[]

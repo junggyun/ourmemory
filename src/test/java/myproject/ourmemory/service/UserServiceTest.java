@@ -2,6 +2,7 @@ package myproject.ourmemory.service;
 
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.CreateUserRequest;
+import myproject.ourmemory.dto.user.DeleteUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.dto.user.GetUserRequest;
 import myproject.ourmemory.exception.UserNotFound;
@@ -181,16 +182,16 @@ class UserServiceTest {
     @DisplayName("회원 삭제")
     public void 회원_삭제() throws Exception {
         //given
-        User user = User.builder()
+        CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
                 .password("1234")
                 .nickName("테란킹")
                 .build();
-        userRepository.save(user);
+        Long userId = userService.join(request);
 
         //when
-        userService.delete(user.getId());
+        userService.delete(userId, "1234");
 
         //then
         assertEquals(0, userRepository.count());

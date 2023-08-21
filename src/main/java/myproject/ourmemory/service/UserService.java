@@ -6,13 +6,8 @@ import myproject.ourmemory.domain.RefreshToken;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserRole;
-import myproject.ourmemory.dto.user.CreateUserRequest;
-import myproject.ourmemory.dto.user.GetUserRequest;
-import myproject.ourmemory.dto.user.UpdateUserRequest;
-import myproject.ourmemory.exception.CreateUserDuplicate;
-import myproject.ourmemory.exception.InvalidRequest;
-import myproject.ourmemory.exception.NotUser;
-import myproject.ourmemory.exception.UserNotFound;
+import myproject.ourmemory.dto.user.*;
+import myproject.ourmemory.exception.*;
 import myproject.ourmemory.jwt.JwtToken;
 import myproject.ourmemory.jwt.JwtTokenProvider;
 import myproject.ourmemory.repository.RefreshTokenRepository;
@@ -24,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -99,17 +96,24 @@ public class UserService {
      * 회원 삭제
      */
     @Transactional
-    public void delete(Long userId) {
+    public void delete(Long userId, String password) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
         validateRole(findUser);
+        validatePassword(password, findUser);
+
         List<UserGroup> userGroups = findUser.getUserGroups();
         for (UserGroup userGroup : userGroups) {
             userGroupService.delete(userGroup.getId());
         }
 
+        refreshTokenService.deleteToken(findUser);
+
+
         userRepository.delete(findUser);
     }
+
+
 
     /**
      * 회원 조회
@@ -163,6 +167,12 @@ public class UserService {
     private void validateRole(User findUser) {
         if (findUser.getRole().equals(UserRole.ADMIN)) {
             throw new NotUser("role", "관리자는 삭제할 수 없습니다.");
+        }
+    }
+
+    private void validatePassword(String password, User findUser) {
+        if (!encoder.matches(password, findUser.getPassword())) {
+            throw new InvalidPassword("password", "비밀번호가 일치하지 않습니다.");
         }
     }
 

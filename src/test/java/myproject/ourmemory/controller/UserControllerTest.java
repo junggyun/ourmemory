@@ -3,6 +3,7 @@ package myproject.ourmemory.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.dto.user.CreateUserRequest;
+import myproject.ourmemory.dto.user.DeleteUserRequest;
 import myproject.ourmemory.dto.user.UpdateUserRequest;
 import myproject.ourmemory.repository.UserRepository;
 import myproject.ourmemory.service.UserService;
@@ -209,18 +210,18 @@ class UserControllerTest {
     @WithMockUser(username = "onlyplsson@gmail.com ", roles = "USER")
     public void 회원_삭제() throws Exception {
         //given
-        User user = User.builder()
+        CreateUserRequest request = CreateUserRequest.builder()
                 .name("박정균")
                 .email("onlyplsson@gmail.com")
-                .password("123123qwe")
+                .password("1234")
                 .nickName("테란킹")
                 .build();
-        userRepository.save(user);
+        Long userId = userService.join(request);
+
 
         //when
-        mockMvc.perform(delete("/api/users/{userId}", user.getId())
-                        .characterEncoding("UTF-8")
-                        .contentType(APPLICATION_JSON)
+        mockMvc.perform(delete("/api/users/{userId}", userId)
+                        .param("password", "1234")
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
