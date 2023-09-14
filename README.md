@@ -12,7 +12,7 @@
 OURMEMORY의 유래 또한 '우리들만의 기억'에서 나왔습니다. <br>
 
 ## 🔗 링크
-https://www.ourmemory.shop
+https://www.ourmemory.shop <br>
 테스트 계정 EMAIL / PW : test@test.com / test1234
 
 ## 🗓 프로젝트 기간 (개인 프로젝트)
