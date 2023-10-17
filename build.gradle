@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'myproject'
-version = '1.0.2-beta'
+version = '1.0.3-beta'
 sourceCompatibility = '17'
 
 configurations {

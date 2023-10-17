@@ -1,7 +1,6 @@
 package myproject.ourmemory.service;
 
 import myproject.ourmemory.InitDB;
-import myproject.ourmemory.domain.Group;
 import myproject.ourmemory.domain.User;
 import myproject.ourmemory.domain.UserGroup;
 import myproject.ourmemory.domain.UserGroupRole;
@@ -18,12 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
