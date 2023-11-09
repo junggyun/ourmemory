@@ -10,6 +10,7 @@ const groupId = ref(store.state.groupData.id)
 const title = ref("")
 const content = ref("")
 const fileInput = ref("")
+const formData = ref(new FormData())
 
 const goGroup = function () {
     store.commit('clearPost')
@@ -25,15 +26,9 @@ const createPost = async function () {
             content: content.value
         }
 
-        const files = fileInput.value
-        const formData = new FormData();
-        formData.append('request', new Blob([JSON.stringify(createPostRequest)], {type: 'application/json'}))
+        formData.value.append('request', new Blob([JSON.stringify(createPostRequest)], {type: 'application/json'}))
 
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i])
-        }
-
-        const result = await createPostAPI(formData);
+        const result = await createPostAPI(formData.value);
         store.commit('setPostId', result.data.id)
         await router.replace(`/${userId.value}/${groupId.value}/${result.data.id}`)
     } catch (error) {
@@ -43,7 +38,12 @@ const createPost = async function () {
 }
 
 const uploadFile = function (event: any) {
+    formData.value = new FormData()
     fileInput.value = event.target.files
+    const files = fileInput.value
+    for (let i = 0; i < files.length; i++) {
+        formData.value.append('files', files[i])
+    }
 }
 
 
