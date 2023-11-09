@@ -37,6 +37,5 @@ out/
 .vscode/
 
 ### image video ###
-/src/main/java/myproject/ourmemory/InitDB.java
 /front/public/image/
 /src/main/resources/static
