@@ -55,14 +55,18 @@ const joinGroup = function (group: any) {
 };
 
 const goGroup = async function (group:any) {
+    try {
+        await store.commit('setGroupId', group.group.id)
+        await store.commit('setGroupName', group.group.name)
+        await store.commit('setGroupKey', group.group.key)
+        await store.commit('setUserGroupRole', group.role)
+        await store.commit('setUserGroupId', group.userGroupId)
 
-    await store.commit('setGroupId', group.group.id)
-    await store.commit('setGroupName', group.group.name)
-    await store.commit('setGroupKey', group.group.key)
-    await store.commit('setUserGroupRole', group.role)
-    await store.commit('setUserGroupId', group.userGroupId)
-
-    await router.push(`/${userId.value}/${group.group.id}`);
+        await router.push(`/${userId.value}/${group.group.id}`);
+        await router.push(`/${userId.value}/${group.group.id}`);
+    } catch (error:any) {
+        console.error(error)
+    }
 }
 
 

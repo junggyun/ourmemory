@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import store from "@/store";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {logoutAPI} from "@/api";
 
 const userId = ref(store.state.userId)
@@ -23,6 +23,9 @@ const goUserInfo = async function () {
 
 };
 
+watch(() => store.state.userId, (newValue) => {
+    userId.value = newValue
+})
 
 </script>
 
