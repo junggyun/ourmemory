@@ -28,7 +28,8 @@ https://www.ourmemory.shop <br>
 
 
 ## 📜 ERD
-![image](https://github.com/terranking1/ourmemory/assets/92567159/4550d54b-9b19-4d5d-b48d-22487505ac20)
+![image](https://github.com/terranking1/ourmemory/assets/92567159/04801060-93f3-4870-84bf-a91e9aaa400c)
+
 
 ## ✍ REST API
 https://www.ourmemory.shop/docs/index.html
