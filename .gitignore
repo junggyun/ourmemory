@@ -40,3 +40,6 @@ out/
 ### image video ###
 /front/public/image/
 /src/main/resources/static
+
+###dbinit
+InitDB.java
