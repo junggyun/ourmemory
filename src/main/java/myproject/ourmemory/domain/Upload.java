@@ -28,13 +28,13 @@ public class Upload {
     private String filePath;
 
     @NotNull
-    private Long fileSize;
+    private long fileSize;
 
     public Upload() {
     }
 
     @Builder
-    public Upload(Post post, String fileName, String filePath, Long fileSize) {
+    public Upload(Post post, String fileName, String filePath, long fileSize) {
         this.post = post;
         this.fileName = fileName;
         this.filePath = filePath;
