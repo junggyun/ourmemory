@@ -18,10 +18,10 @@ OURMEMORY의 유래 또한 '우리들만의 기억'에서 나왔습니다. <br>
 
 ## 🛠 기술 스택, 개발 환경
 ✔ front-end <br>
-- vue3 + typescript <br>
+- Vue3 + TypeScript <br>
 
 ✔ back-end <br>
-- java17 + springboot+ mysql + aws ec2 <br>
+- Java17 + Spring Boot+ MySQL + AWS EC2 <br>
 
 ✔ dev tool <br>
 - Intellij <br>
@@ -29,10 +29,6 @@ OURMEMORY의 유래 또한 '우리들만의 기억'에서 나왔습니다. <br>
 
 ## 📜 ERD
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/04801060-93f3-4870-84bf-a91e9aaa400c)
-
-
-## ✍ REST API
-https://www.ourmemory.shop/docs/index.html
 
 ## ✅ 핵심 기능
 
@@ -77,7 +73,7 @@ https://www.ourmemory.shop/docs/index.html
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/769c8e5a-33c1-4601-878b-d642a93d3d7d) <br>
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/aee6ee3a-3dbf-4611-8007-c9110a287084)
 
-### QUERYDSL
+### Querydsl
 
 - 자바 코드로 SQL 작성 <br>
 
@@ -85,7 +81,7 @@ https://www.ourmemory.shop/docs/index.html
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/e54bba49-f049-4d8b-a743-5a37e1bf2b7a) <br>
 N:1 혹은 1:1 관계매핑에서는 fetchType을 LAZY로 설정하고, fetchjoin으로 조회하는 것이 최적화에 중요!
 
-### SPRING SECURITY + JWT
+### Spring Security + JWT
 
 - security를 통한 권한에 따른 컨트롤러 접근 제어 <br>
 
@@ -95,7 +91,7 @@ N:1 혹은 1:1 관계매핑에서는 fetchType을 LAZY로 설정하고, fetchjoi
 
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/d6fa0464-2f0e-4583-95d9-43970deb2d63)
 
-### VUE
+### Vue
 
 - 클라이언트 화면 개발 및 axios를 통한 백엔드 api와의 http 통신 <br>
 
