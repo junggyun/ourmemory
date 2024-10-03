@@ -87,7 +87,7 @@ N:1 혹은 1:1 관계매핑에서는 fetchType을 LAZY로 설정하고, fetchjoi
 
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/283d5e05-1dc9-49b8-a5b1-ba05e02e3d11)
 
-- jwt토큰을 통한 api요청 권한 관리 => 로그인 관리 <br>
+- JWT를 통한 api요청 권한 관리 => 로그인 관리 <br>
 
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/d6fa0464-2f0e-4583-95d9-43970deb2d63)
 
