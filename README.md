@@ -64,7 +64,7 @@ OURMEMORY의 유래 또한 '우리들만의 기억'에서 나왔습니다. <br>
 ## 🖊 핵심 구현(기술)
 ### JPA
 
-- sql문 없이 객체를 테이블과 매핑(엔티티 개발) <br>
+- SQL문 없이 객체를 테이블과 매핑(엔티티 개발) <br>
 
 ![image](https://github.com/terranking1/ourmemory/assets/92567159/a0ab819f-4010-4fd5-884e-02e1b9dba4a7)
 
